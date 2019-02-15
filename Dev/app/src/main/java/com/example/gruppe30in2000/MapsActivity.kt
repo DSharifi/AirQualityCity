@@ -1,5 +1,6 @@
 package com.example.gruppe30in2000
 
+import android.Manifest
 import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +12,18 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+
+import android.support.v4.app.ActivityCompat
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
+import android.support.annotation.NonNull
+
+
+
+
+
+
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -42,8 +55,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
 
-        // Customize the styling of the base map using a JSON object defined
-        // in a raw resource file.
+        // Customize the map style
         try {
             val success = mMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
@@ -62,6 +74,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
+        enableMyLocation()
 
 
         // Add a marker in Oslo and move the camera
@@ -79,6 +92,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val tmp = LatLng(lat, lng)
         mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name))
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(tmp))
+    }
+
+
+    // Map - Current location
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSION = 1
+    }
+
+
+    fun enableMyLocation() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ){
+            mMap.isMyLocationEnabled = true
+        } else {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        // Check if location permissions are granted and if so enable the
+        // location data layer.
+        when (requestCode) {
+            REQUEST_LOCATION_PERMISSION -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                enableMyLocation()
+                //break
+            }
+        }
     }
 
 

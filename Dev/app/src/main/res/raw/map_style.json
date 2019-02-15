@@ -176,6 +176,15 @@
   },
   {
     "featureType": "water",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#b9d3c2"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
     "elementType": "labels.text.fill",
     "stylers": [
       {
