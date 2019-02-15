@@ -39,5 +39,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val oslo = LatLng(59.911491, 10.757933)
         mMap.addMarker(MarkerOptions().position(oslo).title("Marker in Oslo"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(oslo))
+
+        addStation(60.0,10.0, "testStation")
     }
+
+
+    //Add a pin to the map with the position and name
+    fun addStation(lat : Double, lng : Double, name : String){
+        val tmp = LatLng(lat, lng)
+        mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(tmp))
+    }
+
+
+
+
 }
