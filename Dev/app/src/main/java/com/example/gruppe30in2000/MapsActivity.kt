@@ -50,8 +50,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(tmp))
     }
-
-
-
+    
 
 }
