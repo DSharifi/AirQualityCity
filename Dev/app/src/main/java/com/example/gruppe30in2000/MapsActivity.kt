@@ -19,12 +19,6 @@ import android.support.v4.content.ContextCompat
 import android.support.annotation.NonNull
 
 
-
-
-
-
-
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -36,7 +30,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
 
     }
 
