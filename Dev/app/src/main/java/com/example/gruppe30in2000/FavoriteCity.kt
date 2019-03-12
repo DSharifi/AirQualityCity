@@ -36,13 +36,12 @@ class FavoriteCity : AppCompatActivity() {
         val floatingButton = findViewById<FloatingActionButton>(R.id.floating_button)
 
 
-
         ////// MAKE 2 element to current
-        val title1 = SpannableStringBuilder("Element 1") as Editable
-        val description1 = SpannableStringBuilder("This is the description for element 1") as Editable
+        val title1 = SpannableStringBuilder("Oslo") as Editable
+        val description1 = SpannableStringBuilder("Lav") as Editable
 
-        val title2 = SpannableStringBuilder("Element 2") as Editable
-        val description2 = SpannableStringBuilder("This is the description for element 2") as Editable
+        val title2 = SpannableStringBuilder("Trondheim") as Editable
+        val description2 = SpannableStringBuilder("Moderat") as Editable
 
 
         val element = CityElement(title1, description1)

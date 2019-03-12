@@ -12,4 +12,5 @@
 
     <string name="country">Country</string>
     <string name="risk_type">Risk type</string>
+    <string name="niva">Nivå:</string>
 </resources>
