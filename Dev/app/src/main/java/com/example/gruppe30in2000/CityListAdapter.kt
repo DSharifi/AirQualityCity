@@ -1,15 +1,15 @@
 package com.example.gruppe30in2000
 
+import android.graphics.Color
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.View
 import android.widget.*
-import com.example.gruppe30in2000.CityElement
-import com.example.gruppe30in2000.R
 import kotlinx.android.synthetic.main.alert_dialog.view.*
 
 class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
@@ -41,6 +41,9 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
 
         }
 
+
+        // TODO Find a way to collapse to one function for cleaner code?
+        // Edit elementContent - Similar code to when adding a new element in FavoriteCity.
         holder.editButton.setOnClickListener {
 
             // get the current content
@@ -77,6 +80,17 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val titleInput = edit_title.text
                     val descriptionInput = edit_description.text
+
+
+                    // Change risk displayimage color.
+                    if (descriptionInput.contains("hoy", ignoreCase = true)) {
+                        Log.e("log: ", "DescriptionInput contains hoy!!!")
+                        holder.riskDisplay.setBackgroundColor(Color.BLACK)
+                    }
+                    else {
+                        holder.riskDisplay.setBackgroundColor(Color.GREEN)
+                    }
+
                     addButton.isEnabled = (!titleInput.isEmpty() && !descriptionInput.isEmpty())
                 }
             }
@@ -116,6 +130,7 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
         val description = textView.findViewById<TextView>(R.id.description_text)
         val deleteButton = textView.findViewById<ImageButton>(R.id.delete_button)
         val editButton = textView.findViewById<ImageButton>(R.id.edit_button)
+        val riskDisplay = textView.findViewById<ImageView>(R.id.risk_display)
 
 
     }

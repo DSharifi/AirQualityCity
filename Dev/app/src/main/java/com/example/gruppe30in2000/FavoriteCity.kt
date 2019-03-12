@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.Toast
 import java.util.ArrayList
 import android.content.SharedPreferences
+import android.view.View
 import com.google.gson.Gson
 
 class FavoriteCity : AppCompatActivity() {
@@ -83,6 +84,8 @@ class FavoriteCity : AppCompatActivity() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val titleInput = edit_title.text
                     val descriptionInput = edit_description.text
+
+                    // TODO check what type of risk descriptionInput contain and change backbroungcolor for risk_display ImageView
                     addButton.isEnabled = (!titleInput.isEmpty() && !descriptionInput.isEmpty())
                 }
             }

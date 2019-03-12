@@ -8,7 +8,8 @@
     <string name="dialog_title">Add new element</string>
     <string name="title">Enter title...</string>
     <string name="description">Enter description...</string>
-    <string name="ListActivity_name">List</string>
 
 
+    <string name="country">Country</string>
+    <string name="risk_type">Risk type</string>
 </resources>
