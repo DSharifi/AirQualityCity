@@ -1,9 +1,10 @@
 package com.example.myapplication
 
-data class AirQualityStation(
-    val data: Data,
-    val meta: Meta
-)
+import java.util.function.DoubleBinaryOperator
+
+class AirQualityStation(val data: Data, val meta: Meta) {
+    // TODO: Legger til metoder her. (Get, og set, etc.)
+}
 
 data class Data(
     val time: List<Time>
