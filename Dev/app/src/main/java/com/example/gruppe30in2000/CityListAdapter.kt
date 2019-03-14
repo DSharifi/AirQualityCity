@@ -86,7 +86,6 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val titleInput = edit_title.text
                     val descriptionInput = edit_description.text
-                    validateRiskType(descriptionInput.toString(), holder)
 
                     addButton.isEnabled = (!titleInput.isEmpty() && !descriptionInput.isEmpty())
                 }
@@ -109,6 +108,8 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
                 holder.title.text = edit_title.text
                 holder.description.text = edit_description.text
 
+                validateRiskType(holder.description.text.toString(), holder)
+
                 alertDialog.hide()
 
                 Toast.makeText(addButton.context, "Edit saved", Toast.LENGTH_SHORT).show()
@@ -122,7 +123,7 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
         return dataSet.size
     }
 
-    // TODO image set are delayed by one time, find out why...
+    // Method to validate and change the riskdisplay image by description text.
     private fun validateRiskType(text : String, holder : ViewHolder) {
         // Change risk displayimage color.
         when {
@@ -137,7 +138,6 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
 
             else -> Log.e("log: ", "FEIL RISK INPUT!!")
         }
-        return
     }
 
     class ViewHolder(textView: View) : RecyclerView.ViewHolder(textView) {
