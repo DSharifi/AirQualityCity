@@ -3,16 +3,9 @@ import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 
 data class Station(
-    // display name
-    val name: String,
     // identifier, expression of interest
-    val eoi: String,
-    val longitude: Double,
-    val latitude: Double
+    val eoi: String
 )
-
-
-
 
 
 data class RefTime(
@@ -22,35 +15,12 @@ data class RefTime(
 
 
 
-
-// trenger vi denne?
-data class AirQualityStation (
-    val data: Data
-)
-
-data class Data(
-    val time: TimesList
-)
-
-data class TimesList(
-    val time: Array<Time>
-)
-
-
-data class Time(
-    val to: String,
+// Stasjonsobjekt med metadata og alle
+data class Measurement(
     val from: String,
+    val to: String,
     val variables: Variables
 )
-
-data class Variables(
-    val aqi: AQI
-)
-
-data class AQI(
-    val value: Double
-)
-
 
 
 
@@ -67,16 +37,11 @@ fun getRefTimes() : RefTime {
     return Gson().fromJson(response.text)
 }
 
-
 fun main() {
     val stationList = getStations()
     val refTimes = getRefTimes()
     println("heheh")
     println(stationList[0])
-
-    //val airQualityResponse = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${stationList[0].eoi}&reftime=${refTimes.reftimes[0]}")
-    //println(airQualityResponse.text)
-
 
     val airQualityResponse = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=" + stationList[0].eoi)
     val airQualityList = Gson().fromJson<AirQualityStation>(airQualityResponse.text)
