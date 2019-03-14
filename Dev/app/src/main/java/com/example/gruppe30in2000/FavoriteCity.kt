@@ -15,8 +15,11 @@ import android.widget.EditText
 import android.widget.Toast
 import java.util.ArrayList
 import android.content.SharedPreferences
+import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.View
 import com.google.gson.Gson
+import java.security.AccessController.getContext
 
 class FavoriteCity : AppCompatActivity() {
 
@@ -35,14 +38,12 @@ class FavoriteCity : AppCompatActivity() {
 
         val floatingButton = findViewById<FloatingActionButton>(R.id.floating_button)
 
-
         ////// MAKE 2 element to current
         val title1 = SpannableStringBuilder("Oslo") as Editable
         val description1 = SpannableStringBuilder("Lav") as Editable
 
         val title2 = SpannableStringBuilder("Trondheim") as Editable
         val description2 = SpannableStringBuilder("Moderat") as Editable
-
 
         val element = CityElement(title1, description1)
         val element2 = CityElement(title2, description2)
@@ -77,14 +78,11 @@ class FavoriteCity : AppCompatActivity() {
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val titleInput = edit_title.text
                     val descriptionInput = edit_description.text
-
-                    // TODO check what type of risk descriptionInput contain and change backbroungcolor for risk_display ImageView
                     addButton.isEnabled = (!titleInput.isEmpty() && !descriptionInput.isEmpty())
                 }
             }
@@ -107,11 +105,12 @@ class FavoriteCity : AppCompatActivity() {
         }
     }
 
+
     // Method the initinalize the recycleView
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
         viewManager = LinearLayoutManager(this)
 
-        viewAdapter = CityListAdapter(dataset)
+        viewAdapter = CityListAdapter(dataset, this)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
 
@@ -120,7 +119,6 @@ class FavoriteCity : AppCompatActivity() {
             adapter = viewAdapter
         }
     }
-
     /*
     private fun saveData() {
         val sharedPrefs = getSharedPreferences(sharedPREF, Context.MODE_PRIVATE)

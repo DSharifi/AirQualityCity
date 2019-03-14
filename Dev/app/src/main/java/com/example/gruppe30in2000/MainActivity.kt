@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.e("FDS", "TEST")
         val intent = Intent(this, FavoriteCity::class.java)
         startActivity(intent)
 

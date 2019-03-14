@@ -62,7 +62,8 @@
                android:layout_marginStart="300dp"
                android:layout_marginTop="20dp"
                android:id="@+id/risk_display"
-               android:background="@drawable/ic_lens_black_35dp"
+               android:background="@drawable/ic_lens_green_35dp"
+
 
     />
 

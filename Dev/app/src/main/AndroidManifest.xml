@@ -18,8 +18,6 @@
             android:theme="@style/AppTheme">
         <activity android:name=".CityListAdapter">
         </activity>
-        <activity android:name=".CityListActivity">
-        </activity>
         <activity android:name=".CityElement">
         </activity>
         <activity android:name=".FavoriteCity">

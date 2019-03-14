@@ -1,6 +1,9 @@
 package com.example.gruppe30in2000
 
+import android.app.PendingIntent.getActivity
+import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -11,9 +14,12 @@ import android.view.ViewGroup
 import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.alert_dialog.view.*
+import kotlinx.android.synthetic.main.city_element.view.*
+import java.security.AccessController.getContext
 
-class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
+class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Context) :
     RecyclerView.Adapter<CityListAdapter.ViewHolder>() {
+    val context = context
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityListAdapter.ViewHolder{
@@ -27,9 +33,11 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
         //Log.d("VIEWHOLDER: ", "onBindViewHolder: called")
 
         // set the element (cardview) text and description text base on the current position of the dataSet list.
-        holder.title.text = dataSet[pos].title
-        holder.description.text = dataSet[pos].description
+        holder.title.text = dataSet[pos].title.toString()
+        holder.description.text = dataSet[pos].description.toString()
 
+        // VALIDATE the risk type of newly added city
+        validateRiskType(holder.description.text.toString(), holder)
 
         holder.deleteButton.setOnClickListener {
 
@@ -64,32 +72,21 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
 
             // Change Element content
             val addButton = dialogView.findViewById<Button>(R.id.add_button)
+            addButton.text = "Save"
             val edit_title = dialogView.findViewById<EditText>(R.id.edit_title)
             val edit_description = dialogView.findViewById<EditText>(R.id.edit_description)
 
 
             // make a common textWatcher to use for several editText listener
             val textWatcher = object: TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                }
+                override fun afterTextChanged(s: Editable?) {}
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-                }
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val titleInput = edit_title.text
                     val descriptionInput = edit_description.text
-
-
-                    // Change risk displayimage color.
-                    if (descriptionInput.contains("hoy", ignoreCase = true)) {
-                        Log.e("log: ", "DescriptionInput contains hoy!!!")
-                        holder.riskDisplay.setBackgroundColor(Color.BLACK)
-                    }
-                    else {
-                        holder.riskDisplay.setBackgroundColor(Color.GREEN)
-                    }
+                    validateRiskType(descriptionInput.toString(), holder)
 
                     addButton.isEnabled = (!titleInput.isEmpty() && !descriptionInput.isEmpty())
                 }
@@ -123,6 +120,24 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>) :
 
     override fun getItemCount(): Int {
         return dataSet.size
+    }
+
+    // TODO image set are delayed by one time, find out why...
+    private fun validateRiskType(text : String, holder : ViewHolder) {
+        // Change risk displayimage color.
+        when {
+            text.contains("hoy", ignoreCase = true) ->
+                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lens_red_35dp))
+
+            text.contains("moderat", ignoreCase = true) ->
+                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lens_yellow_35dp))
+
+            text.contains("lav", ignoreCase = true) ->
+                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lens_green_35dp))
+
+            else -> Log.e("log: ", "FEIL RISK INPUT!!")
+        }
+        return
     }
 
     class ViewHolder(textView: View) : RecyclerView.ViewHolder(textView) {
