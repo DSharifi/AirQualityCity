@@ -52,7 +52,7 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
 
         // TODO Find a way to collapse to one function for cleaner code?
         // Edit elementContent - Similar code to when adding a new element in FavoriteCity.
-        holder.editButton.setOnClickListener {
+        holder.linearView.setOnClickListener {
 
             // get the current content
             val tempTitle = dataSet[pos].title
@@ -117,8 +117,12 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
 
         }
 
-    }
 
+//        val onSwipeTouchListener = OnSwipeTouchListener(context)
+//
+//        holder.linearView.setOnTouchListener(onSwipeTouchListener)
+
+    }
     override fun getItemCount(): Int {
         return dataSet.size
     }
@@ -146,7 +150,8 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
         val deleteButton = textView.findViewById<ImageButton>(R.id.delete_button)
         val editButton = textView.findViewById<ImageButton>(R.id.edit_button)
         val riskDisplay = textView.findViewById<ImageView>(R.id.risk_display)
-
+        val swipeDelete = textView.findViewById<LinearLayout>(R.id.swipe_delete)
+        val linearView = textView.findViewById<LinearLayout>(R.id.linear_view)
 
     }
 

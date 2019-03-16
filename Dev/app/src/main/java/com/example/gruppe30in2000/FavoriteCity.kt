@@ -14,12 +14,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import java.util.ArrayList
-import android.content.SharedPreferences
-import android.support.v4.content.ContextCompat
-import android.util.Log
-import android.view.View
-import com.google.gson.Gson
-import java.security.AccessController.getContext
+import android.support.v7.widget.helper.ItemTouchHelper
+
 
 class FavoriteCity : AppCompatActivity() {
 
@@ -34,7 +30,6 @@ class FavoriteCity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorite_city)
-
 
         val floatingButton = findViewById<FloatingActionButton>(R.id.floating_button)
 
@@ -118,6 +113,10 @@ class FavoriteCity : AppCompatActivity() {
 
             adapter = viewAdapter
         }
+
+        val swipeController = SwipeController()
+        val itemTouchhelper = ItemTouchHelper(swipeController)
+        itemTouchhelper.attachToRecyclerView(recyclerView)
     }
     /*
     private fun saveData() {
