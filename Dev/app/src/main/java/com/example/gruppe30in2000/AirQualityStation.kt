@@ -1,4 +1,5 @@
-package com.example.myapplication
+package com.example.gruppe30in2000
+
 
 class AirQualityStation(val data: Data, val meta: Meta) {
     // TODO: Legger til metoder her. (Get, og set, etc.)

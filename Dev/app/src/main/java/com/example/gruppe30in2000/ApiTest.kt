@@ -1,4 +1,5 @@
-package com.example.myapplication
+package com.example.gruppe30in2000
+
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 
