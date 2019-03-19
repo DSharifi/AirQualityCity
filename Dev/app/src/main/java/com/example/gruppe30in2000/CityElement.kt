@@ -1,0 +1,14 @@
+package com.example.gruppe30in2000
+
+import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.text.Editable
+
+
+class CityElement(title: Editable, description: Editable) {
+
+    var title = title
+    var description = description
+
+
+}

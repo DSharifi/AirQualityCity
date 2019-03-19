@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">Gruppe30 IN2000</string>
-    <string name="title_home">Home</string>
-    <string name="title_map">Map</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_maps">Map</string>
+
+    <string name="title_home">Gruppe30 IN2000</string>
+    <string name="title_map">Gruppe30 IN2000</string>
+    <string name="title_notifications">Gruppe30 IN2000</string>
+
+    <string name="dialog_title">Legg til by</string>
+    <string name="delete_dialog_title">Slett by</string>
+    <string name="title">Enter title...</string>
+    <string name="description">Enter description...</string>
+
+
+    <string name="country">Country</string>
+    <string name="risk_type">Risk type</string>
+    <string name="niva">Nivå:</string>
+    <string name="avbryt">Avbryt</string>
+    <string name="ok">OK</string>
 </resources>
