@@ -1,6 +1,5 @@
 package com.example.gruppe30in2000
 
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -15,8 +14,6 @@ import android.widget.EditText
 import android.widget.Toast
 import java.util.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.provider.MediaStore.Audio.Playlists.Members.moveItem
-import android.util.Log
 
 
 class FavoriteCity : AppCompatActivity() {
@@ -116,33 +113,19 @@ class FavoriteCity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
-//        val swipeController = SwipeController()
-//        val itemTouchhelper = ItemTouchHelper(swipeController)
-//        itemTouchhelper.attachToRecyclerView(recyclerView)
 
 
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.LEFT
-        ) {
-
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                moveItem(viewHolder.adapterPosition, target.adapterPosition)
-                return true
+        var swipeController = object : SwipeController() {
+            override fun deleteItem(pos : Int) {
+                deleteItemAt(pos)
             }
+        }
+        val itemTouchhelper = ItemTouchHelper(swipeController)
+        itemTouchhelper.attachToRecyclerView(recyclerView)
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Log.e("onSwiped:", "Swiping")
 
-//                deleteItem(viewHolder.adapterPosition)
 
-            }
-        })
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+
     }
 
     fun moveItem(oldPos: Int, newPos: Int) {
@@ -153,13 +136,20 @@ class FavoriteCity : AppCompatActivity() {
     }
 
 
-    fun deleteItem(pos: Int) {
+    fun deleteItemAt(pos: Int) {
         val item = dataset[pos]
         dataset.removeAt(pos)
         viewAdapter.notifyItemRemoved(pos)
         Toast.makeText(this,"Removed ${item.title}",Toast.LENGTH_SHORT).show()
 
     }
+
+
+
+
+
+
+
     /*
     private fun saveData() {
         val sharedPrefs = getSharedPreferences(sharedPREF, Context.MODE_PRIVATE)
@@ -190,3 +180,109 @@ class FavoriteCity : AppCompatActivity() {
         }
     }*/
 }
+
+
+
+// SWIPECONTROLLER UNUSE COD, DELETE?
+
+
+
+//
+//        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+//            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+//            ItemTouchHelper.LEFT
+//        ) {
+//            private var swipeBack = false
+//            private val buttonWidth = 300f
+//
+//            override fun onMove(
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                target: RecyclerView.ViewHolder
+//            ): Boolean {
+////                moveItem(viewHolder.adapterPosition, target.adapterPosition)
+//                return true
+//            }
+//
+//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+////                Log.e("onSwiped:", "Swiping")
+////                val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
+////                val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
+////                dialogBuilder.setView(dialogView) // set the view into the builder
+////                val alertDialog = dialogBuilder.create()
+////                alertDialog.show()
+////
+////                val okButton = dialogView.findViewById<Button>(R.id.ok_button)
+////                val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
+////
+////                okButton.setOnClickListener {
+////                    deleteItem(viewHolder.adapterPosition)
+////                    alertDialog.hide()
+////                }
+////
+////                cancelButton.setOnClickListener {
+////                    alertDialog.hide()
+////                }
+//            }
+//
+//            override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {
+//                if (swipeBack) {
+//                    swipeBack = false
+//                    return 0
+//                }
+//                return super.convertToAbsoluteDirection(flags, layoutDirection)
+//            }
+//            override fun onChildDraw(
+//                c: Canvas,
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                dX: Float, dY: Float,
+//                actionState: Int, isCurrentlyActive: Boolean
+//            ) {
+//
+//                if (actionState == ACTION_STATE_SWIPE) {
+//                    setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+//                }
+//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+//            }
+//
+//            @SuppressLint("ClickableViewAccessibility")
+//            private fun setTouchListener(
+//                c: Canvas,
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                dX: Float, dY: Float,
+//                actionState: Int, isCurrentlyActive: Boolean
+//            ) {
+//
+//                recyclerView.setOnTouchListener(object : View.OnTouchListener {
+//                    override fun onTouch(v: View, event: MotionEvent): Boolean {
+//                        swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
+//                        if (swipeBack) {
+//                            if (dX <= buttonWidth) {
+//                                Log.e("onSwiped:", "Swiping")
+//                                val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
+//                                val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
+//                                dialogBuilder.setView(dialogView) // set the view into the builder
+//                                val alertDialog = dialogBuilder.create()
+//                                alertDialog.show()
+//
+//                                val okButton = dialogView.findViewById<Button>(R.id.ok_button)
+//                                val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
+//
+//                                okButton.setOnClickListener {
+//                                    deleteItem(viewHolder.adapterPosition)
+//                                    alertDialog.hide()
+//                                }
+//
+//                                cancelButton.setOnClickListener {
+//                                    alertDialog.hide()
+//                                }
+//                            }
+//                        }
+//                        return false
+//                    }
+//                })
+//            }
+//        })
+//        itemTouchHelper.attachToRecyclerView(recyclerView)

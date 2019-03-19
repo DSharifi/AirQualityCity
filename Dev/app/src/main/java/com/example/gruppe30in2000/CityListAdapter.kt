@@ -39,15 +39,15 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
         // VALIDATE the risk type of newly added city
         validateRiskType(holder.description.text.toString(), holder)
 
-        holder.deleteButton.setOnClickListener {
-
-            val itemDetail = dataSet.get(pos).title
-            dataSet.removeAt(pos)
-            notifyItemRemoved(pos)
-            notifyItemRangeChanged(pos,dataSet.size)
-            Toast.makeText(holder.deleteButton.context,"Removed $itemDetail",Toast.LENGTH_SHORT).show()
-
-        }
+//        holder.deleteButton.setOnClickListener {
+//
+//            val itemDetail = dataSet.get(pos).title
+//            dataSet.removeAt(pos)
+//            notifyItemRemoved(pos)
+//            notifyItemRangeChanged(pos,dataSet.size)
+//            Toast.makeText(holder.deleteButton.context,"Removed $itemDetail",Toast.LENGTH_SHORT).show()
+//
+//        }
 
 
         // TODO Find a way to collapse to one function for cleaner code?
@@ -59,8 +59,8 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
             val tempDescription= dataSet[pos].description
 
             // Build new dialog for content change
-            val dialogBuilder = AlertDialog.Builder(holder.deleteButton.context) // make a dialog builder
-            val dialogView = LayoutInflater.from(holder.deleteButton.context).inflate(R.layout.alert_dialog, null) // get the dialog xml view
+            val dialogBuilder = AlertDialog.Builder(context) // make a dialog builder
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null) // get the dialog xml view
             dialogBuilder.setView(dialogView) // set the view into the builder
             dialogView.edit_title.text = tempTitle
             dialogView.edit_description.text = tempDescription
@@ -147,8 +147,8 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
     class ViewHolder(textView: View) : RecyclerView.ViewHolder(textView) {
         val title = textView.findViewById<TextView>(R.id.title_text)
         val description = textView.findViewById<TextView>(R.id.description_text)
-        val deleteButton = textView.findViewById<ImageButton>(R.id.delete_button)
-        val editButton = textView.findViewById<ImageButton>(R.id.edit_button)
+//        val deleteButton = textView.findViewById<ImageButton>(R.id.delete_button)
+//        val editButton = textView.findViewById<ImageButton>(R.id.edit_button)
         val riskDisplay = textView.findViewById<ImageView>(R.id.risk_display)
         val swipeDelete = textView.findViewById<LinearLayout>(R.id.swipe_delete)
         val linearView = textView.findViewById<LinearLayout>(R.id.linear_view)
