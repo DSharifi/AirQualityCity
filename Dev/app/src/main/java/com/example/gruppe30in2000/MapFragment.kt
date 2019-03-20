@@ -4,6 +4,8 @@ package com.example.gruppe30in2000
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.BitmapFactory
+import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
@@ -14,9 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -57,7 +57,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
 
-        Log.e("------ onMapReady","tesssttt")
         mMap = googleMap
 
 
@@ -79,42 +78,41 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
 
-
-        enableMyLocation()
-
+        activateLocationIfEnabled()
 
         // Add a marker in Oslo and move the camera
         val oslo = LatLng(59.911491, 10.757933)
         mMap.addMarker(MarkerOptions().position(oslo).title("Marker in Oslo"))
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(oslo))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo,5.0F))
 
-        addStation(61.0,9.0, "testStation")
+        addStation(61.0,9.0, "testStation", 1)
+        addStation(62.0,9.5, "testStation", 2)
     }
 
 
     //Add a pin to the map with the position and name
-    fun addStation(lat : Double, lng : Double, name : String){
+    // TODO: endre slik den sjekker på luftverdien istedenfor int
+    fun addStation(lat : Double, lng : Double, name : String, color : Int){
         val tmp = LatLng(lat, lng)
-        mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name))
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(tmp))
-    }
 
+        when (color) {
+            1 ->
+                mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
 
-    /*
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        // Check if location permissions are granted and if so enable the
-        // location data layer.
-        when (requestCode) {
-            LocationPermission.getLocationPermissionStatus() -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //break
-            }
+            2 ->
+                mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)))
+
+            3 ->
+                mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+
         }
     }
-    */
 
 
-    fun enableMyLocation() {
+
+    //Activates location button on map if its enabled, else show toast
+    //TODO: Endre else til å linke til settings slik at det kan settes på manuelt
+    fun activateLocationIfEnabled() {
         if (ContextCompat.checkSelfPermission(activity!!.applicationContext,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
@@ -124,6 +122,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         else {
             Toast.makeText(activity!!.applicationContext, R.string.enable_location, Toast.LENGTH_LONG).show()
         }
-
     }
 }

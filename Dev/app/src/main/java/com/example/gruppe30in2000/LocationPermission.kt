@@ -18,13 +18,6 @@ class LocationPermission(val activity: Activity){
 
     companion object {
         const val REQUEST_LOCATION_PERMISSION = 1
-
-
-        fun getLocationPermissionStatus(): Int {
-            return REQUEST_LOCATION_PERMISSION
-        }
-
-
     }
 
     fun enableMyLocation() {
@@ -32,8 +25,6 @@ class LocationPermission(val activity: Activity){
             mActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION
         )
     }
-
-
 
 }
 
