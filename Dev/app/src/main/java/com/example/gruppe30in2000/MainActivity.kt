@@ -16,12 +16,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Creates LocationPermission object and asks user to allow location
+        val lp = LocationPermission(this)
+        lp.enableMyLocation()
 
-        enableMyLocation()
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         replaceFragment(HomeFragment())
 
@@ -58,21 +61,5 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-
-
-    companion object {
-        const val REQUEST_LOCATION_PERMISSION = 1
-
-        fun getLocationPermissionStatus(): Int {
-            return REQUEST_LOCATION_PERMISSION
-        }
-    }
-
-    fun enableMyLocation() {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MainActivity.REQUEST_LOCATION_PERMISSION
-            )
-
-    }
 
 }

@@ -12,7 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.gruppe30in2000.MainActivity.Companion.REQUEST_LOCATION_PERMISSION
+import android.widget.Toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -38,10 +38,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_map, container, false)
         return mView
-
     }
 
 
@@ -101,24 +101,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-
+    /*
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         // Check if location permissions are granted and if so enable the
         // location data layer.
         when (requestCode) {
-            MainActivity.getLocationPermissionStatus() -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            LocationPermission.getLocationPermissionStatus() -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //break
             }
         }
     }
-
-    // Map - Current location
+    */
 
 
     fun enableMyLocation() {
-        if (MainActivity.getLocationPermissionStatus() == 1) {
+        if (ContextCompat.checkSelfPermission(activity!!.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ){
             mMap.isMyLocationEnabled = true
         }
-    }
+        else {
+            Toast.makeText(activity!!.applicationContext, R.string.enable_location, Toast.LENGTH_LONG).show()
+        }
 
+    }
 }
