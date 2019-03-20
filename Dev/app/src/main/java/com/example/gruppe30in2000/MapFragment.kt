@@ -5,6 +5,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -17,6 +18,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
+import com.google.maps.android.heatmaps.Gradient
+import com.google.maps.android.heatmaps.HeatmapTileProvider
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -87,6 +90,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         addStation(61.0,9.0, "testStation", 1)
         addStation(62.0,9.5, "testStation", 2)
+
+        var heatmap = Heatmap(mMap)
     }
 
 
@@ -109,7 +114,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-
     //Activates location button on map if its enabled, else show toast
     //TODO: Endre else til å linke til settings slik at det kan settes på manuelt
     fun activateLocationIfEnabled() {
@@ -123,4 +127,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Toast.makeText(activity!!.applicationContext, R.string.enable_location, Toast.LENGTH_LONG).show()
         }
     }
+
+
 }
