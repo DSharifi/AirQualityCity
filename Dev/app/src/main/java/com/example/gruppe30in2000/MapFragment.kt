@@ -18,8 +18,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import com.google.maps.android.heatmaps.Gradient
-import com.google.maps.android.heatmaps.HeatmapTileProvider
+//import com.google.maps.android.heatmaps.Gradient
+//import com.google.maps.android.heatmaps.HeatmapTileProvider
 
 
 // TODO: Rename parameter arguments, choose names that match

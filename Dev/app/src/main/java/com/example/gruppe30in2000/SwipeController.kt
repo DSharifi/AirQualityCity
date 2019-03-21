@@ -28,7 +28,7 @@ open class SwipeController : Callback() {
     private val buttonWidth = 300f
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        return ItemTouchHelper.Callback.makeMovementFlags(0, LEFT or RIGHT)
+        return ItemTouchHelper.Callback.makeMovementFlags(0, LEFT)
     }
 
     override fun onMove(
@@ -95,6 +95,7 @@ open class SwipeController : Callback() {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
                 if (swipeBack) {
+                    // If swipe left, display dialog to delete
                     if (dX <= buttonWidth) {
                         Log.e("onSwiped:", "Swiping")
                         val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder

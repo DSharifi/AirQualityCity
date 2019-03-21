@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         lp.enableMyLocation()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        replaceFragment(HomeFragment())
+        replaceFragment(FavoriteCity())
 
 //        val intent = Intent(this, FavoriteCity::class.java)
 //      startActivity(intent)
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                replaceFragment(HomeFragment())
+                replaceFragment(FavoriteCity())
                 return@OnNavigationItemSelectedListener true
             }
 
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
+                //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
         }

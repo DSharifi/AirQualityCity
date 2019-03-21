@@ -1,8 +1,10 @@
 package com.example.gruppe30in2000
 
-import android.support.v7.app.AppCompatActivity
+import com.github.salomonbrys.kotson.*
+import com.google.gson.Gson
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,23 +16,43 @@ import android.widget.EditText
 import android.widget.Toast
 import java.util.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 
 
-class FavoriteCity : AppCompatActivity() {
+class FavoriteCity : Fragment() {
+    data class Station(
+        // identifier, expression of interest
+        val eoi: String
+    )
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var fView: View
     private val sharedPREF = "sharedPrefs"
     private val dataSET= "dataset"
 
     private var dataset = ArrayList<CityElement>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_favorite_city)
 
-        val floatingButton = findViewById<FloatingActionButton>(R.id.floating_button)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
+        return fView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        fView
+//    }
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+////        setContentView(R.layout.fragment_favorite_city)
+
+        val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
 
         ////// MAKE 2 element to current
         val title1 = SpannableStringBuilder("Oslo") as Editable
@@ -46,14 +68,15 @@ class FavoriteCity : AppCompatActivity() {
 //        loadData()
         initRecycleView(dataset)
 
+//        println(getAirStations()[3].data.time[0].variables.AQI.value)
+
 
 
         //Toast.makeText(this, "CURRENT DATA SIZE: ${dataset.size}", Toast.LENGTH_LONG).show()
 
 
-
         floatingButton.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(this) // make a dialog builder
+            val dialogBuilder = AlertDialog.Builder(this.context!!) // make a dialog builder
             val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null) // get the dialog xml view
             dialogBuilder.setView(dialogView) // set the view into the builder
             val alertDialog = dialogBuilder.create()
@@ -88,12 +111,12 @@ class FavoriteCity : AppCompatActivity() {
             addButton.setOnClickListener {
                 val tempElement = CityElement(edit_title.text, edit_description.text)
                 dataset.add(tempElement)
-                Toast.makeText(this, "Element added!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, "Element added!", Toast.LENGTH_SHORT).show()
 
                 initRecycleView(dataset)
                 alertDialog.hide()
 
-                Toast.makeText(this, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
                 //saveData()
             }
         }
@@ -102,11 +125,11 @@ class FavoriteCity : AppCompatActivity() {
 
     // Method the initinalize the recycleView
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
-        viewManager = LinearLayoutManager(this)
+        viewManager = LinearLayoutManager(this.context)
 
-        viewAdapter = CityListAdapter(dataset, this)
+        viewAdapter = CityListAdapter(dataset, this.context!!)
 
-        recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
+        recyclerView = fView.findViewById<RecyclerView>(R.id.recyclerView).apply {
 
             layoutManager = viewManager
 
@@ -140,13 +163,36 @@ class FavoriteCity : AppCompatActivity() {
         val item = dataset[pos]
         dataset.removeAt(pos)
         viewAdapter.notifyItemRemoved(pos)
-        Toast.makeText(this,"Removed ${item.title}",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this.context,"Removed ${item.title}",Toast.LENGTH_SHORT).show()
 
     }
 
-
-
-
+//
+//    // Henter livedata for alle målestasjoner
+//    fun getAirStations() : ArrayList<AirQualityStation> {
+//        val stationList = ArrayList<AirQualityStation>()
+//        val stations = getStations()
+//
+//        val gson = Gson()
+//
+//        for (station in stations) {
+//            // Hent stasjonmaaling
+//            val airQualityResponse = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}")
+//            stationList.add(gson.fromJson(airQualityResponse.text))
+//        }
+//
+//        return stationList
+//    }
+//
+//    fun getAqi(station:Int, time:Int) : Double{
+//        return getAirStations()[station].data.time[time].variables.AQI.value
+//    }
+//
+//    // Returnerer en liste med alle stasjoner
+//    fun getStations() : ArrayList<Station> {
+//        val response = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations")
+//        return Gson().fromJson(response.text)
+//    }
 
 
 
@@ -181,108 +227,3 @@ class FavoriteCity : AppCompatActivity() {
     }*/
 }
 
-
-
-// SWIPECONTROLLER UNUSE COD, DELETE?
-
-
-
-//
-//        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-//            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-//            ItemTouchHelper.LEFT
-//        ) {
-//            private var swipeBack = false
-//            private val buttonWidth = 300f
-//
-//            override fun onMove(
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                target: RecyclerView.ViewHolder
-//            ): Boolean {
-////                moveItem(viewHolder.adapterPosition, target.adapterPosition)
-//                return true
-//            }
-//
-//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-////                Log.e("onSwiped:", "Swiping")
-////                val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
-////                val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
-////                dialogBuilder.setView(dialogView) // set the view into the builder
-////                val alertDialog = dialogBuilder.create()
-////                alertDialog.show()
-////
-////                val okButton = dialogView.findViewById<Button>(R.id.ok_button)
-////                val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
-////
-////                okButton.setOnClickListener {
-////                    deleteItem(viewHolder.adapterPosition)
-////                    alertDialog.hide()
-////                }
-////
-////                cancelButton.setOnClickListener {
-////                    alertDialog.hide()
-////                }
-//            }
-//
-//            override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {
-//                if (swipeBack) {
-//                    swipeBack = false
-//                    return 0
-//                }
-//                return super.convertToAbsoluteDirection(flags, layoutDirection)
-//            }
-//            override fun onChildDraw(
-//                c: Canvas,
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                dX: Float, dY: Float,
-//                actionState: Int, isCurrentlyActive: Boolean
-//            ) {
-//
-//                if (actionState == ACTION_STATE_SWIPE) {
-//                    setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-//                }
-//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-//            }
-//
-//            @SuppressLint("ClickableViewAccessibility")
-//            private fun setTouchListener(
-//                c: Canvas,
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                dX: Float, dY: Float,
-//                actionState: Int, isCurrentlyActive: Boolean
-//            ) {
-//
-//                recyclerView.setOnTouchListener(object : View.OnTouchListener {
-//                    override fun onTouch(v: View, event: MotionEvent): Boolean {
-//                        swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
-//                        if (swipeBack) {
-//                            if (dX <= buttonWidth) {
-//                                Log.e("onSwiped:", "Swiping")
-//                                val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
-//                                val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
-//                                dialogBuilder.setView(dialogView) // set the view into the builder
-//                                val alertDialog = dialogBuilder.create()
-//                                alertDialog.show()
-//
-//                                val okButton = dialogView.findViewById<Button>(R.id.ok_button)
-//                                val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
-//
-//                                okButton.setOnClickListener {
-//                                    deleteItem(viewHolder.adapterPosition)
-//                                    alertDialog.hide()
-//                                }
-//
-//                                cancelButton.setOnClickListener {
-//                                    alertDialog.hide()
-//                                }
-//                            }
-//                        }
-//                        return false
-//                    }
-//                })
-//            }
-//        })
-//        itemTouchHelper.attachToRecyclerView(recyclerView)
