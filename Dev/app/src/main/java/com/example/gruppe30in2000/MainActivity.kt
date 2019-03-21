@@ -1,18 +1,28 @@
 package com.example.gruppe30in2000
 
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+interface OnTaskCompleted{
+    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>);
+}
 
+class MainActivity : AppCompatActivity(), OnTaskCompleted  {
+
+    var airQualityStationsList = ArrayList<AirQualityStation>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+       val asyncApiGetter = AsyncApiGetter(this)
+        asyncApiGetter.execute()
 
         // Creates LocationPermission object and asks user to allow location
         val lp = LocationPermission(this)
@@ -23,7 +33,11 @@ class MainActivity : AppCompatActivity() {
 
 //        val intent = Intent(this, FavoriteCity::class.java)
 //      startActivity(intent)
+    }
 
+    override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
+        airQualityStationsList = list
+        Log.e("gggggggg", airQualityStationsList[0].meta.superlocation.name)
     }
 
 

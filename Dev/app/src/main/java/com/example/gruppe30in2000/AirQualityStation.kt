@@ -1,5 +1,34 @@
 package com.example.gruppe30in2000
 
+import com.google.gson.Gson
+import com.github.salomonbrys.kotson.*
+
+class AirQualityStationCollection{
+        var airQualityStationList = ArrayList<AirQualityStation>()
+        init{
+                airQualityStationList = getAirStations()
+        }
+
+        fun getStations() : ArrayList<Station> {
+                val response = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations")
+                return Gson().fromJson(response.text)
+        }
+
+        fun getAirStations() : ArrayList<AirQualityStation> {
+                val stationList = ArrayList<AirQualityStation>()
+                val stations = getStations()
+
+                val gson = Gson()
+
+                for (station in stations) {
+                        val airQualityResponse = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}")
+                        stationList.add(gson.fromJson(airQualityResponse.text))
+                }
+
+                return stationList
+        }
+
+}
 
 class AirQualityStation(val data: Data, val meta: Meta) {
     // TODO: Legger til metoder her. (Get, og set, etc.)
