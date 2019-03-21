@@ -9,4 +9,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="enable_location">Allow this app to access your location for full functionality</string>
+
+
+    <string name="dialog_title">Legg til by</string>
+    <string name="delete_dialog_title">Slett by</string>
+    <string name="title">Enter title...</string>
+    <string name="description">Enter description...</string>
+
+
+    <string name="country">Country</string>
+    <string name="risk_type">Risk type</string>
+    <string name="niva">Nivå:</string>
+    <string name="avbryt">Avbryt</string>
+    <string name="ok">OK</string>
 </resources>

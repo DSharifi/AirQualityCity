@@ -20,6 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -35,5 +40,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
-
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'khttp:khttp:+'
+    implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+    implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
 }
