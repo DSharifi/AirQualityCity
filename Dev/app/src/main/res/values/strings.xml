@@ -1,9 +1,15 @@
 <resources>
     <string name="app_name">Gruppe30 IN2000</string>
+    <string name="title_home">Home</string>
+    <string name="title_map">Map</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_maps">Map</string>
 
-    <string name="title_home">Gruppe30 IN2000</string>
-    <string name="title_map">Gruppe30 IN2000</string>
-    <string name="title_notifications">Gruppe30 IN2000</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="enable_location">Allow this app to access your location for full functionality</string>
+
 
     <string name="dialog_title">Legg til by</string>
     <string name="delete_dialog_title">Slett by</string>
