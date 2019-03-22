@@ -25,6 +25,7 @@ class MapStationsHandler(googleMap: GoogleMap){
         var name : String
         var aqi : Double
 
+
         for (station in stationlist){
             lat = station.meta.location.latitude.toDouble()
             lng = station.meta.location.longitude.toDouble()
@@ -34,6 +35,8 @@ class MapStationsHandler(googleMap: GoogleMap){
 
             addStation(lat, lng, name, aqi)
             }
+
+        createHeatMap()
         }
 
         //Add a pin to the map with the position and name

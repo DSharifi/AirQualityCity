@@ -22,15 +22,6 @@ import com.google.maps.android.heatmaps.Gradient
 import com.google.maps.android.heatmaps.HeatmapTileProvider
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -83,11 +74,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val oslo = LatLng(59.911491, 10.757933)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo,5.0F))
 
-
+        //Creates StationHandler and adds all stations
         val mapStations = MapStationsHandler(mMap)
-
         mapStations.addAllStations(MainActivity.staticAirQualityStationsList)
-        mapStations.createHeatMap()
 
     }
 

@@ -30,8 +30,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
         val lp = LocationPermission(this)
         lp.enableMyLocation()
 
-//        val intent = Intent(this, FavoriteCity::class.java)
-//      startActivity(intent)
     }
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
