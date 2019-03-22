@@ -15,21 +15,8 @@ class MapStationsHandler(googleMap: GoogleMap){
     val yellowHeat = arrayListOf<LatLng>()
     val redHeat = arrayListOf<LatLng>()
 
-
     init {
         mMap = googleMap
-
-
-        val testlat = LatLng(59.5,9.0)
-        val testlat2 = LatLng(59.0,9.0)
-        val testlat3 = LatLng(58.5,9.0)
-
-        /*
-        greenHeat.add(testlat)
-        yellowHeat.add(testlat2)
-        redHeat.add(testlat3)
-        */
-
     }
 
     fun addAllStations(stationlist: ArrayList<AirQualityStation>){
@@ -44,21 +31,25 @@ class MapStationsHandler(googleMap: GoogleMap){
             name = station.meta.location.name
             aqi = station.data.time[0].variables.AQI.value
 
-            addStation(lng, lat, name, aqi)
+
+            addStation(lat, lng, name, aqi)
             }
         }
 
         //Add a pin to the map with the position and name
         // TODO: Endre til å skille på riktig luftverdier
         fun addStation(lat : Double, lng : Double, name : String, aqiValue : Double){
-            val pos = LatLng(lat, lng)
+
+            //Det skal egentlig være lat først, blir feil om man ikke bytter på
+            //Lurer på om api'et bytter på disse
+            val pos = LatLng(lng, lat)
             val iconcolor : BitmapDescriptor
 
-            if (aqiValue < 50){
+            if (aqiValue <= 1.6){
                 iconcolor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
                 greenHeat.add(pos)
 
-            } else if (aqiValue >= 50 && aqiValue < 100 ){
+            } else if (aqiValue > 1.6 && aqiValue < 1.8 ){
                 iconcolor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
                 yellowHeat.add(pos)
             }
@@ -67,11 +58,11 @@ class MapStationsHandler(googleMap: GoogleMap){
                 redHeat.add(pos)
             }
 
-            mMap.addMarker(MarkerOptions().position(pos).title("Station name: " + name).icon(iconcolor))
+            mMap.addMarker(MarkerOptions().position(pos).title("Station: " + name).icon(iconcolor))
         }
+
 
     fun createHeatMap(){
         val heatmap = Heatmap(mMap, greenHeat, yellowHeat, redHeat)
     }
-
 }

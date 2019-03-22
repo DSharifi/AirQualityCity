@@ -43,21 +43,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
-
         mView = inflater.inflate(R.layout.fragment_map, container, false)
         return mView
     }
-
-    /*companion object{
-        private val ARG_TEST = "airQualityStationsList"
-
-        fun newInstance (airQualityStationsList : ArrayList<AirQualityStation>){
-            val fragment = MapFragment()
-            val args = Bundle()
-            args.put(ARG_TEST, airQualityStationsList)
-        }
-    }*/
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,7 +68,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     context, R.raw.map_style
                 )
             )
-
             if (!success) {
                 //Log.e(FragmentActivity.TAG, "Style parsing failed.")
                 print("Styling parsing failed")
@@ -90,27 +77,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             print("Cant find style")
         }
 
-
         activateLocationIfEnabled()
 
-        // Add a marker in Oslo and move the camera
+        //Moves the camera to Oslo
         val oslo = LatLng(59.911491, 10.757933)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo,5.0F))
 
 
-        //val heatmap = Heatmap(mMap)
-
-
         val mapStations = MapStationsHandler(mMap)
 
-        mapStations.addAllStations(MainActivity.staticList)
-
+        mapStations.addAllStations(MainActivity.staticAirQualityStationsList)
         mapStations.createHeatMap()
-
-
-
-        // Get list of stations
-        // addAllStations()
 
     }
 

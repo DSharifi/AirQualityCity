@@ -12,15 +12,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), OnTaskCompleted  {
 
     var airQualityStationsList = ArrayList<AirQualityStation>()
+
     companion object {
-        var staticList = ArrayList<AirQualityStation>()
+        //Have to be static in order to access it from MapFragment
+        var staticAirQualityStationsList = ArrayList<AirQualityStation>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-       val asyncApiGetter = AsyncApiGetter(this)
+        //gets data from api - runs in async thread
+        val asyncApiGetter = AsyncApiGetter(this)
         asyncApiGetter.execute()
 
         // Creates LocationPermission object and asks user to allow location
@@ -33,9 +36,9 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
         airQualityStationsList = list
-        staticList = list
-        Log.e("gggggggg", airQualityStationsList[0].meta.superlocation.name)
+        staticAirQualityStationsList = list
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
         replaceFragment(HomeFragment())
     }
 
@@ -50,7 +53,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
 
             R.id.navigation_map -> {
                 val mf = MapFragment()
-                //mf.onRequestPermissionsResult()
                 replaceFragment(mf)
 
                 return@OnNavigationItemSelectedListener true
@@ -69,8 +71,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentContainer, fragment)
         fragmentTransaction.commit()
-
-
 
     }
 }
