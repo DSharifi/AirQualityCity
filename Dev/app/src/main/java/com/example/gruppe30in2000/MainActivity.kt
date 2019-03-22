@@ -9,13 +9,12 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 
-interface OnTaskCompleted{
-    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>);
-}
-
 class MainActivity : AppCompatActivity(), OnTaskCompleted  {
 
     var airQualityStationsList = ArrayList<AirQualityStation>()
+    companion object {
+        var staticList = ArrayList<AirQualityStation>()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +27,16 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
         val lp = LocationPermission(this)
         lp.enableMyLocation()
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        replaceFragment(HomeFragment())
-
 //        val intent = Intent(this, FavoriteCity::class.java)
 //      startActivity(intent)
     }
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
         airQualityStationsList = list
+        staticList = list
         Log.e("gggggggg", airQualityStationsList[0].meta.superlocation.name)
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        replaceFragment(HomeFragment())
     }
 
 

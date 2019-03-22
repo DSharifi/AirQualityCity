@@ -36,6 +36,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
     private lateinit var mView: View
+    private var airQualityStationList = ArrayList<AirQualityStation>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +44,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
 
         // Inflate the layout for this fragment
+
         mView = inflater.inflate(R.layout.fragment_map, container, false)
         return mView
     }
+
+    /*companion object{
+        private val ARG_TEST = "airQualityStationsList"
+
+        fun newInstance (airQualityStationsList : ArrayList<AirQualityStation>){
+            val fragment = MapFragment()
+            val args = Bundle()
+            args.put(ARG_TEST, airQualityStationsList)
+        }
+    }*/
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,11 +69,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-
     override fun onMapReady(googleMap: GoogleMap) {
 
         mMap = googleMap
-
 
         // Customize the map style
         try {
@@ -85,32 +95,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // Add a marker in Oslo and move the camera
         val oslo = LatLng(59.911491, 10.757933)
-        mMap.addMarker(MarkerOptions().position(oslo).title("Marker in Oslo"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo,5.0F))
 
-        addStation(61.0,9.0, "testStation", 1)
-        addStation(62.0,9.5, "testStation", 2)
 
-        var heatmap = Heatmap(mMap)
-    }
+        //val heatmap = Heatmap(mMap)
 
 
-    //Add a pin to the map with the position and name
-    // TODO: endre slik den sjekker på luftverdien istedenfor int
-    fun addStation(lat : Double, lng : Double, name : String, color : Int){
-        val tmp = LatLng(lat, lng)
+        val mapStations = MapStationsHandler(mMap)
 
-        when (color) {
-            1 ->
-                mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+        mapStations.addAllStations(MainActivity.staticList)
 
-            2 ->
-                mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)))
+        mapStations.createHeatMap()
 
-            3 ->
-                mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
 
-        }
+
+        // Get list of stations
+        // addAllStations()
+
     }
 
 
