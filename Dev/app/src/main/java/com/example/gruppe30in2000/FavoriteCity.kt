@@ -1,5 +1,9 @@
 package com.example.gruppe30in2000
 
+import android.content.ContentValues.TAG
+import android.location.Address
+import android.location.Geocoder
+import android.nfc.Tag
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 import android.os.Bundle
@@ -16,9 +20,14 @@ import android.widget.EditText
 import android.widget.Toast
 import java.util.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import java.io.IOException
 
 
 class FavoriteCity : Fragment() {
@@ -87,7 +96,7 @@ class FavoriteCity : Fragment() {
             val addButton = dialogView.findViewById<Button>(R.id.add_button)
             val edit_title = dialogView.findViewById<EditText>(R.id.edit_title)
             val edit_description = dialogView.findViewById<EditText>(R.id.edit_description)
-
+            val search_text = dialogView.findViewById<EditText>(R.id.search_input)
 
             // make a common textWatcher to use for several editText listener
             val textWatcher = object: TextWatcher {
@@ -106,6 +115,21 @@ class FavoriteCity : Fragment() {
 
             edit_title.addTextChangedListener(textWatcher)
             edit_description.addTextChangedListener(textWatcher)
+            search_text.setOnEditorActionListener { v, actionId, event ->
+                    if(actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.action == KeyEvent.ACTION_DOWN
+                        || event.action == KeyEvent.KEYCODE_ENTER)
+                    {
+
+                        Log.e("Searching", "Serafdashi")
+                        geolocate(search_text.text)
+
+
+                    }
+false // return false if no change/edits were made
+
+            }
 
 
             addButton.setOnClickListener {
@@ -122,7 +146,29 @@ class FavoriteCity : Fragment() {
         }
     }
 
+    private fun geolocate(text : Editable ) : Boolean {
+        val searchString = text.toString()
+        Log.d(TAG, "geolocate: geolocating")
+        val geocoder  = Geocoder(this.context)
+        var list = ArrayList<Address>().toList()
 
+        try {
+            list = geocoder.getFromLocationName(searchString,1)
+        }catch (e : IOException) {
+            Log.e("geolate:", "IOException" + e.message)
+        }
+
+
+        if (list.size > 0) {
+            val address = list.get(0)
+            Log.e("Result address:", address.toString())
+
+//            Toast.makeText(this.context, address.toString(), Toast.LENGTH_LONG).show()
+        }
+
+
+        return false
+    }
     // Method the initinalize the recycleView
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
         viewManager = LinearLayoutManager(this.context)

@@ -43,6 +43,7 @@
                   android:background="@null"
                   android:textColor="#000"
                   android:hint="Oppgi addresser, byer, postnummer"
+                  android:imeOptions="actionSearch"
         />
 
 
