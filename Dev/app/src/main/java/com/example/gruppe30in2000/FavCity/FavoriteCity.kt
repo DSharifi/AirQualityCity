@@ -1,4 +1,4 @@
-package com.example.gruppe30in2000
+package com.example.gruppe30in2000.FavCity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.Toast
 import java.util.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
+import com.example.gruppe30in2000.R
 
 
 class FavoriteCity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.example.gruppe30in2000
+package com.example.gruppe30in2000.FavCity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

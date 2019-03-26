@@ -1,4 +1,4 @@
-package com.example.gruppe30in2000
+package com.example.gruppe30in2000.FavCity
 
 import android.annotation.SuppressLint
 import android.graphics.Canvas
@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import com.example.gruppe30in2000.R
 
 
 enum class ButtonsState {
