@@ -17,7 +17,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 <<<<<<< HEAD
-        <activity android:name=".AllStationView">
+        <activity android:name=".FavCity.AllStationView">
         </activity>
         <activity android:name=".CityListAdapter">
 =======
