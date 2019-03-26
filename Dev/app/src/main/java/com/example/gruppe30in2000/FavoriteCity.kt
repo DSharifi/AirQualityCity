@@ -283,7 +283,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             }.addOnFailureListener {
                 exception ->
                 Log.e(TAG, "Place not found: " + exception.message)
-
             }
         }
 
