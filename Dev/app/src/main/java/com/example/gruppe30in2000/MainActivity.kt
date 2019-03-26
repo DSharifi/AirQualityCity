@@ -14,8 +14,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
-    var airQualityStationsList = ArrayList<AirQualityStation>()
-
     companion object {
         //Have to be static in order to access it from MapFragment
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
@@ -23,7 +21,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.initial_welcome_view)
+
 
         //gets data from api - runs in async thread
         val asyncApiGetter = AsyncApiGetter(this)
@@ -33,13 +32,11 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         val lp = LocationPermission(this)
         lp.enableMyLocation()
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        replaceFragment(FavoriteCity())
     }
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
-        airQualityStationsList = list
         staticAirQualityStationsList = list
+        setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         replaceFragment(FavoriteCity())

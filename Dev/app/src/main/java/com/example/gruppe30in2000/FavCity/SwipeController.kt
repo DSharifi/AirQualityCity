@@ -60,6 +60,7 @@ open class SwipeController : Callback() {
 //                cancelButton.setOnClickListener {
 //                    alertDialog.hide()
 //                }
+        return
     }
 
     override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {

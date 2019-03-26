@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import com.google.android.gms.maps.*
@@ -23,7 +22,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
     private lateinit var mView: View
-    private var airQualityStationList = ArrayList<AirQualityStation>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

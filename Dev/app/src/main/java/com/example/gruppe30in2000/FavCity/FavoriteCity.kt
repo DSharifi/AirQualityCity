@@ -46,13 +46,13 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var fView: View
     private lateinit var placesClient : PlacesClient
+
+    private val sessionId = 1
     private var currentPlace = ""
     private val sharedPREF = "sharedPrefs"
     private val dataSET= "dataset"
@@ -75,16 +75,27 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
         val title2 = "Trondheim"
         val description2 = "Moderat"
+        val title3 = "Bergen"
+        val description3 = "Hoy"
+
 
         val element = CityElement(title1, description1)
         val element2 = CityElement(title2, description2)
+        val element3 = CityElement(title3, description3)
         dataset.add(element)
         dataset.add(element2)
+        dataset.add(element3)
 //        loadData()
         initRecycleView(dataset)
 
         floatingButton.setOnClickListener {
+            val intent = Intent(context, AllStationView::class.java)
+            intent.putExtra("EXTRA_SESSION_ID", sessionId)
+            startActivity(intent)
 
+
+
+            /*
             val dialogBuilder = AlertDialog.Builder(this.context!!) // make a dialog builder
             val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null) // get the dialog xml view
             dialogBuilder.setView(dialogView) // set the view into the builder
@@ -139,7 +150,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
                 Toast.makeText(this.context, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
                 //saveData()
-            }
+            }*/
         }
     }
 
@@ -196,7 +207,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
         // Create a new Places client instance.
         placesClient = Places.createClient(requireContext())
-
 
         // Initialize the AutocompleteSupportFragment.
 //        val autocompleteFragment =  fragmentManager?.findFragmentById(R.id.autocomplete_fragment) as? AutocompleteSupportFragment

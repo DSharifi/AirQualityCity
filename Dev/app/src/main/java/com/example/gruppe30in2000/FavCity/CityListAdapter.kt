@@ -27,7 +27,7 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
     }
 
     override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
-        //Log.d("VIEWHOLDER: ", "onBindViewHolder: called")
+//        Log.e("VIEWHOLDER: ", "onBindViewHolder: called")
 
         // set the element (cardview) text and description text base on the current position of the dataSet list.
         holder.title.text = dataSet[pos].title.toString()
@@ -70,8 +70,8 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
             // Change Element content
             val addButton = dialogView.findViewById<Button>(R.id.add_button)
             addButton.text = "Save"
-            val edit_title = dialogView.findViewById<EditText>(R.id.edit_title)
-            val edit_description = dialogView.findViewById<EditText>(R.id.edit_description)
+            val edit_title = dialogView.findViewById<TextView>(R.id.edit_title)
+            val edit_description = dialogView.findViewById<TextView>(R.id.edit_description)
 
 
             // make a common textWatcher to use for several editText listener
@@ -153,10 +153,7 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
     class ViewHolder(textView: View) : RecyclerView.ViewHolder(textView) {
         val title = textView.findViewById<TextView>(R.id.title_text)
         val description = textView.findViewById<TextView>(R.id.description_text)
-//        val deleteButton = textView.findViewById<ImageButton>(R.id.delete_button)
-//        val editButton = textView.findViewById<ImageButton>(R.id.edit_button)
         val riskDisplay = textView.findViewById<ImageView>(R.id.risk_display)
-        val swipeDelete = textView.findViewById<LinearLayout>(R.id.swipe_delete)
         val linearView = textView.findViewById<LinearLayout>(R.id.linear_view)
 
     }
