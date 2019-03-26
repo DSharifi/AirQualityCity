@@ -1,10 +1,15 @@
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 <<<<<<< HEAD
 package com.example.gruppe30in2000
+=======
+package com.example.gruppe30in2000.Map
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
 
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.location.LocationManager
@@ -13,10 +18,16 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.Log
+=======
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 //import com.google.maps.android.heatmaps.Gradient
@@ -32,18 +43,34 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
+=======
+import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.MainActivity
+import com.example.gruppe30in2000.R
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.*
+
+
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var mMapView: MapView
     private lateinit var mView: View
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
+=======
+    private var airQualityStationList = ArrayList<AirQualityStation>()
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
         // Inflate the layout for this fragment
+=======
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
         mView = inflater.inflate(R.layout.fragment_map, container, false)
         return mView
     }
@@ -58,12 +85,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     }
 
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 
+=======
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
     override fun onMapReady(googleMap: GoogleMap) {
 
         mMap = googleMap
 
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 
+=======
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
         // Customize the map style
         try {
             val success = mMap.setMapStyle(
@@ -71,7 +104,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     context, R.raw.map_style
                 )
             )
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 
+=======
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
             if (!success) {
                 //Log.e(FragmentActivity.TAG, "Style parsing failed.")
                 print("Styling parsing failed")
@@ -81,6 +117,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             print("Cant find style")
         }
 
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 
         activateLocationIfEnabled()
 
@@ -112,6 +149,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(tmp).title("Station name: " + name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
 
         }
+=======
+        activateLocationIfEnabled()
+
+        //Moves the camera to Oslo
+        val oslo = LatLng(59.911491, 10.757933)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo,5.0F))
+
+        //Creates StationHandler and adds all stations
+        val mapStations = MapStationsHandler(mMap)
+        mapStations.addAllStations(MainActivity.staticAirQualityStationsList)
+
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt
     }
 
 
@@ -131,6 +180,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
 }
+<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/MapFragment.kt
 =======
 package com.example.gruppe30in2000
 
@@ -232,3 +282,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 }
 >>>>>>> 8d71fdcd676ab5e4cf3f8ab83dd65291b0899acc
+=======
+>>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/Map/MapFragment.kt

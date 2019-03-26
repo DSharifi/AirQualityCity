@@ -1,15 +1,17 @@
 package com.example.gruppe30in2000
 
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.API.AsyncApiGetter
+import com.example.gruppe30in2000.API.OnTaskCompleted
+import com.example.gruppe30in2000.Map.MapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), OnTaskCompleted  {
+class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     var airQualityStationsList = ArrayList<AirQualityStation>()
 

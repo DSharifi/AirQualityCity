@@ -1,8 +1,6 @@
-package com.example.gruppe30in2000
+package com.example.gruppe30in2000.FavCity
 
-import android.app.PendingIntent.getActivity
 import android.content.Context
-import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
@@ -13,16 +11,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.View
 import android.widget.*
+import com.example.gruppe30in2000.R
 import kotlinx.android.synthetic.main.alert_dialog.view.*
-import kotlinx.android.synthetic.main.city_element.view.*
-import java.security.AccessController.getContext
 
 class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Context) :
     RecyclerView.Adapter<CityListAdapter.ViewHolder>() {
     val context = context
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityListAdapter.ViewHolder{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val textView = LayoutInflater.from(parent.context).inflate(R.layout.city_element, parent, false) as View
         return ViewHolder(textView)
@@ -135,13 +132,19 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
         // Change risk displayimage color.
         when {
             text.contains("hoy", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lens_red_35dp))
+                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context,
+                    R.drawable.ic_lens_red_35dp
+                ))
 
             text.contains("moderat", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lens_yellow_35dp))
+                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context,
+                    R.drawable.ic_lens_yellow_35dp
+                ))
 
             text.contains("lav", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lens_green_35dp))
+                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context,
+                    R.drawable.ic_lens_green_35dp
+                ))
 
             else -> Log.e("log: ", "FEIL RISK INPUT!!")
         }
