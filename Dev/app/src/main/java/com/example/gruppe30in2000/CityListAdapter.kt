@@ -101,8 +101,11 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
 
 
                 // Edit the data list element content
-                dataSet[pos].title.replace(0, titleLength, edit_title.text)
-                dataSet[pos].description.replace(0, descriptLength, edit_description.text)
+
+                // TODO remove? no longer need to implement edit this way.
+
+//                dataSet[pos].title.replace(0, titleLength, edit_title.text)
+//                dataSet[pos].description.replace(0, descriptLength, edit_description.text)
 
                 // Edit the gui element content
                 holder.title.text = edit_title.text

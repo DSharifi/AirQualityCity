@@ -25,7 +25,9 @@
             android:textColor="@color/black"
     />
     <RelativeLayout android:layout_width="match_parent" android:layout_height="50dp"
-                    android:background="@drawable/white_border">
+                    android:background="@drawable/white_border"
+                    android:id="@+id/search_input"
+    >
         <ImageView android:layout_width="15dp" android:layout_height="15dp"
                    android:layout_centerVertical="true"
                    android:layout_marginLeft="10dp"
@@ -34,38 +36,36 @@
 
 
         />
-        <AutoCompleteTextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:layout_marginLeft="10dp"
                   android:layout_centerVertical="true"
                   android:textSize="15sp"
-                  android:id="@+id/search_input"
                   android:layout_toRightOf="@+id/glass_magnify"
                   android:background="@null"
                   android:textColor="#000"
                   android:hint="Oppgi addresser, byer, postnummer"
-                  android:imeOptions="actionSearch"
         />
 
 
     </RelativeLayout>
 
 
-    <EditText
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edit_title"
             android:layout_margin="5dp"
-            android:inputType="text"
+            android:paddingStart="30dp"
             android:textColor="@color/colorAccent"
             android:hint="@string/title"
 
     />
-    <EditText
+    <TextView
             android:layout_width="match_parent"
             android:layout_margin="5dp"
+            android:paddingStart="30dp"
             android:id="@+id/edit_description"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:hint="@string/description"
             android:textColor="@color/colorAccent"
 

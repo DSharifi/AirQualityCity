@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 
 
-class CityElement(title: Editable, description: Editable) {
+class CityElement(title: String, description: String) {
 
     var title = title
     var description = description
