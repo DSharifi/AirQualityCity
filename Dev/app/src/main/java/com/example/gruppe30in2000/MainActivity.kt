@@ -9,6 +9,7 @@ import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
 import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.Map.MapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         staticAirQualityStationsList = list
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        replaceFragment(HomeFragment())
+        replaceFragment(FavoriteCity())
     }
 
 

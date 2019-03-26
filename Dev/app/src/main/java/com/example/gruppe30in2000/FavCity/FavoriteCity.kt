@@ -16,10 +16,10 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.support.v7.widget.helper.ItemTouchHelper
-<<<<<<< HEAD:Dev/app/src/main/java/com/example/gruppe30in2000/FavoriteCity.kt
 import android.util.Log
 import android.view.*
 import android.widget.*
+import com.example.gruppe30in2000.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
@@ -45,9 +45,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-=======
-import com.example.gruppe30in2000.R
->>>>>>> 6ebb3f9ae1e88dbf5f12a4451ab922992d15468a:Dev/app/src/main/java/com/example/gruppe30in2000/FavCity/FavoriteCity.kt
 
 
 
