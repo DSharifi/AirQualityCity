@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.RestrictionsManager.RESULT_ERROR
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -34,7 +35,6 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 import java.io.IOException
@@ -51,8 +51,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var fView: View
     private lateinit var placesClient : PlacesClient
+    private val SecondActivityCode = 101
 
-    private val sessionId = 1
     private var currentPlace = ""
     private val sharedPREF = "sharedPrefs"
     private val dataSET= "dataset"
@@ -89,68 +89,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         initRecycleView(dataset)
 
         floatingButton.setOnClickListener {
-            val intent = Intent(context, AllStationView::class.java)
-            intent.putExtra("EXTRA_SESSION_ID", sessionId)
-            startActivity(intent)
-
-
-
-            /*
-            val dialogBuilder = AlertDialog.Builder(this.context!!) // make a dialog builder
-            val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null) // get the dialog xml view
-            dialogBuilder.setView(dialogView) // set the view into the builder
-            val alertDialog = dialogBuilder.create()
-            alertDialog.show()
-
-
-
-            val addButton = dialogView.findViewById<Button>(R.id.add_button)
-            val edit_title = dialogView.findViewById<TextView>(R.id.edit_title)
-            val edit_description = dialogView.findViewById<TextView>(R.id.edit_description)
-            val searchText = dialogView.findViewById<RelativeLayout>(R.id.search_input)
-
-//             make a common textWatcher to use for several editText/TextView listener
-            val textWatcher = object: TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val titleInput = edit_title.text
-                    val descriptionInput = edit_description.text
-                    addButton.isEnabled = (!titleInput.isEmpty())
-                }
-            }
-
-            edit_title.addTextChangedListener(textWatcher)
-            edit_description.addTextChangedListener(textWatcher)
-
-
-            searchText.setOnClickListener {
-                onSearchInputEnter(searchText.context) // call on google place search.
-                Log.e("CURRENT PLACE", currentPlace)
-
-                if (currentPlace.isNotEmpty()) {
-                    Log.e("IS NOT NYULL OR BLACK", "FDSAFSS")
-                    edit_title.text = currentPlace
-                    currentPlace = "" // reset value
-                }
-            }
-
-
-            addButton.setOnClickListener {
-                val tempElement = CityElement(edit_title.text.toString(), edit_description.text.toString())
-                dataset.add(tempElement)
-                Toast.makeText(this.context, "Element added!", Toast.LENGTH_SHORT).show()
-
-                initRecycleView(dataset)
-                alertDialog.hide()
-
-                Toast.makeText(this.context, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
-                //saveData()
-            }*/
+            val intent = Intent(this@FavoriteCity.context, AllStationView::class.java)
+            intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")
+            startActivityForResult(intent, SecondActivityCode)
         }
     }
 
@@ -245,21 +186,12 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
      * do something with the returned place data (in this example it's place name, ID and Address).
      */
     override fun onActivityResult(requestCode : Int , resultCode: Int, data : Intent) {
-        if (requestCode == 1) {
+        if (requestCode == SecondActivityCode) {
             when (resultCode) {
             RESULT_OK -> {
-                val place = Autocomplete.getPlaceFromIntent(data)
-                Log.e(TAG, "Place: " + place.name + ", " + place.id + ", Address: " + place.address)
-
-
-                // TODO Set the place name/address in title of the cardview
-                // TODO need to retrieve the alertdialog in another way. Find a way to pass the current alertdialog into method.
-                currentPlace = place.address.toString()
-                return
-//                val title = alertDialog.findViewById<TextView>(R.id.edit_title) // change the title of the card to the place the user chose.
-//                title?.text = place.address.toString()
-
-            } AutocompleteActivity.RESULT_ERROR -> {
+                val returnString = data.getStringExtra("ValuefromAllStation")
+                Log.e("FAVOURITE", returnString)
+            } RESULT_ERROR -> {
                     // TODO: Handle the error.
                     val status = Autocomplete.getStatusFromIntent(data)
                     Log.e(TAG, status.statusMessage)
@@ -402,7 +334,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 }
 
 
-// SEARCH TEXT AUTOCOMPLETE
+// TODO SEARCH TEXT AUTOCOMPLETE
 //
 //            search_text.setOnEditorActionListener { v, actionId, event ->
 //                    if(actionId == EditorInfo.IME_ACTION_SEARCH
@@ -417,3 +349,61 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 //
 //            }
 
+// TODO PREVIOUS CONTENT OF FLOATBUTTON.setonclick..
+
+/*
+      val dialogBuilder = AlertDialog.Builder(this.context!!) // make a dialog builder
+      val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null) // get the dialog xml view
+      dialogBuilder.setView(dialogView) // set the view into the builder
+      val alertDialog = dialogBuilder.create()
+      alertDialog.show()
+
+
+
+      val addButton = dialogView.findViewById<Button>(R.id.add_button)
+      val edit_title = dialogView.findViewById<TextView>(R.id.edit_title)
+      val edit_description = dialogView.findViewById<TextView>(R.id.edit_description)
+      val searchText = dialogView.findViewById<RelativeLayout>(R.id.search_input)
+
+//             make a common textWatcher to use for several editText/TextView listener
+      val textWatcher = object: TextWatcher {
+          override fun afterTextChanged(s: Editable?) {
+          }
+
+          override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+          }
+
+          override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+              val titleInput = edit_title.text
+              val descriptionInput = edit_description.text
+              addButton.isEnabled = (!titleInput.isEmpty())
+          }
+      }
+
+      edit_title.addTextChangedListener(textWatcher)
+      edit_description.addTextChangedListener(textWatcher)
+
+
+      searchText.setOnClickListener {
+          onSearchInputEnter(searchText.context) // call on google place search.
+          Log.e("CURRENT PLACE", currentPlace)
+
+          if (currentPlace.isNotEmpty()) {
+              Log.e("IS NOT NYULL OR BLACK", "FDSAFSS")
+              edit_title.text = currentPlace
+              currentPlace = "" // reset value
+          }
+      }
+
+
+      addButton.setOnClickListener {
+          val tempElement = CityElement(edit_title.text.toString(), edit_description.text.toString())
+          dataset.add(tempElement)
+          Toast.makeText(this.context, "Element added!", Toast.LENGTH_SHORT).show()
+
+          initRecycleView(dataset)
+          alertDialog.hide()
+
+          Toast.makeText(this.context, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
+          //saveData()
+      }*/

@@ -1,6 +1,8 @@
 package com.example.gruppe30in2000.FavCity
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
@@ -14,9 +16,11 @@ import android.widget.*
 import com.example.gruppe30in2000.R
 import kotlinx.android.synthetic.main.alert_dialog.view.*
 
-class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Context) :
+
+class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context) :
     RecyclerView.Adapter<CityListAdapter.ViewHolder>() {
     val context = context
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,11 +34,22 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
 //        Log.e("VIEWHOLDER: ", "onBindViewHolder: called")
 
         // set the element (cardview) text and description text base on the current position of the dataSet list.
-        holder.title.text = dataSet[pos].title.toString()
-        holder.description.text = dataSet[pos].description.toString()
+        holder.title.text = dataSet[pos].title
+        holder.description.text = dataSet[pos].description
 
         // VALIDATE the risk type of newly added city
         validateRiskType(holder.description.text.toString(), holder)
+
+
+        if (context is AllStationView) { // If the context that call on this adapter is All stationView, make the addbutton visible.
+            holder.addButton.visibility = View.VISIBLE
+        }
+
+
+        // TODO find out how to send back data from a class to activity (AllStationView)
+        holder.addButton.setOnClickListener {
+        }
+
 
 //        holder.deleteButton.setOnClickListener {
 //
@@ -127,8 +142,13 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
         return dataSet.size
     }
 
+    fun filteredList(list : ArrayList<CityElement>) {
+        dataSet = list
+        notifyDataSetChanged()
+    }
+
     // Method to validate and change the riskdisplay image by description text.
-    private fun validateRiskType(text : String, holder : ViewHolder) {
+    fun validateRiskType(text : String, holder : ViewHolder) {
         // Change risk displayimage color.
         when {
             text.contains("hoy", ignoreCase = true) ->
@@ -155,7 +175,7 @@ class CityListAdapter (private val dataSet: ArrayList<CityElement>, context: Con
         val description = textView.findViewById<TextView>(R.id.description_text)
         val riskDisplay = textView.findViewById<ImageView>(R.id.risk_display)
         val linearView = textView.findViewById<LinearLayout>(R.id.linear_view)
-
+        val addButton = textView.findViewById<ImageButton>(R.id.add_button)
     }
 
 
