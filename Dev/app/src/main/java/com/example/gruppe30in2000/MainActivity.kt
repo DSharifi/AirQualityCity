@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted  {
@@ -57,7 +58,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
             }
 
             R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
+                val mf = SettingsFragment()
+                replaceFragment(mf)
                 return@OnNavigationItemSelectedListener true
             }
         }

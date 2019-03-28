@@ -22,4 +22,22 @@
     <string name="niva">Nivå:</string>
     <string name="avbryt">Avbryt</string>
     <string name="ok">OK</string>
+
+    <string name="alertLevel">Velg nivå for varsling ved luftkvalitet</string>
+    <string name="Good">God luftkvalitet</string>
+    <string name="moderate">Moderat luftkvalitet</string>
+    <string name="Bad">Dårlig luftkvalitet</string>
+    <string name="vBad">Svært dårlig luftkvalitet</string>
+
+    <string name="ingen">Generell befolkning</string>
+    <string name="astma">Astma og andre luftveissykdommer</string>
+    <string name="hjerte">Hjerte- og karsykdommer</string>
+    <string name="eldre">Eldre</string>
+    <string name="gravide">Gravide og småbarn</string>
+
+
+
+
+
+
 </resources>
