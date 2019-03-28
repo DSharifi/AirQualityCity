@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
@@ -34,6 +35,9 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     }
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
+        if(list.isEmpty()){
+            Toast.makeText(this, "Kunne ikke hente data", Toast.LENGTH_LONG).show()
+        }
         staticAirQualityStationsList = list
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
