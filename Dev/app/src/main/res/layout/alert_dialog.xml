@@ -4,7 +4,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:id="@+id/alert_dialog"
         android:orientation="vertical"
         android:background="@color/white"
@@ -14,6 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:textAlignment="center"
 >
+
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,27 +24,55 @@
             android:textSize="20sp"
             android:textColor="@color/black"
     />
-    <EditText
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="50dp"
+                    android:background="@drawable/white_border"
+                    android:id="@+id/search_input"
+    >
+        <ImageView android:layout_width="15dp" android:layout_height="15dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginLeft="10dp"
+                   android:id="@+id/glass_magnify"
+                   android:src="@drawable/ic_glass_magnify"
+
+
+        />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dp"
+                  android:layout_centerVertical="true"
+                  android:textSize="15sp"
+                  android:layout_toRightOf="@+id/glass_magnify"
+                  android:background="@null"
+                  android:textColor="#000"
+                  android:hint="Oppgi addresser, byer, postnummer"
+        />
+
+
+    </RelativeLayout>
+
+
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edit_title"
             android:layout_margin="5dp"
-            android:inputType="text"
+            android:paddingStart="30dp"
             android:textColor="@color/colorAccent"
             android:hint="@string/title"
 
     />
-    <EditText
+    <TextView
             android:layout_width="match_parent"
             android:layout_margin="5dp"
+            android:paddingStart="30dp"
             android:id="@+id/edit_description"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:hint="@string/description"
             android:textColor="@color/colorAccent"
 
 
     />
+
+
 
     <Button
             android:layout_width="match_parent"
@@ -56,6 +85,7 @@
 
             android:enabled="false"
     />
+
 
 </android.support.v7.widget.AlertDialogLayout>
 

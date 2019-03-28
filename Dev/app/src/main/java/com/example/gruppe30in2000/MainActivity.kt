@@ -1,18 +1,21 @@
 package com.example.gruppe30in2000
 
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.Map.MapFragment
+
 import android.util.Log
 import android.view.View
+import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.API.AsyncApiGetter
+import com.example.gruppe30in2000.API.OnTaskCompleted
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), OnTaskCompleted  {
-
-    var airQualityStationsList = ArrayList<AirQualityStation>()
+class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     companion object {
         //Have to be static in order to access it from MapFragment
@@ -21,7 +24,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.initial_welcome_view)
+
 
         //gets data from api - runs in async thread
         val asyncApiGetter = AsyncApiGetter(this)
@@ -34,11 +38,11 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
     }
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
-        airQualityStationsList = list
         staticAirQualityStationsList = list
+        setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        replaceFragment(HomeFragment())
+        replaceFragment(FavoriteCity())
     }
 
 
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                replaceFragment(HomeFragment())
+                replaceFragment(FavoriteCity())
                 return@OnNavigationItemSelectedListener true
             }
 
@@ -60,6 +64,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted  {
             R.id.navigation_notifications -> {
                 val mf = SettingsFragment()
                 replaceFragment(mf)
+                //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
         }

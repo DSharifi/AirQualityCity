@@ -13,8 +13,8 @@
 
     <string name="dialog_title">Legg til by</string>
     <string name="delete_dialog_title">Slett by</string>
-    <string name="title">Enter title...</string>
-    <string name="description">Enter description...</string>
+    <string name="title">By...</string>
+    <string name="description">Innhold</string>
 
 
     <string name="country">Country</string>
