@@ -11,15 +11,14 @@
         card_view:contentPadding="5dp"
         card_view:cardBackgroundColor="#ffffff"
 >
-    <LinearLayout
-            android:layout_width="400dp"
+    <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/linear_view"
+            android:id="@+id/relative_view"
             android:orientation="vertical"
 
     >
-
-        <TextView android:layout_width="match_parent"
+        <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:id="@+id/title_text"
                   android:layout_marginStart="10dp"
@@ -29,14 +28,19 @@
                   android:textColor="@color/black"
                   android:textSize="25sp"
                   android:textStyle="bold"
+
+
         />
-        <LinearLayout
-                android:layout_width="400dp"
+        <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="50dp">
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="50dp"
+        >
+
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/type"
                       android:text="@string/niva"
@@ -49,14 +53,17 @@
                       android:text="@string/risk_type"
                       android:textColor="@color/black"
                       android:textSize="18sp"
+                      android:layout_toRightOf="@+id/type"
             />
-        </LinearLayout>
+        </RelativeLayout>
 
 
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
+
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                android:layout_marginStart="300dp"
@@ -66,40 +73,16 @@
 
 
     />
+    <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                 android:id="@+id/add_button"
+                 android:src="@drawable/ic_add_button"
+                 android:layout_toEndOf="@id/risk_display"
+                 android:layout_alignTop="@+id/risk_display"
+                 android:visibility="invisible"
 
-    <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_marginStart="335dp"-->
-            <!--android:layout_marginTop="10dp"-->
-    <!--&gt;-->
-        <!--<ImageButton-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:id="@+id/delete_button"-->
-                <!--android:src="@drawable/ic_delete_black_24dp"-->
-                <!--android:contentDescription="@string/title"-->
-                <!--android:background="@drawable/ripple_effect"-->
-        <!--/>-->
-        <!--<ImageButton-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:id="@+id/edit_button"-->
-                <!--android:src="@drawable/ic_mode_edit_black_24dp"-->
-                <!--android:contentDescription="@string/title"-->
-                <!--android:background="@drawable/ripple_effect"-->
-        <!--/>-->
+    />
+    </RelativeLayout>
 
-    <!--</LinearLayout>-->
-    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginStart="300dp"
-                android:visibility="invisible"
-                  android:id="@+id/swipe_delete"
-    >
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:background="@drawable/ic_delete_black_24dp"/>
-    </LinearLayout>
 
 </android.support.v7.widget.CardView>
 

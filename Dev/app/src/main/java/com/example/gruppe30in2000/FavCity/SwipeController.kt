@@ -1,4 +1,4 @@
-package com.example.gruppe30in2000
+package com.example.gruppe30in2000.FavCity
 
 import android.annotation.SuppressLint
 import android.graphics.Canvas
@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import com.example.gruppe30in2000.R
 
 
 enum class ButtonsState {
@@ -28,7 +29,7 @@ open class SwipeController : Callback() {
     private val buttonWidth = 300f
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        return ItemTouchHelper.Callback.makeMovementFlags(0, LEFT or RIGHT)
+        return ItemTouchHelper.Callback.makeMovementFlags(0, LEFT)
     }
 
     override fun onMove(
@@ -95,6 +96,7 @@ open class SwipeController : Callback() {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
                 if (swipeBack) {
+                    // If swipe left, display dialog to delete
                     if (dX <= buttonWidth) {
                         Log.e("onSwiped:", "Swiping")
                         val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
@@ -106,8 +108,12 @@ open class SwipeController : Callback() {
                         val okButton = dialogView.findViewById<Button>(R.id.ok_button)
                         val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
 
+                        Log.e("adapterPosition", viewHolder.adapterPosition.toString())
+//                        if (viewHolder.adapterPosition > 0) {
+//                        }
+
                         okButton.setOnClickListener {
-                                deleteItem(viewHolder.adapterPosition)
+                            deleteItem(viewHolder.adapterPosition)
                             alertDialog.hide()
                         }
 
