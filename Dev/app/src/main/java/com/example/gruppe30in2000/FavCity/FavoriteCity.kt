@@ -11,7 +11,6 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -73,19 +72,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         val title1 = "Oslo"
         val description1 = "Lav"
 
-        val title2 = "Trondheim"
-        val description2 = "Moderat"
-        val title3 = "Bergen"
-        val description3 = "Hoy"
 
-
-        val element = CityElement(title1, description1)
-        val element2 = CityElement(title2, description2)
-        val element3 = CityElement(title3, description3)
-        dataset.add(element)
-        dataset.add(element2)
-        dataset.add(element3)
-//        loadData()
+        val element1 = CityElement(title1, description1)
+        dataset.add(element1)
         initRecycleView(dataset)
 
         floatingButton.setOnClickListener {
@@ -94,31 +83,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             startActivityForResult(intent, SecondActivityCode)
         }
     }
-
-    private fun geolocate(text : Editable ) : Boolean {
-        val searchString = text.toString()
-        Log.d(TAG, "geolocate: geolocating")
-        val geocoder  = Geocoder(this.context)
-        var list = ArrayList<Address>().toList()
-
-        try {
-            list = geocoder.getFromLocationName(searchString,1)
-        }catch (e : IOException) {
-            Log.e("geolate:", "IOException" + e.message)
-        }
-
-
-        if (list.size > 0) {
-            val address = list.get(0)
-            Log.e("Result address:", address.toString())
-
-//            Toast.makeText(this.context, address.toString(), Toast.LENGTH_LONG).show()
-        }
-
-
-        return false
-    }
-
 
     // Method the initinalize the recycleView
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
@@ -189,8 +153,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         if (requestCode == SecondActivityCode) {
             when (resultCode) {
             RESULT_OK -> {
-                val returnString = data.getStringExtra("ValuefromAllStation")
-                Log.e("FAVOURITE", returnString)
+                val returnedLocation = data.getStringExtra("Stationlocation")
+                val returnedDescription= data.getStringExtra("DescriptionStation")
+                addFavoriteElement(returnedLocation,returnedDescription)
             } RESULT_ERROR -> {
                     // TODO: Handle the error.
                     val status = Autocomplete.getStatusFromIntent(data)
@@ -204,6 +169,38 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     }
 
+    // Method to add new favourite location to view.
+    private fun addFavoriteElement(location: String, description: String) {
+        dataset.add(CityElement(location, description))
+        initRecycleView(dataset)
+        viewAdapter.notifyDataSetChanged()
+        Toast.makeText(context, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
+
+    }
+
+    private fun geolocate(text : Editable ) : Boolean {
+        val searchString = text.toString()
+        Log.d(TAG, "geolocate: geolocating")
+        val geocoder  = Geocoder(this.context)
+        var list = ArrayList<Address>().toList()
+
+        try {
+            list = geocoder.getFromLocationName(searchString,1)
+        }catch (e : IOException) {
+            Log.e("geolate:", "IOException" + e.message)
+        }
+
+
+        if (list.size > 0) {
+            val address = list.get(0)
+            Log.e("Result address:", address.toString())
+
+//            Toast.makeText(this.context, address.toString(), Toast.LENGTH_LONG).show()
+        }
+
+
+        return false
+    }
 
     // Fetch a spesifct place by id
     fun fetchPlaces() {
@@ -273,6 +270,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         val item = dataset[pos]
         dataset.removeAt(pos)
         viewAdapter.notifyItemRemoved(pos)
+        viewAdapter.notifyItemRangeChanged(pos,dataset.size)
         Toast.makeText(this.context,"Removed ${item.title}",Toast.LENGTH_SHORT).show()
 
     }

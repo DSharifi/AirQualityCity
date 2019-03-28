@@ -1,9 +1,10 @@
 package com.example.gruppe30in2000.FavCity
 
 import android.app.Activity
-import android.content.Intent
+import android.content.*
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -14,6 +15,11 @@ import android.widget.TextView
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import java.util.ArrayList
+import android.widget.Toast
+
+
+
+
 
 class AllStationView : AppCompatActivity() {
 
@@ -25,13 +31,12 @@ class AllStationView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_all_station_view)
-//        val value = intent.getStringExtra("EXTRA_SESSION_ID")
-//        Log.e("ALLSTATION", value)
-//        if (extras != null) {
-//            val value = extras.getString("")
-//            //The key argument here must match that used in the other activity
-//        }
+        setContentView(com.example.gruppe30in2000.R.layout.activity_all_station_view)
+
+
+
+        // RECIEVE DATA FROM ADAPTER with custom message: from-cityadapter
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, IntentFilter("from-cityadapter"))
 
         for (data in airquailityStation) {
             val location = data.meta.location
@@ -67,19 +72,11 @@ class AllStationView : AppCompatActivity() {
 
 
         searchInput.addTextChangedListener(textWatcher)
-
         val title = findViewById<TextView>(R.id.Stasjoner_title)
-
-        // Test sending back data to FavoriteCity.
-        title.setOnClickListener {
-            intent.putExtra("ValuefromAllStation", "HELLOFROM ALLSTATION")
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
-
-
-
     }
+
+
+
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
         viewManager = LinearLayoutManager(this)
 
@@ -104,6 +101,25 @@ class AllStationView : AppCompatActivity() {
     }
 
 
+    // Handler for received Intents. This will be called whenever an Intent
+    // with an action named "custom-event-name" is broadcasted
+    private val mMessageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            // Get extra data included in the Intent
+            val location = intent.getStringExtra("location")
+            val description = intent.getStringExtra("description")
+            passBackDataToActivity(location, description)
+        }
+    }
+
+    // Method to pass data from current activity to another activity
+    // Add the data to send back with putExtra method and set the result.
+    private fun passBackDataToActivity(location : String, description: String) {
+        intent.putExtra("Stationlocation", location)
+        intent.putExtra("DescriptionStation", description)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
 
 
 }

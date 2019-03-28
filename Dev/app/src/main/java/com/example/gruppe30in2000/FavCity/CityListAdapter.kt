@@ -13,8 +13,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.View
 import android.widget.*
-import com.example.gruppe30in2000.R
 import kotlinx.android.synthetic.main.alert_dialog.view.*
+import android.support.v4.content.LocalBroadcastManager
+import com.example.gruppe30in2000.R
 
 
 class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context) :
@@ -46,23 +47,18 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         }
 
 
-        // TODO find out how to send back data from a class to activity (AllStationView)
+        // On addButton clicked. Get the current card information and send back to AllstationView. with the custom: custom-message
         holder.addButton.setOnClickListener {
+            val location = holder.title.text.toString()
+            val description = holder.description.text.toString()
+
+            val intent = Intent("from-cityadapter")
+            intent.putExtra("location", location)
+            intent.putExtra("description", description)
+            LocalBroadcastManager.getInstance(this.context).sendBroadcast(intent)
         }
 
 
-//        holder.deleteButton.setOnClickListener {
-//
-//            val itemDetail = dataSet.get(pos).title
-//            dataSet.removeAt(pos)
-//            notifyItemRemoved(pos)
-//            notifyItemRangeChanged(pos,dataSet.size)
-//            Toast.makeText(holder.deleteButton.context,"Removed $itemDetail",Toast.LENGTH_SHORT).show()
-//
-//        }
-
-
-        // TODO Find a way to collapse to one function for cleaner code?
         // Edit elementContent - Similar code to when adding a new element in FavoriteCity.
         holder.linearView.setOnClickListener {
 
@@ -80,7 +76,6 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             val alertDialog = dialogBuilder.create()
 
             alertDialog.show()
-
 
             // Change Element content
             val addButton = dialogView.findViewById<Button>(R.id.add_button)
@@ -112,13 +107,6 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 val descriptLength = dataSet[pos].description.length
 
 
-                // Edit the data list element content
-
-                // TODO remove? no longer need to implement edit this way.
-
-//                dataSet[pos].title.replace(0, titleLength, edit_title.text)
-//                dataSet[pos].description.replace(0, descriptLength, edit_description.text)
-
                 // Edit the gui element content
                 holder.title.text = edit_title.text
                 holder.description.text = edit_description.text
@@ -131,11 +119,6 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             }
 
         }
-
-
-//        val onSwipeTouchListener = OnSwipeTouchListener(context)
-//
-//        holder.linearView.setOnTouchListener(onSwipeTouchListener)
 
     }
     override fun getItemCount(): Int {

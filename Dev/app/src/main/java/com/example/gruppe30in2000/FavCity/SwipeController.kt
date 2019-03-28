@@ -60,7 +60,6 @@ open class SwipeController : Callback() {
 //                cancelButton.setOnClickListener {
 //                    alertDialog.hide()
 //                }
-        return
     }
 
     override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {
@@ -109,8 +108,12 @@ open class SwipeController : Callback() {
                         val okButton = dialogView.findViewById<Button>(R.id.ok_button)
                         val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
 
+                        Log.e("adapterPosition", viewHolder.adapterPosition.toString())
+//                        if (viewHolder.adapterPosition > 0) {
+//                        }
+
                         okButton.setOnClickListener {
-                                deleteItem(viewHolder.adapterPosition)
+                            deleteItem(viewHolder.adapterPosition)
                             alertDialog.hide()
                         }
 
