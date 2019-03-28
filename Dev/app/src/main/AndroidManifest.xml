@@ -16,11 +16,13 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".CityListAdapter">
+        <activity android:name=".FavCity.AllStationView">
         </activity>
-        <activity android:name=".CityElement">
+        <activity android:name=".FavCity.CityListAdapter">
         </activity>
-        <activity android:name=".FavoriteCity">
+        <activity android:name=".FavCity.CityElement">
+        </activity>
+        <activity android:name=".FavCity.FavoriteCity">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

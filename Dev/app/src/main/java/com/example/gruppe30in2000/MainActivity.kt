@@ -5,25 +5,44 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.API.AsyncApiGetter
+import com.example.gruppe30in2000.API.OnTaskCompleted
+import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.Map.MapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
+    companion object {
+        //Have to be static in order to access it from MapFragment
+        var staticAirQualityStationsList = ArrayList<AirQualityStation>()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.initial_welcome_view)
+
+
+        //gets data from api - runs in async thread
+        val asyncApiGetter = AsyncApiGetter(this)
+        asyncApiGetter.execute()
 
         // Creates LocationPermission object and asks user to allow location
         val lp = LocationPermission(this)
         lp.enableMyLocation()
+    }
 
+    override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
+        if(list.isEmpty()){
+            Toast.makeText(this, "Kunne ikke hente data", Toast.LENGTH_LONG).show()
+        }
+        staticAirQualityStationsList = list
+        setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        replaceFragment(HomeFragment())
 
-//        val intent = Intent(this, FavoriteCity::class.java)
-//      startActivity(intent)
-
+        replaceFragment(FavoriteCity())
     }
 
 
@@ -31,20 +50,19 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                replaceFragment(HomeFragment())
+                replaceFragment(FavoriteCity())
                 return@OnNavigationItemSelectedListener true
             }
 
             R.id.navigation_map -> {
                 val mf = MapFragment()
-                //mf.onRequestPermissionsResult()
                 replaceFragment(mf)
 
                 return@OnNavigationItemSelectedListener true
             }
 
             R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
+                //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -56,8 +74,6 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentContainer, fragment)
         fragmentTransaction.commit()
-
-
 
     }
 }
