@@ -9,13 +9,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import java.util.ArrayList
-import android.widget.Toast
 
 
 
@@ -34,21 +32,20 @@ class AllStationView : AppCompatActivity() {
         setContentView(com.example.gruppe30in2000.R.layout.activity_all_station_view)
 
 
-
         // RECIEVE DATA FROM ADAPTER with custom message: from-cityadapter
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, IntentFilter("from-cityadapter"))
 
         for (data in airquailityStation) {
-            val location = data.meta.location
+            val location= data.meta.location
+            val superLocation = data.meta.superlocation
             val aqiValue = data.data.time[0].variables.AQI.value
             if (aqiValue <= 1.6) {
-                dataset.add(CityElement(location.name, "Lav"))
+                dataset.add(CityElement(location.name + ", " + superLocation.name, "Lav"))
 
             } else if (aqiValue > 1.6 && aqiValue < 1.8) {
-                dataset.add(CityElement(location.name, "Moderat"))
+                dataset.add(CityElement(location.name + ", " + superLocation.name, "Moderat"))
             } else {
-                dataset.add(CityElement(location.name, "Hoy"))
-
+                dataset.add(CityElement(location.name + ", " + superLocation.name, "Hoy"))
             }
         }
         initRecycleView(dataset)
@@ -118,6 +115,11 @@ class AllStationView : AppCompatActivity() {
         intent.putExtra("Stationlocation", location)
         intent.putExtra("DescriptionStation", description)
         setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED, intent)
         finish()
     }
 

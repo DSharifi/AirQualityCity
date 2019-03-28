@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         // Creates LocationPermission object and asks user to allow location
         val lp = LocationPermission(this)
         lp.enableMyLocation()
-
     }
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){

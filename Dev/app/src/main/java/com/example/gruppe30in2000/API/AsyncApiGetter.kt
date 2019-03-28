@@ -3,7 +3,7 @@ package com.example.gruppe30in2000.API
 import android.os.AsyncTask
 
 interface OnTaskCompleted{
-    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>);
+    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>)
 }
 
 class AsyncApiGetter : AsyncTask<Unit, Unit, String> {
