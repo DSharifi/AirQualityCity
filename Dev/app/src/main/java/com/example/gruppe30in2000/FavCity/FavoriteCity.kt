@@ -55,9 +55,10 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     private val sharedPREF = "sharedPrefs"
     private val dataSET= "dataset"
 
-    private var dataset = ArrayList<CityElement>()
+    companion object {
+        var dataset = ArrayList<CityElement>()
 
-
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
         return fView
@@ -67,15 +68,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
 
-        ////// MAKE 2 element to current
-        val title1 = "Oslo"
-        val description1 = "Lav"
-
-
-        val element1 = CityElement(title1, description1)
-        dataset.add(element1)
         initRecycleView(dataset)
-
         floatingButton.setOnClickListener {
             val intent = Intent(this.context, AllStationView::class.java)
             intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")

@@ -21,6 +21,9 @@ import java.util.ArrayList
 
 class AllStationView : AppCompatActivity() {
 
+    // TODO Fix risk_display overlapping with location in GUI
+    // TODO Fix swipecontroller display problem.
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
