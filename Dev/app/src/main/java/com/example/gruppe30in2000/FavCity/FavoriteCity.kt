@@ -56,13 +56,14 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     private lateinit var placesClient : PlacesClient
     private val SecondActivityCode = 101
 
+    // navn paa shared preferences
+    private val name = "favorite cities preferences"
+
+    // navn paa datasettet i shared preferences
+    private val key = "favorite cities"
+
     companion object {
         var dataset = ArrayList<CityElement>()
-
-        // navn paa shared preferences
-        val name = "favorite cities preferences"
-        // navn paa datasettet i shared preferences
-        val key = "favorite cities"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,6 +74,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
+
+        loadFavoriteElement()
 
         initRecycleView(dataset)
         floatingButton.setOnClickListener {
@@ -156,12 +159,17 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         dataset.add(CityElement(location, description))
         initRecycleView(dataset)
         viewAdapter.notifyDataSetChanged()
+
+        // lagrer det nye arrayet!
+        saveFavoriteElement()
+
         Toast.makeText(context, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
+
     }
 
-    /*
-    Kalles direkte paa av addFavoriteElement().
-    Metoden lagrer listen med favoritter til
+    /**
+     * Kalles direkte paa av addFavoriteElement().
+     * Metoden lagrer listen med favoritter til
      */
 
     private fun saveFavoriteElement() {
@@ -174,10 +182,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         editor?.apply()
     }
 
-    /*
-    Metoden skal kalles naar main vinduet loades.
-    */
-
+    /**
+     * Metoden skal kalles naar main vinduet loades.
+     */
     private fun loadFavoriteElement() {
         val sharedPreferences = this.context?.getSharedPreferences(name, Context.MODE_PRIVATE)
         val gson = Gson()
@@ -185,7 +192,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         val json : String? = sharedPreferences?.getString(key, null)
 
         if (json == null) {
-            dataset = ArrayList<CityElement>()
+            return
         } else {
             dataset = gson.fromJson(json)
         }
@@ -239,6 +246,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                 Log.e(TAG, "Place not found: " + exception.message)
             }
         }
+
     fun placeAutocomplete() {
         val token = AutocompleteSessionToken.newInstance()
 
@@ -284,6 +292,10 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         dataset.removeAt(pos)
         viewAdapter.notifyItemRemoved(pos)
         viewAdapter.notifyItemRangeChanged(pos,dataset.size)
+
+        // oppdatere
+        saveFavoriteElement()
+
         Toast.makeText(this.context,"Removed ${item.title}",Toast.LENGTH_SHORT).show()
 
     }
