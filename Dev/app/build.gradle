@@ -49,7 +49,9 @@ dependencies {
 
     implementation 'com.google.code.findbugs:jsr305:3.0.1'
 
-    // rammeverk for aa finne tidsforskjeller
+    // better framework for dates and times compared to built in Date.
     implementation 'joda-time:joda-time:2.10.1'
+    // need a custom json parser for joda-time objects
+    implementation 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.7.1'
 
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
@@ -16,12 +17,18 @@ import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
+import org.joda.time.Minutes
+import com.google.gson.GsonBuilder
+import com.fatboyindustrial.gsonjodatime.Converters
 import org.joda.time.Hours
+import java.util.*
+import kotlin.math.log
+
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     // name of shared preferences
-    private val sharedPreferences = "station preferences"
+    private val preference = "station preferences"
     // key for arrayList of measurements
     private val stations = "station measurements"
     // key for datetime of last measurement
@@ -62,6 +69,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         replaceFragment(FavoriteCity())
+
+        save()
     }
 
 
@@ -105,7 +114,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     private fun checkHoursPassed(lastCheck : DateTime, hours : Int): Boolean {
         val currentTime = DateTime()
         val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
-        return hours > difference;
+        return hours < difference;
     }
 
 
@@ -116,52 +125,52 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
      * Metoden skal kalles naar main vinduet loades.
      */
     fun loadStations() {
-        val sharedPreferences = getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(preference, Context.MODE_PRIVATE)
 
 
-        val stationsJson : String? = sharedPreferences.getString(stations, null)
-        val lastCheckJson : String? = sharedPreferences.getString(lastCheck, null)
-
+        var stationsJson : String? = sharedPreferences.getString(stations, null)
+        var lastCheckJson : String? = sharedPreferences.getString(lastCheck, null)
 
         val gson = Gson()
+        // custom gson parser for joda-time objects
+        val dateGson = Converters.registerDateTime(GsonBuilder()).create()
 
 
-
-        if (stationsJson == null || lastCheckJson == null || checkHoursPassed(gson.fromJson(lastCheckJson), updateTime)) {
+        if (stationsJson == null || lastCheckJson == null || checkHoursPassed(dateGson.fromJson(lastCheckJson, DateTime::class.java), updateTime)) {
             // new get request is neccesary
-
             //gets data from api - runs in async thread
             val asyncApiGetter = AsyncApiGetter(this)
             asyncApiGetter.execute()
-
-            // save data in shared prefs
-            val date = DateTime()
-
-            val newStationsJson : String = gson.toJson(date)
-            val
-
-
         }
 
         else {
             // load already saved
-            staticAirQualityStationsList = gson.fromJson(stationsJson)
+            val stationList = gson.fromJson<ArrayList<AirQualityStation>>(stationsJson)
+            onTaskCompletedApiGetter(stationList)
         }
     }
 
 
 
     /**
-     * 
+     *
      */
 
     private fun save() {
-        val editor = this.getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE).edit()
-
+        // save data in shared prefs
+        val sharedPreferences = getSharedPreferences(preference, Context.MODE_PRIVATE)
         val gson = Gson()
-        val json : String = gson.toJson(staticAirQualityStationsList)
-        editor?.putString(stations, json)
+        val dateGson = Converters.registerDateTime(GsonBuilder()).create()
+        val editor = sharedPreferences?.edit()
+
+        val stationsJson = gson.toJson(staticAirQualityStationsList)
+        val lastCheckJson = dateGson.toJson(DateTime())
+
+        editor?.putString(stations, stationsJson)
+        editor?.putString(lastCheck, lastCheckJson)
         editor?.apply()
+
+        println(staticAirQualityStationsList)
     }
 
 
