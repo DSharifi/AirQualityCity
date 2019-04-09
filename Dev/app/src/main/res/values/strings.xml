@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Gruppe30 IN2000</string>
-    <string name="title_home">Home</string>
-    <string name="title_map">Map</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Hjem</string>
+    <string name="title_map">Kart</string>
+    <string name="title_notifications">Varsling</string>
     <string name="title_activity_maps">Map</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -19,7 +19,7 @@
 
     <string name="country">Country</string>
     <string name="risk_type">Risk type</string>
-    <string name="niva">Nivå:</string>
+    <string name="niva">Forurensingsnivå:</string>
     <string name="avbryt">Avbryt</string>
     <string name="ok">OK</string>
 
