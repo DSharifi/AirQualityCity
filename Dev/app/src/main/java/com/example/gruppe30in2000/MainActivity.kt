@@ -10,9 +10,12 @@ import com.example.gruppe30in2000.Map.MapFragment
 
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
+import com.example.gruppe30in2000.Map.MapStationsHandler
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
@@ -34,10 +37,12 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         // Creates LocationPermission object and asks user to allow location
         val lp = LocationPermission(this)
         lp.enableMyLocation()
-
     }
 
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
+        if(list.isEmpty()){
+            Toast.makeText(this, "Kunne ikke hente data", Toast.LENGTH_LONG).show()
+        }
         staticAirQualityStationsList = list
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)

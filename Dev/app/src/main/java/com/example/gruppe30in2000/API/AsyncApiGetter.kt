@@ -1,9 +1,10 @@
 package com.example.gruppe30in2000.API
 
 import android.os.AsyncTask
+import java.lang.Exception
 
 interface OnTaskCompleted{
-    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>);
+    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>)
 }
 
 class AsyncApiGetter : AsyncTask<Unit, Unit, String> {
@@ -13,8 +14,10 @@ class AsyncApiGetter : AsyncTask<Unit, Unit, String> {
     }
     var airQualityList = ArrayList<AirQualityStation>()
     override fun doInBackground(vararg params: Unit?): String? {
-        val a = AirQualityStationCollection()
-        airQualityList = a.airQualityStationList
+        try {
+            val a = AirQualityStationCollection()
+            airQualityList = a.airQualityStationList
+        } catch (e : Exception){ }
         //Log.e("ddddddddd", airQualityList[0].meta.superlocation.name)
         return null
     }

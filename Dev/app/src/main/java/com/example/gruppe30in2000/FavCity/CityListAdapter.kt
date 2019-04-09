@@ -171,7 +171,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val title = textView.findViewById<TextView>(R.id.title_text)
         val description = textView.findViewById<TextView>(R.id.description_text)
         val riskDisplay = textView.findViewById<ImageView>(R.id.risk_display)
-        val linearView = textView.findViewById<LinearLayout>(R.id.linear_view)
+        val linearView = textView.findViewById<RelativeLayout>(R.id.relative_view)
         val addButton = textView.findViewById<ImageButton>(R.id.add_button)
     }
 

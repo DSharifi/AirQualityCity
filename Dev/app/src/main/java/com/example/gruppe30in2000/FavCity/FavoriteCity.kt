@@ -52,7 +52,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     private lateinit var placesClient : PlacesClient
     private val SecondActivityCode = 101
 
-    private var currentPlace = ""
     private val sharedPREF = "sharedPrefs"
     private val dataSET= "dataset"
 
@@ -78,7 +77,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         initRecycleView(dataset)
 
         floatingButton.setOnClickListener {
-            val intent = Intent(this@FavoriteCity.context, AllStationView::class.java)
+            val intent = Intent(this.context, AllStationView::class.java)
             intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")
             startActivityForResult(intent, SecondActivityCode)
         }
@@ -113,21 +112,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         // Create a new Places client instance.
         placesClient = Places.createClient(requireContext())
 
-        // Initialize the AutocompleteSupportFragment.
-//        val autocompleteFragment =  fragmentManager?.findFragmentById(R.id.autocomplete_fragment) as? AutocompleteSupportFragment
-//
-//        autocompleteFragment?.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
-
-//        autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-//
-//            override fun onPlaceSelected(place : Place) {
-//                Log.i(TAG, "Place: " + place.name + ", " + place.id)
-//            }
-//
-//            override fun onError(status : Status) {
-//                Log.i(TAG, "An error occurred: $status")
-//            }
-//        })
 
 
     }
@@ -166,7 +150,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             }
             }
         }
-
     }
 
     // Method to add new favourite location to view.
@@ -175,7 +158,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         initRecycleView(dataset)
         viewAdapter.notifyDataSetChanged()
         Toast.makeText(context, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
-
     }
 
     private fun geolocate(text : Editable ) : Boolean {
@@ -197,7 +179,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
 //            Toast.makeText(this.context, address.toString(), Toast.LENGTH_LONG).show()
         }
-
 
         return false
     }
@@ -225,7 +206,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                 Log.e(TAG, "Place not found: " + exception.message)
             }
         }
-
     fun placeAutocomplete() {
         val token = AutocompleteSessionToken.newInstance()
 
@@ -405,3 +385,20 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
           Toast.makeText(this.context, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
           //saveData()
       }*/
+
+
+// Initialize the AutocompleteSupportFragment.
+//        val autocompleteFragment =  fragmentManager?.findFragmentById(R.id.autocomplete_fragment) as? AutocompleteSupportFragment
+//
+//        autocompleteFragment?.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
+
+//        autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+//
+//            override fun onPlaceSelected(place : Place) {
+//                Log.i(TAG, "Place: " + place.name + ", " + place.id)
+//            }
+//
+//            override fun onError(status : Status) {
+//                Log.i(TAG, "An error occurred: $status")
+//            }
+//        })
