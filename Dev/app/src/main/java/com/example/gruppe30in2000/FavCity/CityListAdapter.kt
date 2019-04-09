@@ -3,6 +3,7 @@ package com.example.gruppe30in2000.FavCity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
@@ -16,16 +17,14 @@ import android.widget.*
 import kotlinx.android.synthetic.main.alert_dialog.view.*
 import android.support.v4.content.LocalBroadcastManager
 import com.example.gruppe30in2000.R
+import com.example.gruppe30in2000.SettingsFragment
 
 
 class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context) :
     RecyclerView.Adapter<CityListAdapter.ViewHolder>() {
     val context = context
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         val textView = LayoutInflater.from(parent.context).inflate(R.layout.city_element, parent, false) as View
         return ViewHolder(textView)
 
@@ -59,95 +58,110 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         }
 
 
-        // Edit elementContent - Similar code to when adding a new element in FavoriteCity.
         holder.linearView.setOnClickListener {
 
-            // get the current content
-            val tempTitle = dataSet[pos].title
-            val tempDescription= dataSet[pos].description
-
-            // Build new dialog for content change
             val dialogBuilder = AlertDialog.Builder(context) // make a dialog builder
-            val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null) // get the dialog xml view
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.infobox, null) // get the dialog xml view
             dialogBuilder.setView(dialogView) // set the view into the builder
-            dialogView.edit_title.text = tempTitle
-            dialogView.edit_description.text = tempDescription
 
             val alertDialog = dialogBuilder.create()
 
+            val settings = LayoutInflater.from(context).inflate(R.layout.fragment_settings, null);
+
+            val astma = settings.findViewById<CheckBox>(R.id.astma)
+            val hjerte = settings.findViewById<CheckBox>(R.id.hjerte)
+            val eldre = settings.findViewById<CheckBox>(R.id.eldre)
+            val gravide = settings.findViewById<CheckBox>(R.id.gravide)
+            val generell = settings.findViewById<CheckBox>(R.id.ingen)
+
+
+            val statID = dialogView.findViewById<TextView>(R.id.stationID)
+            val healthInfo = dialogView.findViewById<TextView>(R.id.specialInfo)
+            val extBtn = dialogView.findViewById<Button>(R.id.exitBtn)
+
+            var text= ""
+
+            statID.text = holder.title.text.toString()
+
+            val lvl = holder.description.text.toString()
+
+            if (getInfo(lvl).equals("good")) {
+                statID.setBackgroundColor(context.getColor(R.color.good))
+                extBtn.setBackgroundColor(context.getColor(R.color.good))
+                text = context.getString(R.string.goodLvl)
+                text += context.getString(R.string.hEGood)
+                text += context.getString(R.string.allGood)
+                healthInfo.text = text
+            }
+            if (getInfo(lvl).equals("moderat")) {
+                statID.setBackgroundColor(context.getColor(R.color.moderate))
+                extBtn.setBackgroundColor(context.getColor(R.color.moderate))
+                text = context.getString(R.string.modLvl)
+                text += context.getString(R.string.hEModerate)
+                if (astma.isChecked) text += context.getString(R.string.astmaM)
+                if (hjerte.isChecked) text += context.getString(R.string.hjerteM)
+                if (eldre.isChecked) text += context.getString(R.string.eldreM)
+                if (gravide.isChecked || generell.isChecked) text += context.getString(R.string.allGood)
+                healthInfo.text = text
+            }
+            if (getInfo(lvl).equals("bad")) {
+                statID.setBackgroundColor(context.getColor(R.color.bad))
+                extBtn.setBackgroundColor(context.getColor(R.color.bad))
+                text = context.getString(R.string.badLVl)
+                text += context.getString(R.string.hEBad)
+                if (astma.isChecked) text += context.getString(R.string.astmaB)
+                if (hjerte.isChecked) text += context.getString(R.string.hjerteB)
+                if (eldre.isChecked) text += context.getString(R.string.eldreB)
+                if (generell.isChecked) text += context.getString(R.string.generalB)
+                if (gravide.isChecked) text += context.getString(R.string.gravideB)
+                healthInfo.text = text
+            }
+
             alertDialog.show()
 
-            // Change Element content
-            val addButton = dialogView.findViewById<Button>(R.id.add_button)
-            addButton.text = "Save"
-            val edit_title = dialogView.findViewById<TextView>(R.id.edit_title)
-            val edit_description = dialogView.findViewById<TextView>(R.id.edit_description)
-
-
-            // make a common textWatcher to use for several editText listener
-            val textWatcher = object: TextWatcher {
-                override fun afterTextChanged(s: Editable?) {}
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val titleInput = edit_title.text
-                    val descriptionInput = edit_description.text
-
-                    addButton.isEnabled = (!titleInput.isEmpty() && !descriptionInput.isEmpty())
-                }
-            }
-
-            edit_title.addTextChangedListener(textWatcher)
-            edit_description.addTextChangedListener(textWatcher)
-
-
-            addButton.setOnClickListener {
-                val titleLength = dataSet[pos].title.length
-                val descriptLength = dataSet[pos].description.length
-
-
-                // Edit the gui element content
-                holder.title.text = edit_title.text
-                holder.description.text = edit_description.text
-
-                validateRiskType(holder.description.text.toString(), holder)
-
+            extBtn.setOnClickListener {
                 alertDialog.hide()
-
-                Toast.makeText(addButton.context, "Edit saved", Toast.LENGTH_SHORT).show()
             }
-
         }
 
     }
+
     override fun getItemCount(): Int {
         return dataSet.size
     }
 
-    fun filteredList(list : ArrayList<CityElement>) {
+    fun filteredList(list: ArrayList<CityElement>) {
         dataSet = list
         notifyDataSetChanged()
     }
 
     // Method to validate and change the riskdisplay image by description text.
-    fun validateRiskType(text : String, holder : ViewHolder) {
+    fun validateRiskType(text: String, holder: ViewHolder) {
         // Change risk displayimage color.
         when {
             text.contains("hoy", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context,
-                    R.drawable.ic_lens_red_35dp
-                ))
+                holder.riskDisplay.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.ic_lens_red_35dp
+                    )
+                )
 
             text.contains("moderat", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context,
-                    R.drawable.ic_lens_yellow_35dp
-                ))
+                holder.riskDisplay.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.ic_lens_yellow_35dp
+                    )
+                )
 
             text.contains("lav", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(ContextCompat.getDrawable(context,
-                    R.drawable.ic_lens_green_35dp
-                ))
+                holder.riskDisplay.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.ic_lens_green_35dp
+                    )
+                )
 
             else -> Log.e("log: ", "FEIL RISK INPUT!!")
         }
@@ -161,6 +175,20 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val addButton = textView.findViewById<ImageButton>(R.id.add_button)
     }
 
+    fun getInfo(text: String) : String {
 
+        when {
+            text.contains("hoy", ignoreCase = true) ->
+                return "bad"
+            text.contains("moderat", ignoreCase = true) ->
+                return "moderat"
+            text.contains("lav", ignoreCase = true) ->
+                return "good"
+
+            else -> Log.e("log: ", "FEIL INPUT!!")
+        }
+        return "ferdig"
+
+    }
 
 }
