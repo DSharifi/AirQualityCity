@@ -13,8 +13,9 @@
 
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
               android:id="@+id/Stasjoner_title"
-              android:text="Alle Statsjoner"
+              android:text="Alle stasjoner"
               android:textSize="40sp"
+              android:fontFamily="montserrat"
               android:layout_marginTop="10dp"
               android:textAlignment="center"
     />

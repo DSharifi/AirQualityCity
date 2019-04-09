@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
             }
 
             R.id.navigation_notifications -> {
+
                 //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
