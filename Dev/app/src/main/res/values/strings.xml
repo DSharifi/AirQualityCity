@@ -22,4 +22,37 @@
     <string name="niva">Forurensingsnivå:</string>
     <string name="avbryt">Avbryt</string>
     <string name="ok">OK</string>
+
+    <string name="alertLevel">Velg nivå for varsling ved luftkvalitet</string>
+    <string name="Good">God luftkvalitet</string>
+    <string name="moderate">Moderat luftkvalitet</string>
+    <string name="Bad">Dårlig luftkvalitet</string>
+    <string name="vBad">Svært dårlig luftkvalitet</string>
+
+    <string name="ingen">Generell befolkning</string>
+    <string name="astma">Astma og andre luftveissykdommer</string>
+    <string name="hjerte">Hjerte- og karsykdommer</string>
+    <string name="eldre">Eldre</string>
+    <string name="gravide">Gravide og småbarn</string>
+
+    <string name="goodLvl">GOD LUFTKVALITET: \n\n</string>
+    <string name="modLvl">MODERAT LUFTKVALITET: \n\n</string>
+    <string name="badLVl">DÅRLIG LUFTKVALITET: \n\n</string>
+
+
+    <!--Råd er hentet fra https://luftkvalitet.miljostatus.no/artikkel/613 'Luftkvalitet i Norge'-->
+    <string name="hEGood">Liten eller ingen risiko for helseeffekter.\n\n</string>
+    <string name="hEModerate">Moderat helserisiko - Helseeffekter kan forekomme hos enkelte astmatikere og personer med andre luftveissykdommer eller alvorlige hjertekarsykdommer. Friske personer vil sannsynligvis ikke ha helseeffekter.\n\n</string>
+    <string name="hEBad">Betydelig helserisiko - Helseeffekter forekommer hos astmatikere og personer med andre luftveissykdommer eller hjertekarsykdommer. Luftveisirritasjoner og ubehag kan forekomme hos friske personer.\n\n</string>
+    <string name="hEVBad">Alvorlig helserisiko - Sårbare grupper i befolkningen er svært utsatte for helseeffekter. Luftveisirritasjoner og ubehag forekommer hos friske personer.\n\n</string>
+
+    <string name="allGood">Utendørs aktivitet anbefales.\n</string>
+    <string name="astmaM">Utendørs aktivitet anbefales for de fleste. De som opplever forverring av luftveissymptomer bør vurdere å redusere fysisk aktivitet i områder med mye trafikk eller andre høye utslipp.\n</string>
+    <string name="hjerteM">Utendørs aktivitet anbefales for de fleste. De som opplever forverring av symptomer bør vurdere å redusere fysisk aktivitet i områder med mye trafikk eller andre høye utslipp.\n</string>
+    <string name="eldreM">Utendørs aktivitet anbefales for de fleste. De som opplever forverring av symptomer i luftveiene eller hjerte- og karsystemet bør vurdere å redusere fysisk aktivitet i områder med mye trafikk eller andre høye utslipp.\n</string>
+    <string name="astmaB">De som har alvorlig luftveissykdom eller opplever forverring av sin astma bør redusere utendørs fysisk aktivitet og begrense oppholdstiden i de mest forurensede områdene.\n</string>
+    <string name="generalB">Utendørs aktivitet anbefales vanligvis. Hvis du har symptomer som hoste eller sår hals bør du vurdere å redusere utendørs fysisk aktivitet i de mest forurensede områdene.\n</string>
+    <string name="hjerteB">De som har alvorlig hjerte- og karsykdom bør redusere utendørs fysisk aktivitet og begrense oppholdstiden de mest forurensede områdene.\n</string>
+    <string name="eldreB">Utendørs aktivitet anbefales for mange. De med luftveis- eller hjerte- og karsykdom bør redusere utendørs fysisk aktivitet og begrense oppholdstiden i de mest forurensede områdene.\n</string>
+    <string name="gravideB">Utendørs aktivitet anbefales for mange. Gravide og barn med luftveissymptomer bør begrense oppholdstiden i de mest forurensede områdene.\n</string>
 </resources>

@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlin.random.Random
 
 class MapStationsHandler(googleMap: GoogleMap){
     val mMap : GoogleMap
@@ -38,6 +39,7 @@ class MapStationsHandler(googleMap: GoogleMap){
         createHeatMap()
         }
 
+
         //Add a pin to the map with the position and name
         // TODO: Endre til å skille på riktig luftverdier
         fun addStation(lat : Double, lng : Double, name : String, aqiValue : Double){
@@ -45,24 +47,35 @@ class MapStationsHandler(googleMap: GoogleMap){
             //Det skal egentlig være lat først, blir feil om man ikke bytter på
             //Lurer på om api'et bytter på disse
             val pos = LatLng(lng, lat)
-            val iconcolor : BitmapDescriptor
+            val iconColor : BitmapDescriptor
+            val aqiLevel = getAQILevel(aqiValue)
 
-            if (aqiValue <= 1.6){
-                iconcolor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+            when (aqiLevel) {
+            1 ->{
+                iconColor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
                 greenHeat.add(pos)
-
-            } else if (aqiValue > 1.6 && aqiValue < 1.8 ){
-                iconcolor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
+            } 2 ->{
+                iconColor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
                 yellowHeat.add(pos)
-            }
-            else {
-                iconcolor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+            }else ->{
+                iconColor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
                 redHeat.add(pos)
+                }
             }
-
-            mMap.addMarker(MarkerOptions().position(pos).title("Station: " + name).icon(iconcolor))
+            mMap.addMarker(MarkerOptions().position(pos).title("Station: " + name).icon(iconColor))
         }
 
+
+    fun getAQILevel(aqiValue : Double) : Int {
+        // Low = 1, Med =, High = 3
+        if (aqiValue <= 1.6) {
+            return 1
+        } else if (aqiValue > 1.6 && aqiValue < 1.8) {
+            return 2
+        } else {
+            return 3
+        }
+    }
 
     fun createHeatMap(){
         val heatmap = Heatmap(mMap, greenHeat, yellowHeat, redHeat)
