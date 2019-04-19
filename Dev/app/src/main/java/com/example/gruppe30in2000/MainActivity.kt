@@ -8,17 +8,13 @@ import android.support.v7.app.AppCompatActivity
 import com.example.gruppe30in2000.FavCity.FavoriteCity
 import com.example.gruppe30in2000.Map.MapFragment
 
-import android.util.Log
-import android.view.View
+
 import android.widget.Toast
 
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
 import com.example.gruppe30in2000.FavCity.CityElement
-import com.example.gruppe30in2000.FavCity.FavoriteCity
-import com.example.gruppe30in2000.Map.MapFragment
-import com.example.gruppe30in2000.Map.MapStationsHandler
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
