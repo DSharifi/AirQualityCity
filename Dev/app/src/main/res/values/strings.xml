@@ -22,6 +22,7 @@
     <string name="niva">Forurensingsnivå:</string>
     <string name="avbryt">Avbryt</string>
     <string name="ok">OK</string>
+    <string name="legg_til">Legg til</string>
 
     <string name="alertLevel">Velg nivå for varsling ved luftkvalitet</string>
     <string name="Good">God luftkvalitet</string>

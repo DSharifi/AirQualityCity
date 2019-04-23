@@ -4,12 +4,10 @@ import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.Activity.*
+import android.content.*
 import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.Intent
 import android.content.RestrictionsManager.RESULT_ERROR
 import android.content.pm.PackageManager
-import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -18,6 +16,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -27,6 +26,10 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.API.Data
+import com.example.gruppe30in2000.API.Meta
+import com.example.gruppe30in2000.AQILevel
+import com.example.gruppe30in2000.AQILevel.Companion.getAQILevelString
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import com.github.salomonbrys.kotson.fromJson
@@ -64,8 +67,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var fView: View
     private lateinit var placesClient : PlacesClient
-    private val SecondActivityCode = 101
+    private lateinit var mContext : Context
 
+    private val SecondActivityCode = 101
     // navn paa shared preferences
     private val name = "favorite cities preferences"
 
@@ -74,32 +78,70 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     companion object {
         var dataset = ArrayList<CityElement>()
+        var addNearestStation = false
+
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
+
+        // TODO: Finne en maate aa kun legge til naermeste stasjon engang naar appen kjorer?
+        // Add the nearest station to favourite
+        if (!addNearestStation) {
+            Log.e("FDSFDS", "FDSFDS")
+            addNearestStation = true
+            getNearestStation()
+        }
+
         return fView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, IntentFilter("from-mapstationhandler"))
 
         loadFavoriteElement()
 
         initRecycleView(dataset)
+
+
         floatingButton.setOnClickListener {
             val intent = Intent(this.context, AllStationView::class.java)
             intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")
             startActivityForResult(intent, SecondActivityCode)
         }
     }
+    // Handler for received Intents. This will be called whenever an Intent
+    // with an action named "custom-event-name" is broadcasted
+    private val mMessageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            // Get extra data included in the Intent
+            val location = intent.getStringExtra("location")
+            if (checkFavouriteCity(location)) { // if the station already exists in favourite we return
+                return
+            }
+            val description = intent.getStringExtra("description")
+            Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
+            addFavoriteElement(location, description)
+        }
+    }
 
-    // Method the initinalize the recycleView
+    // Method that initinalize the recycleView
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
-        viewManager = LinearLayoutManager(this.context)
 
-        viewAdapter = CityListAdapter(dataset, this.context!!)
+        viewManager = LinearLayoutManager(context)
+
+        // TODO: Finne ut hvorfor context er null her naar man trykker paa legg til fra mapstationholder
+        viewAdapter = CityListAdapter(dataset, mContext)
+
 
         recyclerView = fView.findViewById<RecyclerView>(R.id.recyclerView).apply {
 
@@ -119,38 +161,27 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         itemTouchhelper.attachToRecyclerView(recyclerView)
 
         // Initialize places context and api
-        Places.initialize(this.requireContext(), "AIzaSyCrfEIKJc8Nqz6dPV-Ju1jgCAb-BRek70g")
+        Places.initialize(mContext, "AIzaSyCrfEIKJc8Nqz6dPV-Ju1jgCAb-BRek70g")
 
         // Create a new Places client instance.
-        placesClient = Places.createClient(requireContext())
-
-
-
+        placesClient = Places.createClient(mContext)
     }
 
-    // Test method for places autocomplete
-    fun onSearchInputEnter(context : Context) {
-
-        val fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
-
-        // Start the autocomplete intent.
-        val intent = Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.OVERLAY, fields)
-                .build(context)
-
-        startActivityForResult(intent, 1)
-
-    }
      /**
      * Override the activity's onActivityResult(), check the request code, and
      * do something with the returned place data (in this example it's place name, ID and Address).
      */
+     // Metode som henter result message from AllstationView
     override fun onActivityResult(requestCode : Int , resultCode: Int, data : Intent) {
         if (requestCode == SecondActivityCode) {
             when (resultCode) {
             RESULT_OK -> {
                 val returnedLocation = data.getStringExtra("Stationlocation")
                 val returnedDescription= data.getStringExtra("DescriptionStation")
+                if (checkFavouriteCity(returnedLocation)) {
+                    Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
+                    return
+                }
                 addFavoriteElement(returnedLocation,returnedDescription)
             } RESULT_ERROR -> {
                     // TODO: Handle the error.
@@ -159,21 +190,26 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             } RESULT_CANCELED -> {
                 Log.e("CANCELED","CANCELED")
                     // The user canceled the operation.
-            }
+                }
             }
         }
     }
 
     // Method to add new favourite location to view.
     private fun addFavoriteElement(location: String, description: String) {
+        if (checkFavouriteCity(location)) {
+            return
+        }
         dataset.add(CityElement(location, description))
+
         initRecycleView(dataset)
+
         viewAdapter.notifyDataSetChanged()
 
         // lagrer det nye arrayet!
         saveFavoriteElement()
 
-        Toast.makeText(context, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
+        Toast.makeText(mContext, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
 
     }
 
@@ -183,7 +219,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
      */
 
     private fun saveFavoriteElement() {
-        val sharedPreferences = this.context?.getSharedPreferences(name, Context.MODE_PRIVATE);
+        val sharedPreferences = mContext.getSharedPreferences(name, Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
 
         val gson = Gson()
@@ -196,7 +232,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
      * Metoden skal kalles naar main vinduet loades.
      */
     private fun loadFavoriteElement() {
-        val sharedPreferences = this.context?.getSharedPreferences(name, Context.MODE_PRIVATE)
+        val sharedPreferences = mContext.getSharedPreferences(name, Context.MODE_PRIVATE)
         val gson = Gson()
 
         val json : String? = sharedPreferences?.getString(key, null)
@@ -206,6 +242,14 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         } else {
             dataset = gson.fromJson(json)
         }
+    }
+    private fun checkFavouriteCity(location: String) : Boolean {
+        for (data in dataset) {
+            if (data.title.equals(location)) {
+                return true
+            }
+        }
+        return false
     }
 
 
@@ -318,15 +362,14 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 //        }
     }
 
-    fun getNearestStation() : AirQualityStation?{
+    fun getNearestStation(){
         val fused = LocationServices.getFusedLocationProviderClient(activity!!.applicationContext)
 
         val tmpPos = Location(LocationManager.GPS_PROVIDER)
         val myPos = Location(LocationManager.GPS_PROVIDER)
 
         var tmpStation : AirQualityStation = MainActivity.staticAirQualityStationsList[0]
-
-        var dist : Float = 10000.00f
+        var dist : Float = 1000000.00f
         var tmpDist : Float
 
 
@@ -360,62 +403,12 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                         Log.e("Distance in float:" , dist.toString())
                     }
                 }
-               //kan eventuelt legges til herfra
-                //addFavoriteElement(tmpStation.meta.location.toString(), tmpStation.meta.location.toString())
+                val value = tmpStation.data.time[0].variables.AQI.value
+                addFavoriteElement(tmpStation.meta.location.name, getAQILevelString(value))
             }
-        } else {
-            //Location permission is not granted
-            return null
+
         }
-        return tmpStation
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // TODO save and load data done by user
-    /*
-    private fun saveData() {
-        val sharedPrefs = getSharedPreferences(sharedPREF, Context.MODE_PRIVATE)
-        val editor = sharedPrefs.edit()
-        val gson = Gson()
-        val json = gson.toJson(dataset)
-        editor.putString(dataSET,json)
-        editor.apply()
-    }
-
-
-    private fun loadData() {
-        val sharedPrefs = getSharedPreferences(sharedPREF, Context.MODE_PRIVATE)
-        val gson = Gson()
-        val json = sharedPrefs.getString(dataSET,"")
-
-        if (json != null) {
-            val data = gson.fromJson(json, arrayListOf<Element>().javaClass)
-            Toast.makeText(this, "THAO ER FLOPP ${data.size}", Toast.LENGTH_LONG).show()
-
-
-
-            TODO() // CRASH WHEN SET dataset variable to data
-            // dataset = data
-        }
-        else {
-            return
-        }
-    }*/
 }
 
 
