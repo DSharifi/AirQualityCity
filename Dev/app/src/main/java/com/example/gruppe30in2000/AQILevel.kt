@@ -13,6 +13,17 @@ class AQILevel{
                 return 3
             }
         }
+
+        fun getAQILevelString(aqiValue : Double) : String {
+            // Low = 1, Med =, High = 3
+            if (aqiValue <= 1.6) {
+                return "Lav"
+            } else if (aqiValue > 1.6 && aqiValue < 1.8) {
+                    return "Moderat"
+                } else {
+                return "Hoy"
+            }
+        }
     }
 
 }

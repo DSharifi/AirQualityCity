@@ -26,6 +26,10 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.API.Data
+import com.example.gruppe30in2000.API.Meta
+import com.example.gruppe30in2000.AQILevel
+import com.example.gruppe30in2000.AQILevel.Companion.getAQILevelString
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import com.github.salomonbrys.kotson.fromJson
@@ -74,7 +78,10 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     companion object {
         var dataset = ArrayList<CityElement>()
+        var addNearestStation = false
+
     }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -84,6 +91,15 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
+
+        // TODO: Finne en maate aa kun legge til naermeste stasjon engang naar appen kjorer?
+        // Add the nearest station to favourite
+        if (!addNearestStation) {
+            Log.e("FDSFDS", "FDSFDS")
+            addNearestStation = true
+            getNearestStation()
+        }
+
         return fView
     }
 
@@ -95,6 +111,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         loadFavoriteElement()
 
         initRecycleView(dataset)
+
+
         floatingButton.setOnClickListener {
             val intent = Intent(this.context, AllStationView::class.java)
             intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")
@@ -107,6 +125,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         override fun onReceive(context: Context, intent: Intent) {
             // Get extra data included in the Intent
             val location = intent.getStringExtra("location")
+            if (checkFavouriteCity(location)) { // if the station already exists in favourite we return
+                return
+            }
             val description = intent.getStringExtra("description")
             Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
             addFavoriteElement(location, description)
@@ -144,9 +165,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
         // Create a new Places client instance.
         placesClient = Places.createClient(mContext)
-
-
-
     }
 
      /**
@@ -160,6 +178,10 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             RESULT_OK -> {
                 val returnedLocation = data.getStringExtra("Stationlocation")
                 val returnedDescription= data.getStringExtra("DescriptionStation")
+                if (checkFavouriteCity(returnedLocation)) {
+                    Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
+                    return
+                }
                 addFavoriteElement(returnedLocation,returnedDescription)
             } RESULT_ERROR -> {
                     // TODO: Handle the error.
@@ -175,6 +197,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     // Method to add new favourite location to view.
     private fun addFavoriteElement(location: String, description: String) {
+        if (checkFavouriteCity(location)) {
+            return
+        }
         dataset.add(CityElement(location, description))
 
         initRecycleView(dataset)
@@ -217,6 +242,14 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         } else {
             dataset = gson.fromJson(json)
         }
+    }
+    private fun checkFavouriteCity(location: String) : Boolean {
+        for (data in dataset) {
+            if (data.title.equals(location)) {
+                return true
+            }
+        }
+        return false
     }
 
 
@@ -329,15 +362,14 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 //        }
     }
 
-    fun getNearestStation() : AirQualityStation?{
+    fun getNearestStation(){
         val fused = LocationServices.getFusedLocationProviderClient(activity!!.applicationContext)
 
         val tmpPos = Location(LocationManager.GPS_PROVIDER)
         val myPos = Location(LocationManager.GPS_PROVIDER)
 
         var tmpStation : AirQualityStation = MainActivity.staticAirQualityStationsList[0]
-
-        var dist : Float = 10000.00f
+        var dist : Float = 1000000.00f
         var tmpDist : Float
 
 
@@ -371,62 +403,12 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                         Log.e("Distance in float:" , dist.toString())
                     }
                 }
-               //kan eventuelt legges til herfra
-                //addFavoriteElement(tmpStation.meta.location.toString(), tmpStation.meta.location.toString())
+                val value = tmpStation.data.time[0].variables.AQI.value
+                addFavoriteElement(tmpStation.meta.location.name, getAQILevelString(value))
             }
-        } else {
-            //Location permission is not granted
-            return null
+
         }
-        return tmpStation
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // TODO save and load data done by user
-    /*
-    private fun saveData() {
-        val sharedPrefs = getSharedPreferences(sharedPREF, Context.MODE_PRIVATE)
-        val editor = sharedPrefs.edit()
-        val gson = Gson()
-        val json = gson.toJson(dataset)
-        editor.putString(dataSET,json)
-        editor.apply()
-    }
-
-
-    private fun loadData() {
-        val sharedPrefs = getSharedPreferences(sharedPREF, Context.MODE_PRIVATE)
-        val gson = Gson()
-        val json = sharedPrefs.getString(dataSET,"")
-
-        if (json != null) {
-            val data = gson.fromJson(json, arrayListOf<Element>().javaClass)
-            Toast.makeText(this, "THAO ER FLOPP ${data.size}", Toast.LENGTH_LONG).show()
-
-
-
-            TODO() // CRASH WHEN SET dataset variable to data
-            // dataset = data
-        }
-        else {
-            return
-        }
-    }*/
 }
 
 

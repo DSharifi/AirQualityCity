@@ -11,7 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.R
-import com.example.gruppe30in2000.AQILevel
+import com.example.gruppe30in2000.AQILevel.Companion.getAQILevel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import kotlin.random.Random
@@ -79,6 +79,9 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
     override fun onMarkerClick(marker: Marker?): Boolean {
         Log.e("MapstationHandler", "Marker at location ${marker?.title} clicked")
+
+        val tempLocation = marker?.title?.removeRange(0,9)
+
         val dialogBuilder = AlertDialog.Builder(parentContext) // make a dialog builder
 
         val dialogView = LayoutInflater.from(parentContext).inflate(R.layout.add_favourite_map_dialog, null)
@@ -101,7 +104,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         // TODO: Receive markers info (location etc..) in FavoriteCity, use LocalbroadcastManager??
         // TODO: Sende riktig description
         leggtilButton.setOnClickListener {
-            val location = marker?.title.toString()
+            val location = tempLocation .toString()
             val description = "lav"
 
             val intent = Intent("from-mapstationhandler")
