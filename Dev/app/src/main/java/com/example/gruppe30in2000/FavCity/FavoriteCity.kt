@@ -365,9 +365,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             }
         } else {
             //Location permission is not granted
-            return null;
+            return null
         }
-        return tmpStation;
+        return tmpStation
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.gruppe30in2000.Map
 
 import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.AQILevel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -48,7 +49,7 @@ class MapStationsHandler(googleMap: GoogleMap){
             //Lurer på om api'et bytter på disse
             val pos = LatLng(lng, lat)
             val iconColor : BitmapDescriptor
-            val aqiLevel = getAQILevel(aqiValue)
+            val aqiLevel = AQILevel.getAQILevel(aqiValue)
 
             when (aqiLevel) {
             1 ->{
@@ -65,17 +66,6 @@ class MapStationsHandler(googleMap: GoogleMap){
             mMap.addMarker(MarkerOptions().position(pos).title("Station: " + name).icon(iconColor))
         }
 
-
-    fun getAQILevel(aqiValue : Double) : Int {
-        // Low = 1, Med =, High = 3
-        if (aqiValue <= 1.6) {
-            return 1
-        } else if (aqiValue > 1.6 && aqiValue < 1.8) {
-            return 2
-        } else {
-            return 3
-        }
-    }
 
     fun createHeatMap(){
         val heatmap = Heatmap(mMap, greenHeat, yellowHeat, redHeat)
