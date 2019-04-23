@@ -2,11 +2,13 @@ package com.example.gruppe30in2000.Map
 
 
 import android.Manifest
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,7 @@ import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
+import java.io.Console
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -69,8 +72,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo,5.0F))
 
         //Creates StationHandler and adds all stations
-        val mapStations = MapStationsHandler(mMap)
+        val mapStations = MapStationsHandler(mMap, this.context!!)
         mapStations.addAllStations(MainActivity.staticAirQualityStationsList)
+
 
     }
 

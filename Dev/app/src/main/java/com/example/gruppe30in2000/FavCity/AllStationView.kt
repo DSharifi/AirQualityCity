@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import com.example.gruppe30in2000.MainActivity
@@ -108,6 +109,7 @@ class AllStationView : AppCompatActivity() {
             // Get extra data included in the Intent
             val location = intent.getStringExtra("location")
             val description = intent.getStringExtra("description")
+            Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
             passBackDataToActivity(location, description)
         }
     }
