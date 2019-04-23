@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
+import com.example.gruppe30in2000.AQILevel
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import java.util.ArrayList
@@ -42,13 +43,17 @@ class AllStationView : AppCompatActivity() {
             val location= data.meta.location
             val superLocation = data.meta.superlocation
             val aqiValue = data.data.time[0].variables.AQI.value
-            if (aqiValue <= 1.6) {
-                dataset.add(CityElement(location.name + ", " + superLocation.name, "Lav"))
 
-            } else if (aqiValue > 1.6 && aqiValue < 1.8) {
-                dataset.add(CityElement(location.name + ", " + superLocation.name, "Moderat"))
-            } else {
-                dataset.add(CityElement(location.name + ", " + superLocation.name, "Hoy"))
+            val aqiLevel = AQILevel.getAQILevel(aqiValue)
+
+            when (aqiLevel) {
+                1 ->{
+                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Lav"))
+                } 2 ->{
+                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Moderat"))
+                }else ->{
+                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Hoy"))
+                }
             }
         }
         initRecycleView(dataset)
