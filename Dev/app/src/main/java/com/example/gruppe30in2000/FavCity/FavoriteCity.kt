@@ -1,16 +1,23 @@
 package com.example.gruppe30in2000.FavCity
 
+import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
+import android.app.Activity.*
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.RestrictionsManager.RESULT_ERROR
+import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -19,11 +26,15 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.*
 import android.widget.*
+import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
+import com.github.salomonbrys.kotson.fromJson
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
@@ -35,8 +46,11 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 import java.io.IOException
+import java.lang.reflect.Type
 import java.util.*
 
 
@@ -52,11 +66,15 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     private lateinit var placesClient : PlacesClient
     private val SecondActivityCode = 101
 
-    private val sharedPREF = "sharedPrefs"
-    private val dataSET= "dataset"
+    // navn paa shared preferences
+    private val name = "favorite cities preferences"
 
-    private var dataset = ArrayList<CityElement>()
+    // navn paa datasettet i shared preferences
+    private val key = "favorite cities"
 
+    companion object {
+        var dataset = ArrayList<CityElement>()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
@@ -67,15 +85,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
 
-        ////// MAKE 2 element to current
-        val title1 = "Oslo"
-        val description1 = "Lav"
+        loadFavoriteElement()
 
-
-        val element1 = CityElement(title1, description1)
-        dataset.add(element1)
         initRecycleView(dataset)
-
         floatingButton.setOnClickListener {
             val intent = Intent(this.context, AllStationView::class.java)
             intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")
@@ -157,8 +169,46 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         dataset.add(CityElement(location, description))
         initRecycleView(dataset)
         viewAdapter.notifyDataSetChanged()
+
+        // lagrer det nye arrayet!
+        saveFavoriteElement()
+
         Toast.makeText(context, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
+
     }
+
+    /**
+     * Kalles direkte paa av addFavoriteElement().
+     * Metoden lagrer listen med favoritter til
+     */
+
+    private fun saveFavoriteElement() {
+        val sharedPreferences = this.context?.getSharedPreferences(name, Context.MODE_PRIVATE);
+        val editor = sharedPreferences?.edit()
+
+        val gson = Gson()
+        val json : String = gson.toJson(dataset)
+        editor?.putString(key, json)
+        editor?.apply()
+    }
+
+    /**
+     * Metoden skal kalles naar main vinduet loades.
+     */
+    private fun loadFavoriteElement() {
+        val sharedPreferences = this.context?.getSharedPreferences(name, Context.MODE_PRIVATE)
+        val gson = Gson()
+
+        val json : String? = sharedPreferences?.getString(key, null)
+
+        if (json == null) {
+            return
+        } else {
+            dataset = gson.fromJson(json)
+        }
+    }
+
+
 
     private fun geolocate(text : Editable ) : Boolean {
         val searchString = text.toString()
@@ -206,6 +256,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                 Log.e(TAG, "Place not found: " + exception.message)
             }
         }
+
     fun placeAutocomplete() {
         val token = AutocompleteSessionToken.newInstance()
 
@@ -251,6 +302,10 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         dataset.removeAt(pos)
         viewAdapter.notifyItemRemoved(pos)
         viewAdapter.notifyItemRangeChanged(pos,dataset.size)
+
+        // oppdatere
+        saveFavoriteElement()
+
         Toast.makeText(this.context,"Removed ${item.title}",Toast.LENGTH_SHORT).show()
 
     }
@@ -261,6 +316,58 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 //            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //            inputMethodManager.hideSoftInputFromWindow(edit.windowToken, 0)
 //        }
+    }
+
+    fun getNearestStation() : AirQualityStation?{
+        val fused = LocationServices.getFusedLocationProviderClient(activity!!.applicationContext)
+
+        val tmpPos = Location(LocationManager.GPS_PROVIDER)
+        val myPos = Location(LocationManager.GPS_PROVIDER)
+
+        var tmpStation : AirQualityStation = MainActivity.staticAirQualityStationsList[0]
+
+        var dist : Float = 10000.00f
+        var tmpDist : Float
+
+
+        if (ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            fused.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null){
+                    myPos.latitude = location.latitude
+                    myPos.longitude = location.longitude
+                    Log.e("not null ---- " , location.longitude.toString())
+                    Log.e("not null ---- " , location.latitude.toString())
+
+                }
+                else{
+                    Log.e("Location = " , " Null---")
+
+                }
+
+                Log.e("- mypos lat: " , myPos.latitude.toString())
+                Log.e("- mypos long: " , myPos.longitude.toString())
+
+
+                for (station in MainActivity.staticAirQualityStationsList){
+                    //Det er feil i api'et, så må bytte på lat og long
+                    tmpPos.latitude = station.meta.location.longitude.toDouble()
+                    tmpPos.longitude = station.meta.location.latitude.toDouble()
+
+                    tmpDist = tmpPos.distanceTo(myPos)
+                    if (dist > tmpDist){
+                        tmpStation = station
+                        dist = tmpDist
+                        Log.e("Distance in float:" , dist.toString())
+                    }
+                }
+               //kan eventuelt legges til herfra
+                //addFavoriteElement(tmpStation.meta.location.toString(), tmpStation.meta.location.toString())
+            }
+        } else {
+            //Location permission is not granted
+            return null;
+        }
+        return tmpStation;
     }
 
 

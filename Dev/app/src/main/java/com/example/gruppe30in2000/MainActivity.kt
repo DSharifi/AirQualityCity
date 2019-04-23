@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.Map.MapFragment
+
+
 import android.widget.Toast
+
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
-import com.example.gruppe30in2000.FavCity.FavoriteCity
-import com.example.gruppe30in2000.Map.MapFragment
-import com.example.gruppe30in2000.Map.MapStationsHandler
+import com.example.gruppe30in2000.FavCity.CityElement
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
@@ -24,6 +27,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.initial_welcome_view)
+
+
 
 
         //gets data from api - runs in async thread
@@ -43,6 +48,10 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+
+        // TODO TEMPORARY TEST FAVOURITE CITY LIST
+        // Reset favourite city list everytime the app start.
+        FavoriteCity.dataset = ArrayList<CityElement>()
         replaceFragment(FavoriteCity())
     }
 
@@ -63,6 +72,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
             }
 
             R.id.navigation_notifications -> {
+                val mf = SettingsFragment()
+                replaceFragment(mf)
                 //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
