@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.R
+import com.example.gruppe30in2000.AQILevel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import kotlin.random.Random
@@ -113,17 +114,6 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         return true
     }
 
-
-    fun getAQILevel(aqiValue : Double) : Int {
-        // Low = 1, Med =, High = 3
-        if (aqiValue <= 1.6) {
-            return 1
-        } else if (aqiValue > 1.6 && aqiValue < 1.8) {
-            return 2
-        } else {
-            return 3
-        }
-    }
 
     fun createHeatMap(){
         val heatmap = Heatmap(mMap, greenHeat, yellowHeat, redHeat)
