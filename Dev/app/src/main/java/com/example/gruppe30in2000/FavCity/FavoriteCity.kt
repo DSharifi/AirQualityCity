@@ -4,12 +4,10 @@ import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.Activity.*
+import android.content.*
 import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.Intent
 import android.content.RestrictionsManager.RESULT_ERROR
 import android.content.pm.PackageManager
-import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -18,6 +16,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -64,8 +63,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var fView: View
     private lateinit var placesClient : PlacesClient
-    private val SecondActivityCode = 101
+    private lateinit var mContext : Context
 
+    private val SecondActivityCode = 101
     // navn paa shared preferences
     private val name = "favorite cities preferences"
 
@@ -76,7 +76,13 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         var dataset = ArrayList<CityElement>()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
         return fView
     }
@@ -84,6 +90,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, IntentFilter("from-mapstationhandler"))
 
         loadFavoriteElement()
 
@@ -94,12 +101,26 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             startActivityForResult(intent, SecondActivityCode)
         }
     }
+    // Handler for received Intents. This will be called whenever an Intent
+    // with an action named "custom-event-name" is broadcasted
+    private val mMessageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            // Get extra data included in the Intent
+            val location = intent.getStringExtra("location")
+            val description = intent.getStringExtra("description")
+            Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
+            addFavoriteElement(location, description)
+        }
+    }
 
-    // Method the initinalize the recycleView
+    // Method that initinalize the recycleView
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
-        viewManager = LinearLayoutManager(this.context)
 
-        viewAdapter = CityListAdapter(dataset, this.context!!)
+        viewManager = LinearLayoutManager(context)
+
+        // TODO: Finne ut hvorfor context er null her naar man trykker paa legg til fra mapstationholder
+        viewAdapter = CityListAdapter(dataset, mContext)
+
 
         recyclerView = fView.findViewById<RecyclerView>(R.id.recyclerView).apply {
 
@@ -119,32 +140,20 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         itemTouchhelper.attachToRecyclerView(recyclerView)
 
         // Initialize places context and api
-        Places.initialize(this.requireContext(), "AIzaSyCrfEIKJc8Nqz6dPV-Ju1jgCAb-BRek70g")
+        Places.initialize(mContext, "AIzaSyCrfEIKJc8Nqz6dPV-Ju1jgCAb-BRek70g")
 
         // Create a new Places client instance.
-        placesClient = Places.createClient(requireContext())
+        placesClient = Places.createClient(mContext)
 
 
 
     }
 
-    // Test method for places autocomplete
-    fun onSearchInputEnter(context : Context) {
-
-        val fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
-
-        // Start the autocomplete intent.
-        val intent = Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.OVERLAY, fields)
-                .build(context)
-
-        startActivityForResult(intent, 1)
-
-    }
      /**
      * Override the activity's onActivityResult(), check the request code, and
      * do something with the returned place data (in this example it's place name, ID and Address).
      */
+     // Metode som henter result message from AllstationView
     override fun onActivityResult(requestCode : Int , resultCode: Int, data : Intent) {
         if (requestCode == SecondActivityCode) {
             when (resultCode) {
@@ -159,7 +168,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             } RESULT_CANCELED -> {
                 Log.e("CANCELED","CANCELED")
                     // The user canceled the operation.
-            }
+                }
             }
         }
     }
@@ -167,13 +176,15 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     // Method to add new favourite location to view.
     private fun addFavoriteElement(location: String, description: String) {
         dataset.add(CityElement(location, description))
+
         initRecycleView(dataset)
+
         viewAdapter.notifyDataSetChanged()
 
         // lagrer det nye arrayet!
         saveFavoriteElement()
 
-        Toast.makeText(context, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
+        Toast.makeText(mContext, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
 
     }
 
@@ -183,7 +194,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
      */
 
     private fun saveFavoriteElement() {
-        val sharedPreferences = this.context?.getSharedPreferences(name, Context.MODE_PRIVATE);
+        val sharedPreferences = mContext.getSharedPreferences(name, Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
 
         val gson = Gson()
@@ -196,7 +207,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
      * Metoden skal kalles naar main vinduet loades.
      */
     private fun loadFavoriteElement() {
-        val sharedPreferences = this.context?.getSharedPreferences(name, Context.MODE_PRIVATE)
+        val sharedPreferences = mContext.getSharedPreferences(name, Context.MODE_PRIVATE)
         val gson = Gson()
 
         val json : String? = sharedPreferences?.getString(key, null)

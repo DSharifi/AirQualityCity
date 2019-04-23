@@ -1,10 +1,12 @@
 package com.example.gruppe30in2000
 
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.example.gruppe30in2000.FavCity.FavoriteCity
 import com.example.gruppe30in2000.Map.MapFragment
 
@@ -20,10 +22,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     companion object {
-        //Have to be static in order to access it from MapFragment
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.initial_welcome_view)
@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         lp.enableMyLocation()
     }
 
+
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
         if(list.isEmpty()){
             Toast.makeText(this, "Kunne ikke hente data", Toast.LENGTH_LONG).show()
@@ -54,7 +55,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         FavoriteCity.dataset = ArrayList<CityElement>()
         replaceFragment(FavoriteCity())
     }
-
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -88,4 +88,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         fragmentTransaction.commit()
 
     }
+
+
 }
