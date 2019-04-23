@@ -86,6 +86,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         else {
             Toast.makeText(activity!!.applicationContext, R.string.enable_location, Toast.LENGTH_LONG).show()
+
+            /*
+            https://stackoverflow.com/questions/31127116/open-app-permission-settings/33268774
+
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.parse("package:" + getPackageName()));
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+             */
         }
     }
 
