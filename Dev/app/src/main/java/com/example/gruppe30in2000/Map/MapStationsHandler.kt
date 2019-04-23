@@ -30,6 +30,8 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         mMap.setOnMarkerClickListener(this)
     }
 
+
+    //Adds all stations to map
     fun addAllStations(stationlist: ArrayList<AirQualityStation>){
         var lat : Double
         var lng : Double
