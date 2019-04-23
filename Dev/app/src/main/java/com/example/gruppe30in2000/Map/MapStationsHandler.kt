@@ -61,7 +61,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         //Lurer på om api'et bytter på disse
         val pos = LatLng(lng, lat)
         val iconColor : BitmapDescriptor
-        val aqiLevel = AQILevel.getAQILevel(aqiValue)
+        val aqiLevel = getAQILevel(aqiValue)
 
         when (aqiLevel) {
         1 ->{
