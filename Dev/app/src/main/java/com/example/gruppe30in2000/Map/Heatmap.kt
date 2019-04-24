@@ -12,6 +12,7 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider
 // Skal man ta inn 3 forskjellige lister med kordinater som representerer rød, gul og grønn?
 // Kan bli tungvindt hvis hele kartet må oppdateres hvis kun en stasjon skifter farge?
 
+//Creates the heatmap
 class Heatmap(googleMap: GoogleMap, listGreen: List<LatLng>, listYellow: List<LatLng>, listRed: List<LatLng>){
     init {
         val mMap = googleMap

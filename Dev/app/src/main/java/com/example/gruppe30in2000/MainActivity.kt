@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+
+
+
 import android.widget.Toast
+
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
@@ -15,14 +18,13 @@ import com.example.gruppe30in2000.FavCity.FavoriteCity
 import com.example.gruppe30in2000.Map.MapFragment
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
+import com.example.gruppe30in2000.FavCity.CityElement
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
-import org.joda.time.Minutes
 import com.google.gson.GsonBuilder
 import com.fatboyindustrial.gsonjodatime.Converters
 import org.joda.time.Hours
 import java.util.*
-import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
@@ -41,11 +43,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
 
     companion object {
-        // Has to be static in order to access it from MapFragment
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -60,19 +59,23 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         lp.enableMyLocation()
     }
 
-    override fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>){
-        if(values.isEmpty()){
+
+    override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
+        if(list.isEmpty()){
             Toast.makeText(this, "Kunne ikke hente data", Toast.LENGTH_LONG).show()
         }
-        staticAirQualityStationsList = values
+        staticAirQualityStationsList = list
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+
+        // TODO TEMPORARY TEST FAVOURITE CITY LIST
+        // Reset favourite city list everytime the app start.
+        FavoriteCity.dataset = ArrayList<CityElement>()
         replaceFragment(FavoriteCity())
 
         save()
     }
-
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -90,6 +93,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
             }
 
             R.id.navigation_notifications -> {
+                val mf = SettingsFragment()
+                replaceFragment(mf)
                 //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
@@ -115,6 +120,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         val currentTime = DateTime()
         val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
         return hours < difference;
+
+//        return true
     }
 
 
@@ -172,7 +179,5 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
         println(staticAirQualityStationsList)
     }
-
-
 
 }
