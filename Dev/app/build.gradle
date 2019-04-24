@@ -45,6 +45,14 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
     implementation 'com.google.android.libraries.places:places:1.0.0' // Google places
+
+
+    implementation 'com.google.code.findbugs:jsr305:3.0.1'
+
+    // better framework for dates and times compared to built in Date.
+    implementation 'joda-time:joda-time:2.10.1'
+    // need a custom json parser for joda-time objects
+    implementation 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.7.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
 
 }
