@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import com.example.gruppe30in2000.R
+import kotlinx.android.synthetic.main.city_element.view.*
 
 
 enum class ButtonsState {
@@ -69,6 +70,7 @@ open class SwipeController : Callback() {
         }
         return super.convertToAbsoluteDirection(flags, layoutDirection)
     }
+
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -91,15 +93,13 @@ open class SwipeController : Callback() {
         dX: Float, dY: Float,
         actionState: Int, isCurrentlyActive: Boolean
     ) {
-
         recyclerView.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
                 if (swipeBack) {
                     // If swipe left, display dialog to delete
                     if (dX <= buttonWidth) {
-                        Log.e("onSwiped:", "Swiping")
-                        if (viewHolder.adapterPosition  != - 1) {
+                        if (isCurrentlyActive) {
                             val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
                             val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
                             dialogBuilder.setView(dialogView) // set the view into the builder
@@ -109,7 +109,6 @@ open class SwipeController : Callback() {
                             val okButton = dialogView.findViewById<Button>(R.id.ok_button)
                             val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
 
-                            Log.e("adapterPosition", viewHolder.adapterPosition.toString())
                             okButton.setOnClickListener {
                                 deleteItem(viewHolder.adapterPosition)
                                 alertDialog.hide()
