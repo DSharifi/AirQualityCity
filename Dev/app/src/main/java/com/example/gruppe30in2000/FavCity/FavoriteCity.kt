@@ -48,10 +48,13 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.checkerframework.checker.units.qual.A
 
 import java.io.IOException
 import java.lang.reflect.Type
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log
 
 
 class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
@@ -78,6 +81,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
+
         return fView
     }
 
@@ -166,6 +170,16 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     // Method to add new favourite location to view.
     private fun addFavoriteElement(location: String, description: String) {
+
+//        for (station in MainActivity.staticAirQualityStationsList) {
+//            Log.e("LoopFAVORUITE", "KOM inn i looopen")
+//            if (station.meta.location.name == location) {
+//                val calendar = Calendar.getInstance()
+//                val currentHour = calendar .get(Calendar.HOUR_OF_DAY)
+//                val AQI_o3 = station.data.time[currentHour-1].variables.AQI_o3
+//                Log.e("Add favourite element", "Current time ${calendar.time} - AQUI_o3 ${AQI_o3}")
+//            }
+//        }
         dataset.add(CityElement(location, description))
         initRecycleView(dataset)
         viewAdapter.notifyDataSetChanged()

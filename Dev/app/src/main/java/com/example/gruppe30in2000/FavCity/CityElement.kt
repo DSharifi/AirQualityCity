@@ -10,5 +10,4 @@ class CityElement(title: String, description: String) {
     var title = title
     var description = description
 
-
 }

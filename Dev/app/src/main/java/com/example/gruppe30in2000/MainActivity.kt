@@ -16,10 +16,10 @@ import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
 import com.example.gruppe30in2000.FavCity.CityElement
-import com.example.gruppe30in2000.FavCity.FavoriteCity
-import com.example.gruppe30in2000.Map.MapFragment
 import com.example.gruppe30in2000.Map.MapStationsHandler
 import kotlinx.android.synthetic.main.activity_main.*
+
+
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
@@ -31,9 +31,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.initial_welcome_view)
-
-
-
 
         //gets data from api - runs in async thread
         val asyncApiGetter = AsyncApiGetter(this)
@@ -76,8 +73,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
             }
 
             R.id.navigation_notifications -> {
-                val mf = SettingsFragment()
-                replaceFragment(mf)
+                val sf = SettingsFragment()
+                replaceFragment(sf)
                 //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }

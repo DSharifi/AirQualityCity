@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.alert_dialog.view.*
 import android.support.v4.content.LocalBroadcastManager
+import com.example.gruppe30in2000.LocalSettings
 import com.example.gruppe30in2000.R
 import com.example.gruppe30in2000.SettingsFragment
 
@@ -59,6 +60,35 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
 
         holder.linearView.setOnClickListener {
+            // extend view and show basic info
+            // https://stackoverflow.com/questions/41464629/expand-collapse-animation-in-cardview
+
+            holder.svevestov.text = "svevestøv"
+            holder.nitrogen.text = "nitrogendioksid"
+            holder.ozone.text = "oznoe"
+            holder.test.text = "TEST"
+
+            if (holder.svevestov.visibility == View.GONE) {
+                holder.svevestov.visibility = View.VISIBLE
+                holder.nitrogen.visibility = View.VISIBLE
+                holder.ozone.visibility = View.VISIBLE
+                holder.test.visibility = View.VISIBLE
+            }
+            else  {
+                holder.svevestov.visibility = View.GONE
+                holder.nitrogen.visibility = View.GONE
+                holder.ozone.visibility = View.GONE
+                holder.test.visibility = View.GONE
+            }
+
+        }
+
+        holder.ib.setOnClickListener {
+
+
+            val settings = SettingsFragment()
+
+            settings.loadData()
 
             val dialogBuilder = AlertDialog.Builder(context) // make a dialog builder
             val dialogView = LayoutInflater.from(context).inflate(R.layout.infobox, null) // get the dialog xml view
@@ -66,20 +96,12 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
             val alertDialog = dialogBuilder.create()
 
-            val settings = LayoutInflater.from(context).inflate(R.layout.fragment_settings, null);
-
-            val astma = settings.findViewById<CheckBox>(R.id.astma)
-            val hjerte = settings.findViewById<CheckBox>(R.id.hjerte)
-            val eldre = settings.findViewById<CheckBox>(R.id.eldre)
-            val gravide = settings.findViewById<CheckBox>(R.id.gravide)
-            val generell = settings.findViewById<CheckBox>(R.id.ingen)
-
 
             val statID = dialogView.findViewById<TextView>(R.id.stationID)
             val healthInfo = dialogView.findViewById<TextView>(R.id.specialInfo)
             val extBtn = dialogView.findViewById<Button>(R.id.exitBtn)
 
-            var text= ""
+            var infotext = ""
 
             statID.text = holder.title.text.toString()
 
@@ -88,33 +110,33 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             if (getInfo(lvl).equals("good")) {
                 statID.setBackgroundColor(context.getColor(R.color.good))
                 extBtn.setBackgroundColor(context.getColor(R.color.good))
-                text = context.getString(R.string.goodLvl)
-                text += context.getString(R.string.hEGood)
-                text += context.getString(R.string.allGood)
-                healthInfo.text = text
+                infotext = context.getString(R.string.goodLvl)
+                infotext += context.getString(R.string.hEGood)
+                infotext += context.getString(R.string.allGood)
+                healthInfo.text = infotext
             }
             if (getInfo(lvl).equals("moderat")) {
                 statID.setBackgroundColor(context.getColor(R.color.moderate))
                 extBtn.setBackgroundColor(context.getColor(R.color.moderate))
-                text = context.getString(R.string.modLvl)
-                text += context.getString(R.string.hEModerate)
-                if (astma.isChecked) text += context.getString(R.string.astmaM)
-                if (hjerte.isChecked) text += context.getString(R.string.hjerteM)
-                if (eldre.isChecked) text += context.getString(R.string.eldreM)
-                if (gravide.isChecked || generell.isChecked) text += context.getString(R.string.allGood)
-                healthInfo.text = text
+                infotext = context.getString(R.string.modLvl)
+                infotext += context.getString(R.string.hEModerate)
+                if (LocalSettings.astmaState) infotext += context.getString(R.string.astmaM)
+                if (LocalSettings.heartState) infotext += context.getString(R.string.hjerteM)
+                if (LocalSettings.oldState) infotext += context.getString(R.string.eldreM)
+                if (LocalSettings.pregState || LocalSettings.genState) infotext += context.getString(R.string.allGood)
+                healthInfo.text = infotext
             }
             if (getInfo(lvl).equals("bad")) {
                 statID.setBackgroundColor(context.getColor(R.color.bad))
                 extBtn.setBackgroundColor(context.getColor(R.color.bad))
-                text = context.getString(R.string.badLVl)
-                text += context.getString(R.string.hEBad)
-                if (astma.isChecked) text += context.getString(R.string.astmaB)
-                if (hjerte.isChecked) text += context.getString(R.string.hjerteB)
-                if (eldre.isChecked) text += context.getString(R.string.eldreB)
-                if (generell.isChecked) text += context.getString(R.string.generalB)
-                if (gravide.isChecked) text += context.getString(R.string.gravideB)
-                healthInfo.text = text
+                infotext = context.getString(R.string.badLVl)
+                infotext += context.getString(R.string.hEBad)
+                if (LocalSettings.astmaState) infotext += context.getString(R.string.astmaB)
+                if (LocalSettings.heartState) infotext += context.getString(R.string.hjerteB)
+                if (LocalSettings.oldState) infotext += context.getString(R.string.eldreB)
+                if (LocalSettings.pregState) infotext += context.getString(R.string.gravideB)
+                if (LocalSettings.genState) infotext += context.getString(R.string.generalB)
+                healthInfo.text = infotext
             }
 
             alertDialog.show()
@@ -173,6 +195,15 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val riskDisplay = textView.findViewById<ImageView>(R.id.risk_display)
         val linearView = textView.findViewById<RelativeLayout>(R.id.relative_view)
         val addButton = textView.findViewById<ImageButton>(R.id.add_button)
+        val ib = textView.findViewById<ImageButton>(R.id.infoButton)
+
+
+        val svevestov = textView.findViewById<TextView>(R.id.pollution)
+        val nitrogen = textView.findViewById<TextView>(R.id.pollution2)
+        val ozone = textView.findViewById<TextView>(R.id.pollution3)
+        val test = textView.findViewById<TextView>(R.id.pollution4)
+
+
     }
 
     fun getInfo(text: String) : String {
