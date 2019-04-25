@@ -99,26 +99,25 @@ open class SwipeController : Callback() {
                     // If swipe left, display dialog to delete
                     if (dX <= buttonWidth) {
                         Log.e("onSwiped:", "Swiping")
-                        val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
-                        val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
-                        dialogBuilder.setView(dialogView) // set the view into the builder
-                        val alertDialog = dialogBuilder.create()
-                        alertDialog.show()
+                        if (viewHolder.adapterPosition  != - 1) {
+                            val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
+                            val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
+                            dialogBuilder.setView(dialogView) // set the view into the builder
+                            val alertDialog = dialogBuilder.create()
+                            alertDialog.show()
 
-                        val okButton = dialogView.findViewById<Button>(R.id.ok_button)
-                        val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
+                            val okButton = dialogView.findViewById<Button>(R.id.ok_button)
+                            val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
 
-                        Log.e("adapterPosition", viewHolder.adapterPosition.toString())
-//                        if (viewHolder.adapterPosition > 0) {
-//                        }
+                            Log.e("adapterPosition", viewHolder.adapterPosition.toString())
+                            okButton.setOnClickListener {
+                                deleteItem(viewHolder.adapterPosition)
+                                alertDialog.hide()
+                            }
 
-                        okButton.setOnClickListener {
-                            deleteItem(viewHolder.adapterPosition)
-                            alertDialog.hide()
-                        }
-
-                        cancelButton.setOnClickListener {
-                            alertDialog.hide()
+                            cancelButton.setOnClickListener {
+                                alertDialog.hide()
+                            }
                         }
                     }
                 }
