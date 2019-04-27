@@ -44,6 +44,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
         if (context is AllStationView) { // If the context that call on this adapter is All stationView, make the addbutton visible.
             holder.addButton.visibility = View.VISIBLE
+            holder.ib.visibility = View.INVISIBLE
         }
 
 
@@ -63,22 +64,37 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             // extend view and show basic info
             // https://stackoverflow.com/questions/41464629/expand-collapse-animation-in-cardview
 
-            holder.svevestov.text = "svevestøv"
-            holder.nitrogen.text = "nitrogendioksid"
-            holder.ozone.text = "oznoe"
-            holder.test.text = "TEST"
+            val sSText = "Svevestøv nivå: " + String.format("%.2f", dataSet[pos].pm10val) + dataSet[pos].pm10Unit
+            val nitText = "Nitrogeninnhold: " + String.format("%.2f", dataSet[pos].nOVal) + dataSet[pos].nOunit
+            val ozText = "Ozon nivå: " + String.format("%.2f", dataSet[pos].ozvalue) + dataSet[pos].ozonUnit + "\n"
+
+            val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + dataSet[pos].nitHeating.toString() + "%\nIndustri: " + dataSet[pos].nitInd +
+                    "%\nTrafikk/Eksos: " + dataSet[pos].nitExc + "%\nShipping: " + dataSet[pos].nitShip + "%"
+
+            val pm10Lvls = "Svevestøvkilder:\nOppvarming: " + dataSet[pos].pmHeat.toString() + "%\nIndustri: " + dataSet[pos].pmInd +
+                    "%\nEksos: " + dataSet[pos].pmExc + "%\nTrafikk: " + dataSet[pos].pmNonEx + "%\nShipping: " + dataSet[pos].pmShip + "%"
+
+
+            holder.svevestov.text = sSText
+            holder.nitrogen.text = nitText
+            holder.ozone.text = ozText
+            holder.nitLvls.text = nitrogenLvls
+            holder.pm10Lvls.text = pm10Lvls
+
 
             if (holder.svevestov.visibility == View.GONE) {
                 holder.svevestov.visibility = View.VISIBLE
                 holder.nitrogen.visibility = View.VISIBLE
                 holder.ozone.visibility = View.VISIBLE
-                holder.test.visibility = View.VISIBLE
+                holder.nitLvls.visibility = View.VISIBLE
+                holder.pm10Lvls.visibility = View.VISIBLE
             }
             else  {
                 holder.svevestov.visibility = View.GONE
                 holder.nitrogen.visibility = View.GONE
                 holder.ozone.visibility = View.GONE
-                holder.test.visibility = View.GONE
+                holder.nitLvls.visibility = View.GONE
+                holder.pm10Lvls.visibility = View.GONE
             }
 
         }
@@ -201,7 +217,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val svevestov = textView.findViewById<TextView>(R.id.pollution)
         val nitrogen = textView.findViewById<TextView>(R.id.pollution2)
         val ozone = textView.findViewById<TextView>(R.id.pollution3)
-        val test = textView.findViewById<TextView>(R.id.pollution4)
+        val nitLvls = textView.findViewById<TextView>(R.id.pollution4)
+        val pm10Lvls = textView.findViewById<TextView>(R.id.pollution5)
 
 
     }

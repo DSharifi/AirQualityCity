@@ -9,14 +9,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
+import com.example.gruppe30in2000.AQILevel
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
-import java.util.ArrayList
-
-
-
+import java.util.*
 
 
 class AllStationView : AppCompatActivity() {
@@ -42,13 +41,43 @@ class AllStationView : AppCompatActivity() {
             val location= data.meta.location
             val superLocation = data.meta.superlocation
             val aqiValue = data.data.time[0].variables.AQI.value
-            if (aqiValue <= 1.6) {
-                dataset.add(CityElement(location.name + ", " + superLocation.name, "Lav"))
 
-            } else if (aqiValue > 1.6 && aqiValue < 1.8) {
-                dataset.add(CityElement(location.name + ", " + superLocation.name, "Moderat"))
-            } else {
-                dataset.add(CityElement(location.name + ", " + superLocation.name, "Hoy"))
+            val calendar = Calendar.getInstance()
+            val currentHour = calendar .get(Calendar.HOUR_OF_DAY)
+            val AQI_o3String = data.data.time[currentHour-1].variables.o3_concentration.units
+            val AQI_o3Value = data.data.time[currentHour-1].variables.o3_concentration.value
+            val nitVal = data.data.time[currentHour-1].variables.no2_concentration.value
+            val nitUnit = data.data.time[currentHour-1].variables.no2_concentration.units
+            val nitHeating = data.data.time[currentHour-1].variables.no2_local_fraction_heating.value
+            val nitShipping = data.data.time[currentHour-1].variables.no2_local_fraction_shipping.value
+            val nitIndustry = data.data.time[currentHour-1].variables.no2_local_fraction_industry.value
+            val nitTrafficExhaust = data.data.time[currentHour-1].variables.no2_local_fraction_traffic_exhaust.value
+
+            val pm10val = data.data.time[currentHour-1].variables.pm10_concentration.value
+            val pm10uni = data.data.time[currentHour-1].variables.pm10_concentration.units
+            val pm10Heating = data.data.time[currentHour-1].variables.pm10_local_fraction_heating.value
+            val pm10LocalFractionShipping = data.data.time[currentHour-1].variables.pm10_local_fraction_shipping.value
+            val pm10LocalFractionIndustry = data.data.time[currentHour-1].variables.pm10_local_fraction_industry.value
+            val pm10LocalFractionTrafficExhaust = data.data.time[currentHour-1].variables.pm10_local_fraction_traffic_exhaust.value
+            val pm10LocalFractionTrafficNonexhaust = data.data.time[currentHour-1].variables.pm10_local_fraction_traffic_nonexhaust.value
+
+
+            val aqiLevel = AQILevel.getAQILevel(aqiValue)
+
+            when (aqiLevel) {
+                1 ->{
+                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Lav", AQI_o3String, AQI_o3Value, nitVal, nitUnit, pm10val,
+                        pm10uni, nitHeating, nitIndustry, nitShipping, nitTrafficExhaust, pm10Heating, pm10LocalFractionShipping,
+                        pm10LocalFractionIndustry, pm10LocalFractionTrafficExhaust, pm10LocalFractionTrafficNonexhaust))
+                } 2 ->{
+                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Moderat", AQI_o3String, AQI_o3Value, nitVal, nitUnit, pm10val,
+                        pm10uni, nitHeating, nitIndustry, nitShipping, nitTrafficExhaust, pm10Heating, pm10LocalFractionShipping,
+                        pm10LocalFractionIndustry, pm10LocalFractionTrafficExhaust, pm10LocalFractionTrafficNonexhaust))
+                }else ->{
+                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Hoy", AQI_o3String, AQI_o3Value, nitVal, nitUnit, pm10val,
+                        pm10uni, nitHeating, nitIndustry, nitShipping, nitTrafficExhaust, pm10Heating, pm10LocalFractionShipping,
+                        pm10LocalFractionIndustry, pm10LocalFractionTrafficExhaust, pm10LocalFractionTrafficNonexhaust))
+                }
             }
         }
         initRecycleView(dataset)
@@ -108,6 +137,7 @@ class AllStationView : AppCompatActivity() {
             // Get extra data included in the Intent
             val location = intent.getStringExtra("location")
             val description = intent.getStringExtra("description")
+            Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
             passBackDataToActivity(location, description)
         }
     }
