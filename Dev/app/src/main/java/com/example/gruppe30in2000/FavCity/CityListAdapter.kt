@@ -1,22 +1,16 @@
 package com.example.gruppe30in2000.FavCity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.View
 import android.widget.*
-import kotlinx.android.synthetic.main.alert_dialog.view.*
 import android.support.v4.content.LocalBroadcastManager
-import com.example.gruppe30in2000.LocalSettings
 import com.example.gruppe30in2000.R
 import com.example.gruppe30in2000.SettingsFragment
 
@@ -112,6 +106,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
             val alertDialog = dialogBuilder.create()
 
+            val preferences = context?.getSharedPreferences(SettingsFragment.PREFS, Context.MODE_PRIVATE)
 
             val statID = dialogView.findViewById<TextView>(R.id.stationID)
             val healthInfo = dialogView.findViewById<TextView>(R.id.specialInfo)
@@ -136,10 +131,10 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 extBtn.setBackgroundColor(context.getColor(R.color.moderate))
                 infotext = context.getString(R.string.modLvl)
                 infotext += context.getString(R.string.hEModerate)
-                if (LocalSettings.astmaState) infotext += context.getString(R.string.astmaM)
-                if (LocalSettings.heartState) infotext += context.getString(R.string.hjerteM)
-                if (LocalSettings.oldState) infotext += context.getString(R.string.eldreM)
-                if (LocalSettings.pregState || LocalSettings.genState) infotext += context.getString(R.string.allGood)
+                if (preferences?.getBoolean(SettingsFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaM)
+                if (preferences?.getBoolean(SettingsFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteM)
+                if (preferences?.getBoolean(SettingsFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreM)
+                if (preferences?.getBoolean(SettingsFragment.pregKEY, false) == true|| preferences?.getBoolean(SettingsFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
                 healthInfo.text = infotext
             }
             if (getInfo(lvl).equals("bad")) {
@@ -147,11 +142,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 extBtn.setBackgroundColor(context.getColor(R.color.bad))
                 infotext = context.getString(R.string.badLVl)
                 infotext += context.getString(R.string.hEBad)
-                if (LocalSettings.astmaState) infotext += context.getString(R.string.astmaB)
-                if (LocalSettings.heartState) infotext += context.getString(R.string.hjerteB)
-                if (LocalSettings.oldState) infotext += context.getString(R.string.eldreB)
-                if (LocalSettings.pregState) infotext += context.getString(R.string.gravideB)
-                if (LocalSettings.genState) infotext += context.getString(R.string.generalB)
+                if (preferences?.getBoolean(SettingsFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaB)
+                if (preferences?.getBoolean(SettingsFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreB)
+                if (preferences?.getBoolean(SettingsFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteB)
+                if (preferences?.getBoolean(SettingsFragment.pregKEY, false) == true) infotext += context.getString(R.string.gravideB)
+                if (preferences?.getBoolean(SettingsFragment.genKEY, false) == true) infotext += context.getString(R.string.generalB)
                 healthInfo.text = infotext
             }
 

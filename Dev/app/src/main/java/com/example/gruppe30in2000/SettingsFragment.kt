@@ -14,21 +14,22 @@ import android.widget.Toast
 
 class SettingsFragment : Fragment() {
 
-    val PREFS = "SHARED_PREFS"
-    val astmaKEY = "astma_key"
-    val oldKEY = "old_key"
-    val genKEY = "gen_key"
-    val heartKEY = "heart_key"
-    val pregKEY = "preg_key"
-
-
     lateinit var fView: View
 
-    private var astmaB = false
-    private var oldB = false
-    private var genB = false
-    private var heartB = false
-    private var pregB = false
+    companion object {
+        val PREFS = "SHARED_PREFS"
+        val astmaKEY = "astma_key"
+        val oldKEY = "old_key"
+        val genKEY = "gen_key"
+        val heartKEY = "heart_key"
+        val pregKEY = "preg_key"
+    }
+
+    var astmaB = false
+    var oldB = false
+    var genB = false
+    var heartB = false
+    var pregB = false
 
     lateinit var astmaCB: CheckBox
     lateinit var oldCB: CheckBox
@@ -83,27 +84,22 @@ class SettingsFragment : Fragment() {
 
         if (preferences?.getBoolean(astmaKEY, false) == true) {
             astmaB = true
-            LocalSettings.astmaState = true
         }
 
         if (preferences?.getBoolean(oldKEY, false) == true) {
             oldB = true
-            LocalSettings.oldState = true
         }
 
         if (preferences?.getBoolean(genKEY, false) == true) {
             genB = true
-            LocalSettings.genState = true
         }
 
         if (preferences?.getBoolean(heartKEY, false) == true) {
             heartB = true
-            LocalSettings.heartState = true
         }
 
         if (preferences?.getBoolean(pregKEY, false) == true) {
             pregB = true
-            LocalSettings.pregState = true
         }
     }
 
