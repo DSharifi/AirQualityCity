@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import android.view.View
 import android.widget.*
 import android.support.v4.content.LocalBroadcastManager
+import com.example.gruppe30in2000.PreferenceFragment
 import com.example.gruppe30in2000.R
-import com.example.gruppe30in2000.SettingsFragment
+import android.preference.PreferenceManager;
+
 
 
 class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context) :
@@ -95,18 +97,13 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
         holder.ib.setOnClickListener {
 
-
-            val settings = SettingsFragment()
-
-            settings.loadData()
-
             val dialogBuilder = AlertDialog.Builder(context) // make a dialog builder
             val dialogView = LayoutInflater.from(context).inflate(R.layout.infobox, null) // get the dialog xml view
             dialogBuilder.setView(dialogView) // set the view into the builder
 
             val alertDialog = dialogBuilder.create()
 
-            val preferences = context?.getSharedPreferences(SettingsFragment.PREFS, Context.MODE_PRIVATE)
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
             val statID = dialogView.findViewById<TextView>(R.id.stationID)
             val healthInfo = dialogView.findViewById<TextView>(R.id.specialInfo)
@@ -131,10 +128,10 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 extBtn.setBackgroundColor(context.getColor(R.color.moderate))
                 infotext = context.getString(R.string.modLvl)
                 infotext += context.getString(R.string.hEModerate)
-                if (preferences?.getBoolean(SettingsFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaM)
-                if (preferences?.getBoolean(SettingsFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteM)
-                if (preferences?.getBoolean(SettingsFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreM)
-                if (preferences?.getBoolean(SettingsFragment.pregKEY, false) == true|| preferences?.getBoolean(SettingsFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
+                if (prefs.getBoolean(PreferenceFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaM)
+                if (prefs.getBoolean(PreferenceFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteM)
+                if (prefs.getBoolean(PreferenceFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreM)
+                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true || prefs.getBoolean(PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
                 healthInfo.text = infotext
             }
             if (getInfo(lvl).equals("bad")) {
@@ -142,11 +139,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 extBtn.setBackgroundColor(context.getColor(R.color.bad))
                 infotext = context.getString(R.string.badLVl)
                 infotext += context.getString(R.string.hEBad)
-                if (preferences?.getBoolean(SettingsFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaB)
-                if (preferences?.getBoolean(SettingsFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreB)
-                if (preferences?.getBoolean(SettingsFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteB)
-                if (preferences?.getBoolean(SettingsFragment.pregKEY, false) == true) infotext += context.getString(R.string.gravideB)
-                if (preferences?.getBoolean(SettingsFragment.genKEY, false) == true) infotext += context.getString(R.string.generalB)
+                if (prefs.getBoolean(PreferenceFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaB)
+                if (prefs.getBoolean(PreferenceFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreB)
+                if (prefs.getBoolean(PreferenceFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteB)
+                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true) infotext += context.getString(R.string.gravideB)
+                if (prefs.getBoolean(PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.generalB)
                 healthInfo.text = infotext
             }
 

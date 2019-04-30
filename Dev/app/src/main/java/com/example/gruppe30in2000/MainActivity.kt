@@ -73,7 +73,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
             }
 
             R.id.navigation_notifications -> {
-                val sf = SettingsFragment()
+                val sf = PreferenceFragment()
+
                 replaceFragment(sf)
                 //message.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true

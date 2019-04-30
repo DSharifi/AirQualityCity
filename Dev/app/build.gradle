@@ -55,4 +55,7 @@ dependencies {
     implementation 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.7.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.android.support:preference-v14:28.0.0'
+    //preferences
+    implementation 'com.takisoft.fix:preference-v7:25.3.0.0'
+
 }
