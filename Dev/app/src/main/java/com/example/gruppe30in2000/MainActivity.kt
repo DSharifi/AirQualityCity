@@ -1,9 +1,12 @@
 package com.example.gruppe30in2000
 
 
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
 import com.example.gruppe30in2000.FavCity.FavoriteCity
 import com.example.gruppe30in2000.Map.MapFragment
@@ -27,6 +30,9 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         //Have to be static in order to access it from MapFragment
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
     }
+
+    lateinit var notificationManager : NotificationManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +83,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
                 replaceFragment(sf)
                 //message.setText(R.string.title_notifications)
+                notifyer()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -89,5 +96,36 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         fragmentTransaction.replace(R.id.fragmentContainer, fragment)
         fragmentTransaction.commit()
 
+    }
+
+    fun notifyer() {
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        var id = 1232132
+
+        for (station in FavoriteCity.dataset) {
+
+            //Må ha if tester på nivåene og sammenligne med prefrences som er satt
+            //if (station.aqiValue >= PreferenceFragment.AQILevel){
+            if (station.description == "Hoy"){
+
+
+
+                val builder = NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_warning_blue_24dp)
+                    .setContentTitle("AQS: " + station.title)
+                    .setContentText("Forurensingsnivå: ??")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("Forurensingsnivå: " + station.description)
+                    )
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+
+                id++
+                notificationManager.notify(id, builder.build())
+            }
+
+        }
     }
 }
