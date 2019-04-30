@@ -16,10 +16,8 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         val heartKEY = "heart_key"
         val pregKEY = "preg_key"
 
-        val goodKey = "good_key"
-        val moderateKey = "moderate_key"
-        val badKey = "bad_key"
-        val veryBadKey = "verybad_key"
+        val alertValue = "alertValue"
+
     }
 
     override fun onCreatePreferences(savedstates: Bundle?, rootkey: String?) {

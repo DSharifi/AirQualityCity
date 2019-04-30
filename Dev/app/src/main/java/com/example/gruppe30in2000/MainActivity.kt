@@ -4,6 +4,7 @@ package com.example.gruppe30in2000
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.NotificationCompat
@@ -98,18 +99,18 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     }
 
+
     fun notifyer() {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         var id = 1232132
 
         for (station in FavoriteCity.dataset) {
 
-            //Må ha if tester på nivåene og sammenligne med prefrences som er satt
-            //if (station.aqiValue >= PreferenceFragment.AQILevel){
-            if (station.description == "Hoy"){
+            if (prefs.getString(PreferenceFragment.alertValue, "10").toInt() <= AQILevel.getAlertLevel(station.aqiValue)){
 
-
+                Log.e(prefs.getString(PreferenceFragment.alertValue, "10"), AQILevel.getAlertLevel(station.aqiValue).toString())
 
                 val builder = NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_warning_blue_24dp)
@@ -125,7 +126,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
                 id++
                 notificationManager.notify(id, builder.build())
             }
-
         }
     }
 }
