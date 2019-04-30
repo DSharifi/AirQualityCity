@@ -95,9 +95,12 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         // TODO: Finne en maate aa kun legge til naermeste stasjon engang naar appen kjorer?
         // Add the nearest station to favourite
         if (!addNearestStation) {
-            Log.e("FDSFDS", "FDSFDS")
             addNearestStation = true
-            getNearestStation()
+
+            // If list of all station is not empty then we get and add the nearest station available
+            if (MainActivity.staticAirQualityStationsList.isNotEmpty()) {
+                getNearestStation()
+            }
         }
 
         return fView
@@ -128,9 +131,17 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             if (checkFavouriteCity(location)) { // if the station already exists in favourite we return
                 return
             }
-            val description = intent.getStringExtra("description")
-            Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
-            addFavoriteElement(location, description)
+            // TODO: Loop through the list of station and get the info that is needed.
+            for (station in MainActivity.staticAirQualityStationsList) {
+                if (station.meta.location.name == location) {
+                    val aqi = station.data.time[0].variables.AQI.value
+                    val description = getAQILevelString(aqi) // get the aqi level in string
+                    Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
+                    addFavoriteElement(location, description)
+
+                }
+            }
+
         }
     }
 
@@ -160,11 +171,11 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         val itemTouchhelper = ItemTouchHelper(swipeController)
         itemTouchhelper.attachToRecyclerView(recyclerView)
 
-        // Initialize places context and api
-        Places.initialize(mContext, "AIzaSyCrfEIKJc8Nqz6dPV-Ju1jgCAb-BRek70g")
-
-        // Create a new Places client instance.
-        placesClient = Places.createClient(mContext)
+//        // Initialize places context and api
+//        Places.initialize(mContext, "AIzaSyCrfEIKJc8Nqz6dPV-Ju1jgCAb-BRek70g")
+//
+//        // Create a new Places client instance.
+//        placesClient = Places.createClient(mContext)
     }
 
     /**
@@ -175,18 +186,20 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     override fun onActivityResult(requestCode : Int , resultCode: Int, data : Intent) {
         if (requestCode == SecondActivityCode) {
             when (resultCode) {
-                RESULT_OK -> {
-                    val returnedLocation = data.getStringExtra("Stationlocation")
-                    val returnedDescription= data.getStringExtra("DescriptionStation")
-                    if (checkFavouriteCity(returnedLocation)) {
-                        Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
-                        return
-                    }
-                    addFavoriteElement(returnedLocation,returnedDescription)
-                } RESULT_ERROR -> {
-                // TODO: Handle the error.
-                val status = Autocomplete.getStatusFromIntent(data)
-                Log.e(TAG, status.statusMessage)
+            RESULT_OK -> {
+                val returnedLocation = data.getStringExtra("Stationlocation")
+                val returnedDescription= data.getStringExtra("DescriptionStation")
+                if (checkFavouriteCity(returnedLocation)) {
+                    Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
+                    return
+                }
+
+
+                addFavoriteElement(returnedLocation,returnedDescription)
+            } RESULT_ERROR -> {
+                    // TODO: Handle the error.
+                    val status = Autocomplete.getStatusFromIntent(data)
+                    Log.e(TAG, status.statusMessage)
             } RESULT_CANCELED -> {
                 Log.e("CANCELED","CANCELED")
                 // The user canceled the operation.
@@ -254,7 +267,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     }
     private fun checkFavouriteCity(location: String) : Boolean {
         for (data in dataset) {
-            if (data.title.equals(location)) {
+            if (data.title.contentEquals(location)) {
                 return true
             }
         }

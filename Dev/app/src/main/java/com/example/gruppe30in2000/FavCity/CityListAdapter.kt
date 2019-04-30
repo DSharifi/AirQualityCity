@@ -103,6 +103,14 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
             val alertDialog = dialogBuilder.create()
 
+            val settings = LayoutInflater.from(context).inflate(R.layout.fragment_settings, null)
+
+            val astma = settings.findViewById<CheckBox>(R.id.astma)
+            val hjerte = settings.findViewById<CheckBox>(R.id.hjerte)
+            val eldre = settings.findViewById<CheckBox>(R.id.eldre)
+            val gravide = settings.findViewById<CheckBox>(R.id.gravide)
+            val generell = settings.findViewById<CheckBox>(R.id.ingen)
+
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
             val statID = dialogView.findViewById<TextView>(R.id.stationID)
