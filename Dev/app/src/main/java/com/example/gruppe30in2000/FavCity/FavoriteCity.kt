@@ -167,30 +167,30 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         placesClient = Places.createClient(mContext)
     }
 
-     /**
+    /**
      * Override the activity's onActivityResult(), check the request code, and
      * do something with the returned place data (in this example it's place name, ID and Address).
      */
-     // Metode som henter result message from AllstationView
+    // Metode som henter result message from AllstationView
     override fun onActivityResult(requestCode : Int , resultCode: Int, data : Intent) {
         if (requestCode == SecondActivityCode) {
             when (resultCode) {
-            RESULT_OK -> {
-                val returnedLocation = data.getStringExtra("Stationlocation")
-                val returnedDescription= data.getStringExtra("DescriptionStation")
-                if (checkFavouriteCity(returnedLocation)) {
-                    Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
-                    return
-                }
-                addFavoriteElement(returnedLocation,returnedDescription)
-            } RESULT_ERROR -> {
-                    // TODO: Handle the error.
-                    val status = Autocomplete.getStatusFromIntent(data)
-                    Log.e(TAG, status.statusMessage)
+                RESULT_OK -> {
+                    val returnedLocation = data.getStringExtra("Stationlocation")
+                    val returnedDescription= data.getStringExtra("DescriptionStation")
+                    if (checkFavouriteCity(returnedLocation)) {
+                        Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                    addFavoriteElement(returnedLocation,returnedDescription)
+                } RESULT_ERROR -> {
+                // TODO: Handle the error.
+                val status = Autocomplete.getStatusFromIntent(data)
+                Log.e(TAG, status.statusMessage)
             } RESULT_CANCELED -> {
                 Log.e("CANCELED","CANCELED")
-                    // The user canceled the operation.
-                }
+                // The user canceled the operation.
+            }
             }
         }
     }
@@ -200,7 +200,16 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         if (checkFavouriteCity(location)) {
             return
         }
-        dataset.add(CityElement(location, description))
+        val bits = location.split(",").toTypedArray()
+        val formatedLoc = bits[0]
+
+        Log.e("TESTE NAVN", "Dette er loc:" + formatedLoc)
+        for (data in MainActivity.staticAirQualityStationsList) {
+            val locationName = data.meta.location.name
+            if (locationName.equals(formatedLoc)) {
+                dataset.add(CityElement(data))
+            }
+        }
 
         initRecycleView(dataset)
 
@@ -292,32 +301,32 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         // Add a listener to handle the response.
 
         placesClient.fetchPlace(request).addOnSuccessListener {
-            response ->
-              val place = response.place
-              Log.i(TAG, "Place found: " + place.name)
-            }.addOnFailureListener {
+                response ->
+            val place = response.place
+            Log.i(TAG, "Place found: " + place.name)
+        }.addOnFailureListener {
                 exception ->
-                Log.e(TAG, "Place not found: " + exception.message)
-            }
+            Log.e(TAG, "Place not found: " + exception.message)
         }
+    }
 
     fun placeAutocomplete() {
         val token = AutocompleteSessionToken.newInstance()
 
         // Create a RectangularBounds object.
         val bounds = RectangularBounds.newInstance(
-          LatLng(-33.880490, 151.184363),
-          LatLng(-33.858754, 151.229596));
+            LatLng(-33.880490, 151.184363),
+            LatLng(-33.858754, 151.229596));
         // Use the builder to create a FindAutocompletePredictionsRequest.
         val request = FindAutocompletePredictionsRequest.builder()
-        // Call either setLocationBias() OR setLocationRestriction().
-           .setLocationBias(bounds)
-           //.setLocationRestriction(bounds)
-           .setCountry("au")
-           .setTypeFilter(TypeFilter.ADDRESS)
-           .setSessionToken(token)
-           .setQuery("query")
-           .build()
+            // Call either setLocationBias() OR setLocationRestriction().
+            .setLocationBias(bounds)
+            //.setLocationRestriction(bounds)
+            .setCountry("au")
+            .setTypeFilter(TypeFilter.ADDRESS)
+            .setSessionToken(token)
+            .setQuery("query")
+            .build()
 
         placesClient.findAutocompletePredictions(request).addOnSuccessListener {
                 response ->
@@ -327,8 +336,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             }
         }.addOnFailureListener {
                 exception ->
-                   val apiException = ApiException(Status(1))
-                   Log.e(TAG, "Place not found: " + apiException.statusCode)
+            val apiException = ApiException(Status(1))
+            Log.e(TAG, "Place not found: " + apiException.statusCode)
         }
     }
 
@@ -435,53 +444,39 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
       dialogBuilder.setView(dialogView) // set the view into the builder
       val alertDialog = dialogBuilder.create()
       alertDialog.show()
-
-
-
       val addButton = dialogView.findViewById<Button>(R.id.add_button)
       val edit_title = dialogView.findViewById<TextView>(R.id.edit_title)
       val edit_description = dialogView.findViewById<TextView>(R.id.edit_description)
       val searchText = dialogView.findViewById<RelativeLayout>(R.id.search_input)
-
 //             make a common textWatcher to use for several editText/TextView listener
       val textWatcher = object: TextWatcher {
           override fun afterTextChanged(s: Editable?) {
           }
-
           override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
           }
-
           override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
               val titleInput = edit_title.text
               val descriptionInput = edit_description.text
               addButton.isEnabled = (!titleInput.isEmpty())
           }
       }
-
       edit_title.addTextChangedListener(textWatcher)
       edit_description.addTextChangedListener(textWatcher)
-
-
       searchText.setOnClickListener {
           onSearchInputEnter(searchText.context) // call on google place search.
           Log.e("CURRENT PLACE", currentPlace)
-
           if (currentPlace.isNotEmpty()) {
               Log.e("IS NOT NYULL OR BLACK", "FDSAFSS")
               edit_title.text = currentPlace
               currentPlace = "" // reset value
           }
       }
-
-
       addButton.setOnClickListener {
           val tempElement = CityElement(edit_title.text.toString(), edit_description.text.toString())
           dataset.add(tempElement)
           Toast.makeText(this.context, "Element added!", Toast.LENGTH_SHORT).show()
-
           initRecycleView(dataset)
           alertDialog.hide()
-
           Toast.makeText(this.context, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
           //saveData()
       }*/
@@ -502,3 +497,5 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 //                Log.i(TAG, "An error occurred: $status")
 //            }
 //        })
+
+

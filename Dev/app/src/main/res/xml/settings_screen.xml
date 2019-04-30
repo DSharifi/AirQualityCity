@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/alertLevel">
+
+        <CheckBoxPreference
+                android:key="good_key"
+                android:title="@string/Good"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="moderate_key"
+                android:title="@string/moderate"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="bad_key"
+                android:title="@string/Bad"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="verybad_key"
+                android:title="@string/vBad"
+                android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="INFOOMPERSONVERNOGBRUKSOMRÅDEOSV...">
+
+        <CheckBoxPreference
+                android:key="astma_key"
+                android:title="@string/astma"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="old_key"
+                android:title="@string/eldre"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="heart_key"
+                android:title="@string/hjerte"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="preg_key"
+                android:title="@string/gravide"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="gen_key"
+                android:title="@string/ingen"
+                android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
