@@ -15,6 +15,7 @@ import com.example.gruppe30in2000.AQILevel.Companion.getAQILevel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import kotlin.random.Random
+import java.util.*
 
 class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnMarkerClickListener {
     val mMap : GoogleMap
@@ -24,6 +25,9 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
     val greenHeat = arrayListOf<LatLng>()
     val yellowHeat = arrayListOf<LatLng>()
     val redHeat = arrayListOf<LatLng>()
+
+    val calendar = Calendar.getInstance()
+    val currentHour = calendar .get(Calendar.HOUR_OF_DAY)
 
     init {
         mMap = googleMap
@@ -43,7 +47,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
             lat = station.meta.location.latitude.toDouble()
             lng = station.meta.location.longitude.toDouble()
             name = station.meta.location.name
-            aqi = station.data.time[0].variables.AQI.value
+            aqi = station.data.time[currentHour-1].variables.AQI.value
 
 
             addStation(lat, lng, name, aqi)

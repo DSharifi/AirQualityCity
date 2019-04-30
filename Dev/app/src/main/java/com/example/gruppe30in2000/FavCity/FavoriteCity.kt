@@ -207,29 +207,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         for (data in MainActivity.staticAirQualityStationsList) {
             val locationName = data.meta.location.name
             if (locationName.equals(formatedLoc)) {
-                val calendar = Calendar.getInstance()
-                val currentHour = calendar .get(Calendar.HOUR_OF_DAY)
-                val AQI_o3String = data.data.time[currentHour-1].variables.o3_concentration.units
-                val AQI_o3Value = data.data.time[currentHour-1].variables.o3_concentration.value
-
-                val nitVal = data.data.time[currentHour-1].variables.no2_concentration.value
-                val nitUnit = data.data.time[currentHour-1].variables.no2_concentration.units
-                val nitHeating = data.data.time[currentHour-1].variables.no2_local_fraction_heating.value
-                val nitShipping = data.data.time[currentHour-1].variables.no2_local_fraction_shipping.value
-                val nitIndustry = data.data.time[currentHour-1].variables.no2_local_fraction_industry.value
-                val nitTrafficExhaust = data.data.time[currentHour-1].variables.no2_local_fraction_traffic_exhaust.value
-
-                val pm10val = data.data.time[currentHour-1].variables.pm10_concentration.value
-                val pm10uni = data.data.time[currentHour-1].variables.pm10_concentration.units
-                val pm10Heating = data.data.time[currentHour-1].variables.pm10_local_fraction_heating.value
-                val pm10LocalFractionShipping = data.data.time[currentHour-1].variables.pm10_local_fraction_shipping.value
-                val pm10LocalFractionIndustry = data.data.time[currentHour-1].variables.pm10_local_fraction_industry.value
-                val pm10LocalFractionTrafficExhaust = data.data.time[currentHour-1].variables.pm10_local_fraction_traffic_exhaust.value
-                val pm10LocalFractionTrafficNonexhaust = data.data.time[currentHour-1].variables.pm10_local_fraction_traffic_nonexhaust.value
-
-                dataset.add(CityElement(location, description, AQI_o3String, AQI_o3Value, nitVal, nitUnit, pm10val,
-                    pm10uni, nitHeating, nitIndustry, nitShipping, nitTrafficExhaust, pm10Heating, pm10LocalFractionShipping,
-                    pm10LocalFractionIndustry, pm10LocalFractionTrafficExhaust, pm10LocalFractionTrafficNonexhaust))
+                dataset.add(CityElement(data))
             }
         }
 

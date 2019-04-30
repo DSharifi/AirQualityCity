@@ -10,7 +10,6 @@ class PreferenceFragment : PreferenceFragmentCompat() {
 
 
     companion object {
-        val PREFS = "SHARED_PREFS"
         val astmaKEY = "astma_key"
         val oldKEY = "old_key"
         val genKEY = "gen_key"
