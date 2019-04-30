@@ -62,7 +62,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
             val sSText = "Svevestøv nivå: " + String.format("%.2f", dataSet[pos].pm10val) + dataSet[pos].pm10Unit
             val nitText = "Nitrogeninnhold: " + String.format("%.2f", dataSet[pos].nOVal) + dataSet[pos].nOunit
-            val ozText = "Ozon nivå: " + String.format("%.2f", dataSet[pos].ozvalue) + dataSet[pos].ozonUnit + "\n"
+            val ozText = "Ozon nivå: " + String.format("%.2f", dataSet[pos].ozvalue) + dataSet[pos].ozonUnit
+            val aqiText = "AQI nivå: " + String.format("%.2f", dataSet[pos].aqiValue) + "\n"
 
             val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + dataSet[pos].nitHeating.toString() + "%\nIndustri: " + dataSet[pos].nitInd +
                     "%\nTrafikk/Eksos: " + dataSet[pos].nitExc + "%\nShipping: " + dataSet[pos].nitShip + "%"
@@ -74,6 +75,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             holder.svevestov.text = sSText
             holder.nitrogen.text = nitText
             holder.ozone.text = ozText
+            holder.aqilvl.text = aqiText
             holder.nitLvls.text = nitrogenLvls
             holder.pm10Lvls.text = pm10Lvls
 
@@ -84,6 +86,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 holder.ozone.visibility = View.VISIBLE
                 holder.nitLvls.visibility = View.VISIBLE
                 holder.pm10Lvls.visibility = View.VISIBLE
+                holder.aqilvl.visibility = View.VISIBLE
             }
             else  {
                 holder.svevestov.visibility = View.GONE
@@ -91,6 +94,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 holder.ozone.visibility = View.GONE
                 holder.nitLvls.visibility = View.GONE
                 holder.pm10Lvls.visibility = View.GONE
+                holder.aqilvl.visibility = View.GONE
             }
 
         }
@@ -211,6 +215,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val ozone = textView.findViewById<TextView>(R.id.pollution3)
         val nitLvls = textView.findViewById<TextView>(R.id.pollution4)
         val pm10Lvls = textView.findViewById<TextView>(R.id.pollution5)
+        val aqilvl = textView.findViewById<TextView>(R.id.pollution6)
 
 
     }

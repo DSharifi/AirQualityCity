@@ -128,9 +128,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             if (checkFavouriteCity(location)) { // if the station already exists in favourite we return
                 return
             }
-            val description = intent.getStringExtra("description")
-            Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
-            addFavoriteElement(location, description)
+            Log.e("Allstation View", "Received Message from cityadapter ${location}")
+            addFavoriteElement(location)
         }
     }
 
@@ -182,7 +181,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                         Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
                         return
                     }
-                    addFavoriteElement(returnedLocation,returnedDescription)
+                    addFavoriteElement(returnedLocation)
                 } RESULT_ERROR -> {
                 // TODO: Handle the error.
                 val status = Autocomplete.getStatusFromIntent(data)
@@ -196,7 +195,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     }
 
     // Method to add new favourite location to view.
-    private fun addFavoriteElement(location: String, description: String) {
+    private fun addFavoriteElement(location: String) {
         if (checkFavouriteCity(location)) {
             return
         }
@@ -413,7 +412,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                     }
                 }
                 val value = tmpStation.data.time[0].variables.AQI.value
-                addFavoriteElement(tmpStation.meta.location.name, getAQILevelString(value))
+                addFavoriteElement(tmpStation.meta.location.name)
             }
 
         }

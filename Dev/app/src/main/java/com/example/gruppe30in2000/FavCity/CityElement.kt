@@ -20,8 +20,6 @@ class CityElement(station: AirQualityStation) {
     var title = location.name + ", " + superLocation.name
     val description = AQILevel.getAQILevelString(aqiValue)
 
-
-
     var ozonUnit = station.data.time[currentHour-1].variables.o3_concentration.units
     var ozvalue = station.data.time[currentHour-1].variables.o3_concentration.value
     var nOVal = station.data.time[currentHour-1].variables.no2_concentration.value
