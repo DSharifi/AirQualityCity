@@ -38,7 +38,7 @@ class AllStationView : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, IntentFilter("from-cityadapter"))
 
         for (data in airquailityStation) {
-                dataset.add(CityElement(data))
+                dataset.add(CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY)))
             }
 
         initRecycleView(dataset)

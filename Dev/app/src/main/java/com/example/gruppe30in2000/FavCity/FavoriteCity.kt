@@ -98,9 +98,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         // Add the nearest station to favourite
         if (!addNearestStation) {
             addNearestStation = true
-
             // If list of all station is not empty then we get and add the nearest station available
             if (MainActivity.staticAirQualityStationsList.isNotEmpty()) {
+                Log.e("OncreateView","GET NEAREAST!")
                 getNearestStation()
             }
         }
@@ -133,11 +133,15 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         Log.e("CURRENTIME" ,  "$currentDate - Time: $currentTime")
         progresslabel.text = "$currentDate - Time: $currentTime"
         seekbar.progress = currentTime
-
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
-                progresslabel.text = "$currentDate - Time: $i"
+                if (i != 0) {
+                    progresslabel.text = "$currentDate - Time: $i"
+                }
+                else {
+                    progresslabel.text = "$currentDate - Time: 1"
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -145,23 +149,28 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 // TODO: Open a dialog that ask the user to confirm change?
-                forecasting(seekBar.progress)
+                if (seekBar.progress == 0) {
+                    forecasting(1)
+                }
+                else {
+                    forecasting(seekBar.progress)
+                }
             }
         })
 
     }
-    // TODO: Method for forecasting
+    // TODO: Denne metoden endrer alle nødvendig informasjon om en stasjon på den valgte tiden
     private fun forecasting(time : Int) {
         Toast.makeText(mContext, "Endret informasjon om stasjonene til tidspunktet: $time", Toast.LENGTH_SHORT).show()
         // TODO: Loop through dataset and change info for each station to the specified time?
+        val newDateset = ArrayList<CityElement>()
         for (station in dataset) {
-            val tempStation = getStation(station.title)
-
+            val tempStation = getStation(station.location.name)
             if (tempStation != null) {
-                val aqi = tempStation.data.time[time].variables.AQI
-                station.description = getAQILevelString(aqi.value)
+                newDateset.add(CityElement(tempStation, time))
             }
         }
+        dataset = newDateset
         initRecycleView(dataset)
     }
     // Handler for received Intents. This will be called whenever an Intent
@@ -179,11 +188,13 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                     val aqi = station.data.time[0].variables.AQI.value
                     val description = getAQILevelString(aqi) // get the aqi level in string
                     Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
-                    addFavoriteElement(location, description)
+                    addFavoriteElement(location)
 
                 }
             }
 
+            Log.e("Allstation View", "Received Message from cityadapter ${location}")
+            addFavoriteElement(location)
         }
     }
 
@@ -219,11 +230,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         val itemTouchhelper = ItemTouchHelper(swipeController)
         itemTouchhelper.attachToRecyclerView(recyclerView)
 
-//        // Initialize places context and api
-//        Places.initialize(mContext, "AIzaSyCrfEIKJc8Nqz6dPV-Ju1jgCAb-BRek70g")
-//
-//        // Create a new Places client instance.
-//        placesClient = Places.createClient(mContext)
     }
 
      /* Override the activity's onActivityResult(), check the request code, and
@@ -242,7 +248,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                 }
 
 
-                addFavoriteElement(returnedLocation,returnedDescription)
+                addFavoriteElement(returnedLocation)
             } RESULT_ERROR -> {
                     // TODO: Handle the error.
                     val status = Autocomplete.getStatusFromIntent(data)
@@ -256,8 +262,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     }
 
     // Method to add new favourite location to view.
-    private fun addFavoriteElement(location: String, description: String) {
-        if (checkFavouriteCity(location)) {
+    private fun addFavoriteElement(location: String) {
+        if (checkFavouriteCity(location)) { // TODO: Change content to work for the newer cityElement location.
             return
         }
         val bits = location.split(",").toTypedArray()
@@ -267,7 +273,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         for (data in MainActivity.staticAirQualityStationsList) {
             val locationName = data.meta.location.name
             if (locationName.equals(formatedLoc)) {
-                dataset.add(CityElement(data))
+                dataset.add(CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY)))
             }
         }
 
@@ -314,7 +320,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     }
     private fun checkFavouriteCity(location: String) : Boolean {
         for (data in dataset) {
-            if (data.title.contentEquals(location)) {
+            if (data.location.name.contentEquals(location)) {
                 return true
             }
         }
@@ -323,7 +329,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     private fun getStation(location : String) : AirQualityStation?{
         for (station in MainActivity.staticAirQualityStationsList) {
-            if (station.meta.location.name == location) {
+            if (station.meta.location.name.equals(location)) {
                 return station
             }
         }
@@ -463,8 +469,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
                 }
 
-//                Log.e("- mypos lat: " , myPos.latitude.toString())
-//                Log.e("- mypos long: " , myPos.longitude.toString())
 
 
                 for (station in MainActivity.staticAirQualityStationsList){
@@ -480,89 +484,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                     }
                 }
                 val value = tmpStation.data.time[0].variables.AQI.value
-                addFavoriteElement(tmpStation.meta.location.name, getAQILevelString(value))
+                addFavoriteElement(tmpStation.meta.location.name)
             }
 
         }
     }
 }
-
-
-// TODO SEARCH TEXT AUTOCOMPLETE
-//
-//            search_text.setOnEditorActionListener { v, actionId, event ->
-//                    if(actionId == EditorInfo.IME_ACTION_SEARCH
-//                        || actionId == EditorInfo.IME_ACTION_DONE
-//                        || event.action == KeyEvent.ACTION_DOWN
-//                        || event.action == KeyEvent.KEYCODE_ENTER)
-//                    {
-//                        onSearchInputEnter(search_text.context, alertDialog) // call on google place search.
-//                        hideSoftKeyboard()
-//                    }
-//false // return false if no change/edits were made
-//
-//            }
-
-// TODO PREVIOUS CONTENT OF FLOATBUTTON.setonclick..
-
-/*
-      val dialogBuilder = AlertDialog.Builder(this.context!!) // make a dialog builder
-      val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null) // get the dialog xml view
-      dialogBuilder.setView(dialogView) // set the view into the builder
-      val alertDialog = dialogBuilder.create()
-      alertDialog.show()
-      val addButton = dialogView.findViewById<Button>(R.id.add_button)
-      val edit_title = dialogView.findViewById<TextView>(R.id.edit_title)
-      val edit_description = dialogView.findViewById<TextView>(R.id.edit_description)
-      val searchText = dialogView.findViewById<RelativeLayout>(R.id.search_input)
-//             make a common textWatcher to use for several editText/TextView listener
-      val textWatcher = object: TextWatcher {
-          override fun afterTextChanged(s: Editable?) {
-          }
-          override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-          }
-          override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-              val titleInput = edit_title.text
-              val descriptionInput = edit_description.text
-              addButton.isEnabled = (!titleInput.isEmpty())
-          }
-      }
-      edit_title.addTextChangedListener(textWatcher)
-      edit_description.addTextChangedListener(textWatcher)
-      searchText.setOnClickListener {
-          onSearchInputEnter(searchText.context) // call on google place search.
-          Log.e("CURRENT PLACE", currentPlace)
-          if (currentPlace.isNotEmpty()) {
-              Log.e("IS NOT NYULL OR BLACK", "FDSAFSS")
-              edit_title.text = currentPlace
-              currentPlace = "" // reset value
-          }
-      }
-      addButton.setOnClickListener {
-          val tempElement = CityElement(edit_title.text.toString(), edit_description.text.toString())
-          dataset.add(tempElement)
-          Toast.makeText(this.context, "Element added!", Toast.LENGTH_SHORT).show()
-          initRecycleView(dataset)
-          alertDialog.hide()
-          Toast.makeText(this.context, "Dataset Length: ${dataset.size}", Toast.LENGTH_LONG).show()
-          //saveData()
-      }*/
-
-
-// Initialize the AutocompleteSupportFragment.
-//        val autocompleteFragment =  fragmentManager?.findFragmentById(R.id.autocomplete_fragment) as? AutocompleteSupportFragment
-//
-//        autocompleteFragment?.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
-
-//        autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-//
-//            override fun onPlaceSelected(place : Place) {
-//                Log.i(TAG, "Place: " + place.name + ", " + place.id)
-//            }
-//
-//            override fun onError(status : Status) {
-//                Log.i(TAG, "An error occurred: $status")
-//            }
-//        })
-
-

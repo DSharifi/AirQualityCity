@@ -9,18 +9,17 @@ import com.example.gruppe30in2000.AQILevel
 import java.util.*
 
 
-class CityElement(station: AirQualityStation) {
+class CityElement(station: AirQualityStation, currentHour: Int) {
 
     val location= station.meta.location
     val superLocation = station.meta.superlocation
     val calendar = Calendar.getInstance()
-    val currentHour = calendar .get(Calendar.HOUR_OF_DAY)
-    val aqiValue = station.data.time[currentHour-1].variables.AQI.value
+    val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+    var aqiValue = station.data.time[currentHour-1].variables.AQI.value
+    val data = station.data
 
     var title = location.name + ", " + superLocation.name
     var description = AQILevel.getAQILevelString(aqiValue)
-
-
 
     var ozonUnit = station.data.time[currentHour-1].variables.o3_concentration.units
     var ozvalue = station.data.time[currentHour-1].variables.o3_concentration.value

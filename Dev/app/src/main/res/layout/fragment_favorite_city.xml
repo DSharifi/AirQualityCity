@@ -35,9 +35,9 @@
         <SeekBar android:layout_width="150dp" android:layout_height="wrap_content"
                  android:layout_marginTop="20dp"
                  android:id="@+id/seekbar"
-                 android:max="47"
+                 android:max="48"
                  android:splitTrack="false"
-                 android:progress="24"
+                 android:min="1"
                  android:thumb="@drawable/layout"
                  android:layout_centerHorizontal="true"
         />
