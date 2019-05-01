@@ -15,10 +15,7 @@ import android.widget.TextView
 import com.example.gruppe30in2000.AQILevel
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
-import java.util.ArrayList
-
-
-
+import java.util.*
 
 
 class AllStationView : AppCompatActivity() {
@@ -41,22 +38,9 @@ class AllStationView : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, IntentFilter("from-cityadapter"))
 
         for (data in airquailityStation) {
-            val location= data.meta.location
-            val superLocation = data.meta.superlocation
-            val aqiValue = data.data.time[0].variables.AQI.value
-
-            val aqiLevel = AQILevel.getAQILevel(aqiValue)
-
-            when (aqiLevel) {
-                1 ->{
-                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Lav"))
-                } 2 ->{
-                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Moderat"))
-                }else ->{
-                    dataset.add(CityElement(location.name + ", " + superLocation.name, "Hoy"))
-                }
+                dataset.add(CityElement(data))
             }
-        }
+
         initRecycleView(dataset)
 
         // TODO implement add cardview and send back the selected cardview to FavoriteCity and display it in Favorites city View.
