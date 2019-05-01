@@ -51,10 +51,13 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.fragment_favorite_city.*
+import org.joda.time.Hours
 
 import java.io.IOException
 import java.lang.reflect.Type
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
@@ -79,7 +82,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     companion object {
         var dataset = ArrayList<CityElement>()
         var addNearestStation = false
-
     }
 
 
@@ -110,6 +112,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, IntentFilter("from-mapstationhandler"))
+        val seekbar = view.findViewById<SeekBar>(R.id.seekbar)
+        val progresslabel = view.findViewById<TextView>(R.id.progress_text)
+
 
         loadFavoriteElement()
 
@@ -121,6 +126,43 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")
             startActivityForResult(intent, SecondActivityCode)
         }
+
+        // Get the current time in the 24 hours format (ranging from 0 - 23)
+        val currentDate = Calendar.getInstance().time.toString().take(10)
+        val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        Log.e("CURRENTIME" ,  "$currentDate - Time: $currentTime")
+        progresslabel.text = "$currentDate - Time: $currentTime"
+        seekbar.progress = currentTime
+
+        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                // Display the current progress of SeekBar
+                progresslabel.text = "$currentDate - Time: $i"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                // TODO: Open a dialog that ask the user to confirm change?
+                forecasting(seekBar.progress)
+            }
+        })
+
+    }
+    // TODO: Method for forecasting
+    private fun forecasting(time : Int) {
+        Toast.makeText(mContext, "Endret informasjon om stasjonene til tidspunktet: $time", Toast.LENGTH_SHORT).show()
+        // TODO: Loop through dataset and change info for each station to the specified time?
+        for (station in dataset) {
+            val tempStation = getStation(station.title)
+
+            if (tempStation != null) {
+                val aqi = tempStation.data.time[time].variables.AQI
+                station.description = getAQILevelString(aqi.value)
+            }
+        }
+        initRecycleView(dataset)
     }
     // Handler for received Intents. This will be called whenever an Intent
     // with an action named "custom-event-name" is broadcasted
@@ -145,10 +187,11 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         }
     }
 
+
     // Method that initinalize the recycleView
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
 
-        viewManager = LinearLayoutManager(context)
+        viewManager = LinearLayoutManager(mContext)
 
         // TODO: Finne ut hvorfor context er null her naar man trykker paa legg til fra mapstationholder
         viewAdapter = CityListAdapter(dataset, mContext)
@@ -167,6 +210,11 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             override fun deleteItem(pos : Int) {
                 deleteItemAt(pos)
             }
+
+            override fun moveItem(oldPos: Int, newPos: Int) {
+                Log.e("FacvouriteCity", "Moving")
+                moveItem(oldPos, newPos)
+            }
         }
         val itemTouchhelper = ItemTouchHelper(swipeController)
         itemTouchhelper.attachToRecyclerView(recyclerView)
@@ -177,6 +225,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 //        // Create a new Places client instance.
 //        placesClient = Places.createClient(mContext)
     }
+
+
 
      /**
      * Override the activity's onActivityResult(), check the request code, and
@@ -265,7 +315,14 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         return false
     }
 
-
+    private fun getStation(location : String) : AirQualityStation?{
+        for (station in MainActivity.staticAirQualityStationsList) {
+            if (station.meta.location.name == location) {
+                return station
+            }
+        }
+        return null
+    }
 
     private fun geolocate(text : Editable ) : Boolean {
         val searchString = text.toString()
@@ -391,17 +448,17 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                 if (location != null){
                     myPos.latitude = location.latitude
                     myPos.longitude = location.longitude
-                    Log.e("not null ---- " , location.longitude.toString())
-                    Log.e("not null ---- " , location.latitude.toString())
+//                    Log.e("not null ---- " , location.longitude.toString())
+//                    Log.e("not null ---- " , location.latitude.toString())
 
                 }
                 else{
-                    Log.e("Location = " , " Null---")
+//                    Log.e("Location = " , " Null---")
 
                 }
 
-                Log.e("- mypos lat: " , myPos.latitude.toString())
-                Log.e("- mypos long: " , myPos.longitude.toString())
+//                Log.e("- mypos lat: " , myPos.latitude.toString())
+//                Log.e("- mypos long: " , myPos.longitude.toString())
 
 
                 for (station in MainActivity.staticAirQualityStationsList){
@@ -413,7 +470,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                     if (dist > tmpDist){
                         tmpStation = station
                         dist = tmpDist
-                        Log.e("Distance in float:" , dist.toString())
+//                        Log.e("Distance in float:" , dist.toString())
                     }
                 }
                 val value = tmpStation.data.time[0].variables.AQI.value

@@ -86,7 +86,7 @@ class AllStationView : AppCompatActivity() {
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
         viewManager = LinearLayoutManager(this)
 
-        viewAdapter = CityListAdapter(dataset, this)
+        viewAdapter = CityListAdapter(dataset,this)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewAllStation).apply {
 

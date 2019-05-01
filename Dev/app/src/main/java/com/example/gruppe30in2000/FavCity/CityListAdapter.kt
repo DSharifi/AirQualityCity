@@ -16,8 +16,13 @@ import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.alert_dialog.view.*
 import android.support.v4.content.LocalBroadcastManager
+import com.example.gruppe30in2000.API.AirQualityStation
+import com.example.gruppe30in2000.API.getAirStations
+import com.example.gruppe30in2000.API.getAqi
+import com.example.gruppe30in2000.AQILevel.Companion.getAQILevelString
 import com.example.gruppe30in2000.R
 import com.example.gruppe30in2000.SettingsFragment
+import kotlinx.android.synthetic.main.city_element.view.*
 
 
 class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context) :
@@ -31,14 +36,14 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
     }
 
     override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
-//        Log.e("VIEWHOLDER: ", "onBindViewHolder: called")
 
         // set the element (cardview) text and description text base on the current position of the dataSet list.
         holder.title.text = dataSet[pos].title
         holder.description.text = dataSet[pos].description
-
         // VALIDATE the risk type of newly added city
         validateRiskType(holder.description.text.toString(), holder)
+
+
 
 
         if (context is AllStationView) { // If the context that call on this adapter is All stationView, make the addbutton visible.
@@ -56,7 +61,6 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             intent.putExtra("description", description)
             LocalBroadcastManager.getInstance(this.context).sendBroadcast(intent)
         }
-
 
         holder.linearView.setOnClickListener {
 
@@ -188,7 +192,5 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             else -> Log.e("log: ", "FEIL INPUT!!")
         }
         return "ferdig"
-
     }
-
 }

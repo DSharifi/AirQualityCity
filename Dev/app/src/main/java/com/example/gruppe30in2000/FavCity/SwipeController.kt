@@ -2,6 +2,7 @@ package com.example.gruppe30in2000.FavCity
 
 import android.annotation.SuppressLint
 import android.graphics.Canvas
+import android.provider.MediaStore.Audio.Playlists.Members.moveItem
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -38,29 +39,13 @@ open class SwipeController : Callback() {
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-//                moveItem(viewHolder.adapterPosition, target.adapterPosition)
+        Log.e("Swipeconntroller", "Moving")
+        moveItem(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                Log.e("onSwiped:", "Swiping")
-//                val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder
-//                val dialogView = LayoutInflater.from(recyclerView.context).inflate(R.layout.delete_alert, null) // get the dialog xml view
-//                dialogBuilder.setView(dialogView) // set the view into the builder
-//                val alertDialog = dialogBuilder.create()
-//                alertDialog.show()
-//
-//                val okButton = dialogView.findViewById<Button>(R.id.ok_button)
-//                val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
-//
-//                okButton.setOnClickListener {
-//                    deleteItem(viewHolder.adapterPosition)
-//                    alertDialog.hide()
-//                }
-//
-//                cancelButton.setOnClickListener {
-//                    alertDialog.hide()
-//                }
+
     }
 
     override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {
@@ -125,6 +110,9 @@ open class SwipeController : Callback() {
         })
     }
     open fun deleteItem(pos: Int) {
+        return
+    }
+    open fun moveItem(oldPos: Int, newPos: Int) {
         return
     }
 }
