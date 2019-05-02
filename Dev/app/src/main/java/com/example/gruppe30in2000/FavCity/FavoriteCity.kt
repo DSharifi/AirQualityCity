@@ -100,7 +100,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             addNearestStation = true
             // If list of all station is not empty then we get and add the nearest station available
             if (MainActivity.staticAirQualityStationsList.isNotEmpty()) {
-                Log.e("OncreateView","GET NEAREAST!")
                 getNearestStation()
             }
         }
@@ -114,6 +113,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, IntentFilter("from-mapstationhandler"))
         val seekbar = view.findViewById<SeekBar>(R.id.seekbar)
         val progresslabel = view.findViewById<TextView>(R.id.progress_text)
+        val restore_button = view.findViewById<ImageButton>(R.id.restore_button)
 
 
         loadFavoriteElement()
@@ -128,20 +128,20 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         }
 
         // Get the current time in the 24 hours format (ranging from 0 - 23)
-        val currentDate = Calendar.getInstance().time.toString().take(10)
         val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        Log.e("CURRENTIME" ,  "$currentDate - Time: $currentTime")
-        progresslabel.text = "$currentDate - Time: $currentTime"
+        progresslabel.text = getDateTimeString(currentTime-1)
+
         seekbar.progress = currentTime
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
                 if (i != 0) {
-                    progresslabel.text = "$currentDate - Time: $i"
+                    progresslabel.text = getDateTimeString(i-1)
                 }
                 else {
-                    progresslabel.text = "$currentDate - Time: 1"
+                    progresslabel.text = getDateTimeString(0)
                 }
+
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -155,13 +155,29 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                 else {
                     forecasting(seekBar.progress)
                 }
+                Toast.makeText(mContext, "Endret informasjon til stasjonene til tidspunktet: ${progresslabel.text}", Toast.LENGTH_SHORT).show()
+
             }
         })
+
+        restore_button.setOnClickListener {
+            Toast.makeText(mContext, "Tilbakestilt informasjon til statsjonnene til nåtid: ${currentTime}", Toast.LENGTH_SHORT).show()
+            // Tilbakestiller dataene til nåtid
+            forecasting(currentTime-1)
+            progresslabel.text = getDateTimeString(currentTime-1)
+            seekbar.progress = currentTime
+        }
+    }
+
+    private fun getDateTimeString(currentTime : Int) : String{
+        val datetime = MainActivity.staticAirQualityStationsList[0].data.time[currentTime].from.split("T")
+        val date = datetime[0]
+        val hour = datetime[1].take(5)
+        return date + " - Kl:" + hour
 
     }
     // TODO: Denne metoden endrer alle nødvendig informasjon om en stasjon på den valgte tiden
     private fun forecasting(time : Int) {
-        Toast.makeText(mContext, "Endret informasjon om stasjonene til tidspunktet: $time", Toast.LENGTH_SHORT).show()
         // TODO: Loop through dataset and change info for each station to the specified time?
         val newDateset = ArrayList<CityElement>()
         for (station in dataset) {
@@ -263,13 +279,12 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     // Method to add new favourite location to view.
     private fun addFavoriteElement(location: String) {
-        if (checkFavouriteCity(location)) { // TODO: Change content to work for the newer cityElement location.
+        if (checkFavouriteCity(location)) { // TODO: Change content to work for the newer cityElement location. DONE?
             return
         }
         val bits = location.split(",").toTypedArray()
         val formatedLoc = bits[0]
 
-        Log.e("TESTE NAVN", "Dette er loc:" + formatedLoc)
         for (data in MainActivity.staticAirQualityStationsList) {
             val locationName = data.meta.location.name
             if (locationName.equals(formatedLoc)) {
