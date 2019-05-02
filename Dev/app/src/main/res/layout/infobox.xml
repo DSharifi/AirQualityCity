@@ -19,6 +19,8 @@
             android:layout_marginLeft="5dp"
             android:layout_alignParentStart="true"
             android:id="@+id/specialInfo"/>
+
+
     <Button
             android:text="AVSLUTT"
             android:layout_width="match_parent"

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -7,7 +6,7 @@
         android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_margin="10dp"
         android:id="@+id/card_view"
-        card_view:cardCornerRadius="20dp"
+        card_view:cardCornerRadius="35dp"
         card_view:contentPadding="5dp"
         card_view:cardBackgroundColor="#ffffff"
 >
@@ -43,14 +42,13 @@
                       android:id="@+id/type"
                       android:text="@string/niva"
                       android:textSize="18sp"
-                      android:textColor="@color/black"
             />
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:layout_marginStart="10dp"
                       android:id="@+id/description_text"
                       android:text="@string/risk_type"
-                      android:textColor="@color/white"
+                      android:textColor="@color/black"
                       android:textSize="18sp"
                       android:layout_toRightOf="@+id/type"
             />
@@ -70,43 +68,42 @@
                       android:gravity="center"
                       android:textSize="20sp"
                       android:layout_centerHorizontal="true"
-                      android:visibility="gone"
+                      android:visibility="visible"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution2"
                       android:textSize="20sp"
                       android:layout_below="@id/pollution"
                       android:layout_centerHorizontal="true"
-                      android:visibility="gone"
+                      android:visibility="visible"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution3"
                       android:textSize="20sp"
                       android:layout_below="@+id/pollution2"
                       android:layout_centerHorizontal="true"
-                      android:visibility="gone"
+                      android:visibility="visible"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution4"
                       android:textSize="20sp"
                       android:layout_below="@id/pollution6"
-                      android:visibility="gone"
+                      android:visibility="visible"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution5"
                       android:textSize="20sp"
                       android:layout_below="@id/pollution6"
                       android:layout_alignParentEnd="true"
-                      android:visibility="gone"
+                      android:visibility="visible"
             />
+
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution6"
                       android:textSize="20sp"
                       android:layout_below="@id/pollution3"
                       android:layout_centerHorizontal="true"
-                      android:visibility="gone"
             />
-
 
 
         </RelativeLayout>
@@ -122,21 +119,11 @@
     />
     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                  android:id="@+id/add_button"
-                 android:layout_marginEnd="10dp"
                  android:src="@drawable/ic_add_button"
-                 android:visibility="invisible"
-                 android:layout_gravity="center|end"
-                 android:background="#ffffff"
-
-
-    />
-    <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                 android:id="@+id/infoButton"
-                 android:layout_gravity="center|end"
-                 android:layout_marginEnd="10dp"
-                 android:src="@drawable/ic_warning_black_24dp"
                  android:visibility="visible"
-                 android:background="#ffffff"
+                 android:layout_gravity="end"
+                 android:layout_marginTop="20dp"
+
     />
 
 

@@ -3,6 +3,7 @@
     <string name="title_home">Hjem</string>
     <string name="title_map">Kart</string>
     <string name="title_notifications">Varsling</string>
+    <string name="title_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
 
     <!-- TODO: Remove or change this placeholder text -->
