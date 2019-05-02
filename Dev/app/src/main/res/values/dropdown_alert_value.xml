@@ -2,8 +2,8 @@
 <resources>
     <string-array name="drop">
         <item>Ingen varsling</item>
-        <item>Moderat</item>
-        <item>Hoy</item>
+        <item>Moderat og høyere</item>
+        <item>Høy</item>
     </string-array>
 
     <string-array name="dropValue">

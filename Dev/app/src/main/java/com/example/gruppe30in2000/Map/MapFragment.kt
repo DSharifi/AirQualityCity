@@ -75,7 +75,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val mapStations = MapStationsHandler(mMap, this.context!!)
         mapStations.addAllStations(MainActivity.staticAirQualityStationsList)
 
-
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.setPadding(25, 25, 25, 125)
     }
 
 

@@ -100,6 +100,11 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     }
 
 
+
+
+    //Burde flyttes ut til en annen fil
+
+
     fun notifyer() {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)

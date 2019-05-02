@@ -10,7 +10,7 @@
             android:entryValues="@array/dropValue" />
 
     <PreferenceCategory
-        android:title="INFOOMPERSONVERNOGBRUKSOMRÅDEOSV...">
+        android:title="Informasjonstype">
 
         <CheckBoxPreference
                 android:key="astma_key"
