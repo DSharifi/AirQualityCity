@@ -119,9 +119,9 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     private fun checkHoursPassed(lastCheck : DateTime, hours : Int): Boolean {
         val currentTime = DateTime()
         val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
-        return hours < difference;
+//        return hours < difference
 
-//        return true
+        return true
     }
 
 

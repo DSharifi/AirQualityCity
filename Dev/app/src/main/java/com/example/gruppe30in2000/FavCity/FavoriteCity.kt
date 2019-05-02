@@ -97,7 +97,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         if (!addNearestStation) {
             Log.e("FDSFDS", "FDSFDS")
             addNearestStation = true
-            getNearestStation()
+//            getNearestStation()
         }
 
         return fView
