@@ -111,6 +111,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         val ozone = dialogView.findViewById<TextView>(R.id.pollution3)
         val nitlvls = dialogView.findViewById<TextView>(R.id.pollution4)
         val pm10lvls = dialogView.findViewById<TextView>(R.id.pollution5)
+        val aqiLevel = dialogView.findViewById<TextView>(R.id.pollution6)
 
         val location = tempLocation.toString()
 
@@ -141,8 +142,8 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
                 val sSText = "Svevestøv nivå: " + String.format("%.2f", pm10val) + pm10Unit
                 val nitText = "Nitrogeninnhold: " + String.format("%.2f", nOVal) + nOunit
-                val ozText = "Ozon nivå: " + String.format("%.2f", ozvalue) + ozonUnit + "\n" + "AQI nivå: " +
-                        String.format("%.2f", aqiValue) + "\n"
+                val ozText = "Ozon nivå: " + String.format("%.2f", ozvalue) + ozonUnit
+                val aqiText = "AQI nivå: " + String.format("%.2f", aqiValue) + "\n"
 
                 val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + nitHeating.toString() + "%\nIndustri: " + nitInd +
                         "%\nTrafikk/Eksos: " + nitExc + "%\nShipping: " + nitShip + "%"
@@ -157,6 +158,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                 pm10lvls.text = pm10Lvls
                 tittel.text = location
                 nivaTxt.text = lvl
+                aqiLevel.text = aqiText
 
                 if (lvl.equals("Hoy")) {
                     riskDisplay.setImageDrawable(

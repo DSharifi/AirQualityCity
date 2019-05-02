@@ -87,15 +87,22 @@
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution4"
                       android:textSize="20sp"
-                      android:layout_below="@id/pollution3"
+                      android:layout_below="@id/pollution6"
                       android:visibility="visible"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution5"
                       android:textSize="20sp"
-                      android:layout_below="@id/pollution3"
+                      android:layout_below="@id/pollution6"
                       android:layout_alignParentEnd="true"
                       android:visibility="visible"
+            />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:id="@+id/pollution6"
+                      android:textSize="20sp"
+                      android:layout_below="@id/pollution3"
+                      android:layout_centerHorizontal="true"
             />
 
 

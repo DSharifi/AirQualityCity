@@ -37,6 +37,18 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         // VALIDATE the risk type of newly added city
         validateRiskType(holder.description.text.toString(), holder)
 
+        val text = " " + dataSet[pos].description + " "
+        holder.description.text = text
+
+        if (holder.description.text.toString().equals(" Lav ")) {
+            holder.description.setBackgroundResource(R.drawable.rounded_good)
+        }
+        if (holder.description.text.toString().equals(" Moderat ")) {
+            holder.description.setBackgroundResource(R.drawable.rounded_moderate)
+        }
+        if (holder.description.text.toString().equals(" Hoy ")) {
+            holder.description.setBackgroundResource(R.drawable.rounded_bad)
+        }
 
         if (context is AllStationView) { // If the context that call on this adapter is All stationView, make the addbutton visible.
             holder.addButton.visibility = View.VISIBLE
