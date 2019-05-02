@@ -30,7 +30,6 @@ class AsyncApiGetter : AsyncTask<Unit, Unit, String> {
             val a = AirQualityStationCollection()
             airQualityList = a.airQualityStationList
         } catch (e : Exception){ }
-        //Log.e("ddddddddd", airQualityList[0].meta.superlocation.name)
         return null
     }
 

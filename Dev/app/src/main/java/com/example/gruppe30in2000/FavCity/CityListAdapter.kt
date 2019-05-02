@@ -28,12 +28,10 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
     }
 
     override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
-//        Log.e("VIEWHOLDER: ", "onBindViewHolder: called")
 
         // set the element (cardview) text and description text base on the current position of the dataSet list.
         holder.title.text = dataSet[pos].title
         holder.description.text = dataSet[pos].description
-
         // VALIDATE the risk type of newly added city
         validateRiskType(holder.description.text.toString(), holder)
 
@@ -49,6 +47,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         if (holder.description.text.toString().equals(" Hoy ")) {
             holder.description.setBackgroundResource(R.drawable.rounded_bad)
         }
+
+
 
         if (context is AllStationView) { // If the context that call on this adapter is All stationView, make the addbutton visible.
             holder.addButton.visibility = View.VISIBLE
@@ -66,7 +66,6 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             intent.putExtra("description", description)
             LocalBroadcastManager.getInstance(this.context).sendBroadcast(intent)
         }
-
 
         holder.linearView.setOnClickListener {
             // extend view and show basic info
@@ -118,6 +117,14 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             dialogBuilder.setView(dialogView) // set the view into the builder
 
             val alertDialog = dialogBuilder.create()
+
+//            val settings = LayoutInflater.from(context).inflate(R.layout.fragment_settings, null)
+//
+//            val astma = settings.findViewById<CheckBox>(R.id.astma)
+//            val hjerte = settings.findViewById<CheckBox>(R.id.hjerte)
+//            val eldre = settings.findViewById<CheckBox>(R.id.eldre)
+//            val gravide = settings.findViewById<CheckBox>(R.id.gravide)
+//            val generell = settings.findViewById<CheckBox>(R.id.ingen)
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -245,7 +252,5 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             else -> Log.e("log: ", "FEIL INPUT!!")
         }
         return "ferdig"
-
     }
-
 }
