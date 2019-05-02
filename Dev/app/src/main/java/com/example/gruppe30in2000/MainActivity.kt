@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     // duration in hours between updates
     private val updateTime = 2
 
+    lateinit var notificationManager : NotificationManager
+
+
 
 
     companion object {
@@ -96,6 +99,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
                 val mf = SettingsFragment()
                 replaceFragment(mf)
                 //message.setText(R.string.title_notifications)
+                notifyer()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -178,6 +182,38 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         editor?.apply()
 
         println(staticAirQualityStationsList)
+    }
+
+
+    //Burde flyttes ut til en annen fil
+
+    fun notifyer() {
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
+        var id = 1232132
+
+        for (station in FavoriteCity.dataset) {
+
+            if (prefs.getString(PreferenceFragment.alertValue, "10").toInt() <= AQILevel.getAlertLevel(station.aqiValue)){
+
+                Log.e(prefs.getString(PreferenceFragment.alertValue, "10"), AQILevel.getAlertLevel(station.aqiValue).toString())
+
+                val builder = NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_warning_blue_24dp)
+                    .setContentTitle("AQS: " + station.title)
+                    .setContentText("Forurensingsnivå: ??")
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("Forurensingsnivå: " + station.description)
+                    )
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+
+                id++
+                notificationManager.notify(id, builder.build())
+            }
+        }
     }
 
 }

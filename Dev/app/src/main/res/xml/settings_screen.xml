@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+            android:title="Varslingsvalg"
+            android:summary="Velg hvilket nivå du ønsker å få varsel om"
+            android:key="alertValue"
+            android:defaultValue="1"
+            android:entries="@array/drop"
+            android:entryValues="@array/dropValue" />
+
+    <PreferenceCategory
+        android:title="Informasjonstype">
+
+        <CheckBoxPreference
+                android:key="astma_key"
+                android:title="@string/astma"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="old_key"
+                android:title="@string/eldre"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="heart_key"
+                android:title="@string/hjerte"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="preg_key"
+                android:title="@string/gravide"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="gen_key"
+                android:title="@string/ingen"
+                android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
