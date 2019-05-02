@@ -1,6 +1,7 @@
 package com.example.gruppe30in2000
 
 
+import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -24,7 +25,15 @@ import org.joda.time.DateTime
 import com.google.gson.GsonBuilder
 import com.fatboyindustrial.gsonjodatime.Converters
 import org.joda.time.Hours
+
+import android.preference.PreferenceManager
+
+import android.support.v4.app.NotificationCompat
+
+import android.util.Log
+
 import java.util.*
+
 
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
@@ -96,7 +105,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
             }
 
             R.id.navigation_notifications -> {
-                val mf = SettingsFragment()
+                val mf = PreferenceFragment()
                 replaceFragment(mf)
                 //message.setText(R.string.title_notifications)
                 notifyer()
