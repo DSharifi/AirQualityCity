@@ -157,31 +157,34 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                 nitlvls.text = nitrogenLvls
                 pm10lvls.text = pm10Lvls
                 tittel.text = location
-                nivaTxt.text = lvl
+                nivaTxt.text = " " + lvl + " "
                 aqiLevel.text = aqiText
 
                 if (lvl.equals("Hoy")) {
                     riskDisplay.setImageDrawable(
                         ContextCompat.getDrawable(
                             parentContext,
-                            R.drawable.ic_lens_red_35dp
+                            R.drawable.ic_sad_svgrepo_com
                         ))
+                    nivaTxt.setBackgroundResource(R.drawable.rounded_bad)
                 }
 
                 if (lvl.equals("Moderat")) {
                     riskDisplay.setImageDrawable(
                         ContextCompat.getDrawable(
                             parentContext,
-                            R.drawable.ic_lens_yellow_35dp
+                            R.drawable.ic_straight_svgrepo_com
                         ))
+                    nivaTxt.setBackgroundResource(R.drawable.rounded_moderate)
                 }
 
                 if (lvl.equals("Lav")) {
                     riskDisplay.setImageDrawable(
                         ContextCompat.getDrawable(
                             parentContext,
-                            R.drawable.ic_lens_green_35dp
+                            R.drawable.ic_smile_svgrepo_com
                         ))
+                    nivaTxt.setBackgroundResource(R.drawable.rounded_good)
                 }
             }
         }
