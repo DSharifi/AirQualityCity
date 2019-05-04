@@ -175,6 +175,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         val hour = datetime[1].take(5)
         return date + " - Kl:" + hour
 
+
     }
     // TODO: Denne metoden endrer alle nødvendig informasjon om en stasjon på den valgte tiden
     private fun forecasting(time : Int) {

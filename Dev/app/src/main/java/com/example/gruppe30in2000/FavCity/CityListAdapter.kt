@@ -196,7 +196,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 holder.riskDisplay.setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
-                        R.drawable.ic_lens_red_35dp
+                        R.drawable.ic_sad_svgrepo_com
                     )
                 )
 
@@ -204,7 +204,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 holder.riskDisplay.setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
-                        R.drawable.ic_lens_yellow_35dp
+                        R.drawable.ic_straight_svgrepo_com
                     )
                 )
 
@@ -212,7 +212,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 holder.riskDisplay.setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
-                        R.drawable.ic_lens_green_35dp
+                        R.drawable.ic_smile_svgrepo_com
                     )
                 )
 
