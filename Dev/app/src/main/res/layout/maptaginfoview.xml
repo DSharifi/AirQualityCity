@@ -47,9 +47,9 @@
                       android:layout_marginStart="10dp"
                       android:id="@+id/description_text"
                       android:text="@string/risk_type"
-
                       android:textColor="@color/white"
                       android:textSize="18sp"
+                      android:textStyle="bold|italic"
                       android:layout_toRightOf="@+id/type"
             />
 

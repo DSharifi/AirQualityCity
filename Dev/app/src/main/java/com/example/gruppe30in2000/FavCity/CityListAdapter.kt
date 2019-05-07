@@ -35,17 +35,21 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         // VALIDATE the risk type of newly added city
         validateRiskType(holder.description.text.toString(), holder)
 
-        val text = " " + dataSet[pos].description + " "
-        holder.description.text = text
 
-        if (holder.description.text.toString().equals(" Lav ")) {
+
+
+        if (holder.description.text.toString().equals("Lav")) {
             holder.description.setBackgroundResource(R.drawable.rounded_good)
+            holder.description.text = " God "
         }
-        if (holder.description.text.toString().equals(" Moderat ")) {
+        if (holder.description.text.toString().equals("Moderat")) {
             holder.description.setBackgroundResource(R.drawable.rounded_moderate)
+            holder.description.text = " Moderat "
         }
-        if (holder.description.text.toString().equals(" Hoy ")) {
+        if (holder.description.text.toString().equals("Hoy")) {
             holder.description.setBackgroundResource(R.drawable.rounded_bad)
+            holder.description.text = " Dårlig "
+
         }
 
 

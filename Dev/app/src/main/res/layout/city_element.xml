@@ -52,8 +52,11 @@
                       android:text="@string/risk_type"
                       android:textColor="@color/white"
                       android:textSize="18sp"
+                      android:textStyle="bold"
                       android:layout_toRightOf="@+id/type"
+
             />
+
 
 
         </RelativeLayout>
@@ -118,6 +121,7 @@
                android:layout_gravity="end"
                android:layout_marginEnd="50dp"
                android:layout_marginTop="25dp"
+               android:visibility="gone"
     />
     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                  android:id="@+id/add_button"

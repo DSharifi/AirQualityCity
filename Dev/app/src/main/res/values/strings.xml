@@ -20,7 +20,7 @@
 
     <string name="country">Country</string>
     <string name="risk_type">Risk type</string>
-    <string name="niva">Forurensingsnivå:</string>
+    <string name="niva">Luftkvalitet:</string>
     <string name="avbryt">Avbryt</string>
     <string name="ok">OK</string>
     <string name="legg_til">Legg til</string>

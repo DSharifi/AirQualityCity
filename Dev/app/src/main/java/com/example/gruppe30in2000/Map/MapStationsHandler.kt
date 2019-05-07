@@ -157,7 +157,6 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                 nitlvls.text = nitrogenLvls
                 pm10lvls.text = pm10Lvls
                 tittel.text = location
-                nivaTxt.text = " " + lvl + " "
                 aqiLevel.text = aqiText
 
                 if (lvl.equals("Hoy")) {
@@ -167,6 +166,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                             R.drawable.ic_sad_svgrepo_com
                         ))
                     nivaTxt.setBackgroundResource(R.drawable.rounded_bad)
+                    nivaTxt.text = " Dårlig "
                 }
 
                 if (lvl.equals("Moderat")) {
@@ -176,6 +176,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                             R.drawable.ic_straight_svgrepo_com
                         ))
                     nivaTxt.setBackgroundResource(R.drawable.rounded_moderate)
+                    nivaTxt.text = " Moderat "
                 }
 
                 if (lvl.equals("Lav")) {
@@ -185,6 +186,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                             R.drawable.ic_smile_svgrepo_com
                         ))
                     nivaTxt.setBackgroundResource(R.drawable.rounded_good)
+                    nivaTxt.text = " God "
                 }
             }
         }
