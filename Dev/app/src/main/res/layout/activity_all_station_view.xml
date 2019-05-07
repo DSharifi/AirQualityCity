@@ -42,7 +42,7 @@
                   android:layout_toRightOf="@+id/glass_magnify"
                   android:background="@null"
                   android:textColor="#000"
-                  android:hint="Oppgi addresser, byer, postnummer"
+                  android:hint="Oppgi Stasjonsnavn eller kommune"
                   android:id="@+id/search_input"
                   android:layout_alignTop="@+id/glass_magnify"
         />

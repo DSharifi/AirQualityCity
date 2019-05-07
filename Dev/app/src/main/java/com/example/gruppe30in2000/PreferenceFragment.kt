@@ -73,7 +73,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         mailTo.setOnPreferenceClickListener {
             val mailto = Intent(Intent.ACTION_SEND)
             mailto.setType("message/rfc822")
-            mailto.putExtra(Intent.EXTRA_EMAIL, arrayOf("test@gmail.com"))
+            mailto.putExtra(Intent.EXTRA_EMAIL, arrayOf("sdbjunes@student.matnat.uio.no"))
             mailto.putExtra(Intent.EXTRA_SUBJECT, "Tilbakemelding til AirQalityCity")
             mailto.putExtra(Intent.EXTRA_TEXT, "Skriv din tilbakemelding her.. ")
             startActivity(Intent.createChooser(mailto, "velg mail applikasjon"))
