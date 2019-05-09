@@ -6,7 +6,7 @@ import java.lang.Exception
 
 
 interface OnTaskCompleted{
-    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>)
+    fun onTaskCompletedApiGetter(values: ArrayList<AirQualityStation>, saveData: Boolean)
 }
 
 
@@ -35,7 +35,7 @@ class AsyncApiGetter : AsyncTask<Unit, Unit, String> {
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        listener.onTaskCompletedApiGetter(airQualityList)
+        listener.onTaskCompletedApiGetter(airQualityList, true)
     }
 
 
