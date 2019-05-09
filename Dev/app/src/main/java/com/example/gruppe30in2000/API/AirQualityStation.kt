@@ -3,15 +3,20 @@ package com.example.gruppe30in2000.API
 import android.util.Log
 import com.google.gson.Gson
 import com.github.salomonbrys.kotson.*
+import okhttp3.OkHttpClient
 
 class AirQualityStationCollection{
         var airQualityStationList = ArrayList<AirQualityStation>()
+        private val userAgent = "Gruppe30"
+
         init{
                 airQualityStationList = getAirStations()
         }
 
         fun getStations() : ArrayList<Station> {
-                val response = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations")
+                val url = "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations"
+                val response = khttp.get(url, headers = mapOf("User-Agent" to userAgent))
+
                 return Gson().fromJson(response.text)
         }
 
@@ -22,9 +27,12 @@ class AirQualityStationCollection{
                 val gson = Gson()
 
                 for (station in stations) {
-                        val airQualityResponse = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}")
+                        val url =  "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}"
+                        val airQualityResponse = khttp.get(url, headers = mapOf("User-Agent" to userAgent))
                         stationList.add(gson.fromJson(airQualityResponse.text))
+
                 }
+
                 Log.e("test", "test")
                 return stationList
         }
