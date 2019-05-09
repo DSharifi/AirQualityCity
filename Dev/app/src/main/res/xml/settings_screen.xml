@@ -4,7 +4,7 @@
     <PreferenceCategory
         android:title="Varsling">
         <ListPreference
-                android:title="Varslingsvalg"
+                android:title="Varslingsvalg for dine stasjoner"
                 android:summary="Velg hvilket nivå du ønsker å få varsel om"
                 android:key="alertValue"
                 android:defaultValue="1"
