@@ -1,5 +1,6 @@
 package com.example.gruppe30in2000.API
 
+import android.util.Log
 import com.google.gson.Gson
 import com.github.salomonbrys.kotson.*
 
@@ -24,7 +25,7 @@ class AirQualityStationCollection{
                         val airQualityResponse = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}")
                         stationList.add(gson.fromJson(airQualityResponse.text))
                 }
-
+                Log.e("test", "test")
                 return stationList
         }
 
