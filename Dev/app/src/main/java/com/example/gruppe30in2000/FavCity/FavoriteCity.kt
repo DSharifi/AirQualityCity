@@ -174,9 +174,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         val date = datetime[0]
         val hour = datetime[1].take(5)
         return date + " - Kl:" + hour
-
-
     }
+
+
     // TODO: Denne metoden endrer alle nødvendig informasjon om en stasjon på den valgte tiden
     private fun forecasting(time : Int) {
         // TODO: Loop through dataset and change info for each station to the specified time?
@@ -190,6 +190,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         dataset = newDateset
         initRecycleView(dataset)
     }
+
+
     // Handler for received Intents. This will be called whenever an Intent
     // with an action named "custom-event-name" is broadcasted
     private val mMessageReceiver = object : BroadcastReceiver() {
@@ -331,7 +333,10 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         if (json == null) {
             return
         } else {
+            // Get the current time in the 24 hours format (ranging from 0 - 23)
+            val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             dataset = gson.fromJson(json)
+            forecasting(currentTime-1)
         }
     }
     private fun checkFavouriteCity(location: String) : Boolean {
