@@ -4,8 +4,8 @@ class AQILevel{
 
     companion object {
         
-        val low = 1.4
-        val medium = 1.6
+        val low = 2
+        val medium = 3
         
         fun getAQILevel(aqiValue : Double) : Int {
             // Low = 1, Med =, High = 3

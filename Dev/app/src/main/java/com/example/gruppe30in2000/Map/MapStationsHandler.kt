@@ -146,7 +146,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                 val aqiText = "AQI nivå: " + String.format("%.2f", aqiValue) + "\n"
 
                 val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + nitHeating.toString() + "%\nIndustri: " + nitInd +
-                        "%\nTrafikk/Eksos: " + nitExc + "%\nShipping: " + nitShip + "%"
+                        "%\nEksos: " + nitExc + "%\nShipping: " + nitShip + "%"
 
                 val pm10Lvls = "Svevestøvkilder:\nOppvarming: " + pmHeat.toString() + "%\nIndustri: " + pmInd +
                         "%\nEksos: " + pmExc + "%\nTrafikk: " + pmNonEx + "%\nShipping: " + pmShip + "%"
