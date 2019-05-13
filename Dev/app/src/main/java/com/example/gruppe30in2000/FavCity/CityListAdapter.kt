@@ -33,7 +33,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         holder.title.text = dataSet[pos].title
         holder.description.text = dataSet[pos].description
         // VALIDATE the risk type of newly added city
-        validateRiskType(holder.description.text.toString(), holder)
+//        validateRiskType(holder.description.text.toString(), holder)
 
 
 
@@ -81,7 +81,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             val aqiText = "AQI nivå: " + String.format("%.2f", dataSet[pos].aqiValue) + "\n"
 
             val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + dataSet[pos].nitHeating.toString() + "%\nIndustri: " + dataSet[pos].nitInd +
-                    "%\nTrafikk/Eksos: " + dataSet[pos].nitExc + "%\nShipping: " + dataSet[pos].nitShip + "%"
+                    "%\nEksos: " + dataSet[pos].nitExc + "%\nShipping: " + dataSet[pos].nitShip + "%"
 
             val pm10Lvls = "Svevestøvkilder:\nOppvarming: " + dataSet[pos].pmHeat.toString() + "%\nIndustri: " + dataSet[pos].pmInd +
                     "%\nEksos: " + dataSet[pos].pmExc + "%\nTrafikk: " + dataSet[pos].pmNonEx + "%\nShipping: " + dataSet[pos].pmShip + "%"
@@ -192,37 +192,37 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         notifyDataSetChanged()
     }
 
-    // Method to validate and change the riskdisplay image by description text.
-    fun validateRiskType(text: String, holder: ViewHolder) {
-        // Change risk displayimage color.
-        when {
-            text.contains("hoy", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_sad_svgrepo_com
-                    )
-                )
-
-            text.contains("moderat", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_straight_svgrepo_com
-                    )
-                )
-
-            text.contains("lav", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_smile_svgrepo_com
-                    )
-                )
-
-            else -> Log.e("log: ", "FEIL RISK INPUT!!")
-        }
-    }
+//    // Method to validate and change the riskdisplay image by description text.
+//    fun validateRiskType(text: String, holder: ViewHolder) {
+//        // Change risk displayimage color.
+//        when {
+//            text.contains("hoy", ignoreCase = true) ->
+//                holder.riskDisplay.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        context,
+//                        R.drawable.ic_sad_svgrepo_com
+//                    )
+//                )
+//
+//            text.contains("moderat", ignoreCase = true) ->
+//                holder.riskDisplay.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        context,
+//                        R.drawable.ic_straight_svgrepo_com
+//                    )
+//                )
+//
+//            text.contains("lav", ignoreCase = true) ->
+//                holder.riskDisplay.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        context,
+//                        R.drawable.ic_smile_svgrepo_com
+//                    )
+//                )
+//
+//            else -> Log.e("log: ", "FEIL RISK INPUT!!")
+//        }
+//    }
 
     class ViewHolder(textView: View) : RecyclerView.ViewHolder(textView) {
         val title = textView.findViewById<TextView>(R.id.title_text)
@@ -246,11 +246,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
     fun getInfo(text: String) : String {
 
         when {
-            text.contains("hoy", ignoreCase = true) ->
+            text.contains("dårlig", ignoreCase = true) ->
                 return "bad"
             text.contains("moderat", ignoreCase = true) ->
                 return "moderat"
-            text.contains("lav", ignoreCase = true) ->
+            text.contains("god", ignoreCase = true) ->
                 return "good"
 
             else -> Log.e("log: ", "FEIL INPUT!!")
