@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
                 val builder = NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_warning_blue_24dp)
                     .setContentTitle("AQS: " + station.title)
-                    .setContentText("Forurensingsnivå: ??")
+                    .setContentText("Forurensingsnivå: " + station.description)
                     .setStyle(
                         NotificationCompat.BigTextStyle()
                             .bigText("Forurensingsnivå: " + station.description)
