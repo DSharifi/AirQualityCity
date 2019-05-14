@@ -19,6 +19,12 @@
         <activity android:name=".FavCity.AllStationView"
         android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".GraphActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".PieChartActivity"
+                  android:screenOrientation="portrait">
+        </activity>
         <!--<activity android:name=".FavCity.CityListAdapter">-->
         <!--</activity>-->
         <!--<activity android:name=".FavCity.CityElement">-->

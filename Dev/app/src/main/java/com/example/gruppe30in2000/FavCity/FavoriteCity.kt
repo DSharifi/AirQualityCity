@@ -128,15 +128,32 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         }
 
         // Get the current time in the 24 hours format (ranging from 0 - 23)
-        val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        progresslabel.text = getDateTimeString(currentTime-1)
+        val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val date = Calendar.getInstance().get(Calendar.DATE)
 
-        seekbar.progress = currentTime
+        val timeIndex = getTimeIndex(time, date)
+
+        Log.e("hourrrrrrr", time.toString())
+        Log.e("dateeeeeee", date.toString())
+
+
+
+        progresslabel.text = getDateTimeString(timeIndex)
+
+        /*if(currentTime == 0){
+                seekbar.progress = 23
+        } else if(currentTime == 1){
+            seekbar.progress = 24
+        } else if(currentTime == 2){
+            seekbar.progress = 25
+        } else{
+            seekbar.progress = currentTime
+        }*/
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
                 if (i != 0) {
-                    progresslabel.text = getDateTimeString(i-1)
+                    progresslabel.text = getDateTimeString(i)
                 }
                 else {
                     progresslabel.text = getDateTimeString(0)
@@ -161,20 +178,28 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         })
 
         restore_button.setOnClickListener {
-            Toast.makeText(mContext, "Tilbakestilt informasjon til statsjonnene til nåtid: ${currentTime}", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(mContext, "Tilbakestilt informasjon til statsjonnene til nåtid", Toast.LENGTH_SHORT).show()
             // Tilbakestiller dataene til nåtid
-            forecasting(currentTime-1)
-            progresslabel.text = getDateTimeString(currentTime-1)
-            seekbar.progress = currentTime
+            Log.e("jbf", time.toString())
+            forecasting(timeIndex)
+            //progresslabel.text = getDateTimeString(currentTime-1)
+            seekbar.progress = timeIndex
         }
+
+        restore_button.callOnClick()
     }
 
     private fun getDateTimeString(currentTime : Int) : String{
-        val datetime = MainActivity.staticAirQualityStationsList[0].data.time[currentTime].from.split("T")
-        val date = datetime[0]
-        val hour = datetime[1].take(5)
-        return date + " - Kl:" + hour
-
+        Log.e("prog", currentTime.toString())
+        if (MainActivity.staticAirQualityStationsList.isNotEmpty()){
+            val datetime = MainActivity.staticAirQualityStationsList[0].data.time[currentTime].from.split("T")
+            val date = datetime[0]
+            val hour = datetime[1].take(5)
+            Log.e("date", date)
+            Log.e("hour", hour)
+            return date + " - Kl:" + hour
+        }
+        return "No data"
 
     }
     // TODO: Denne metoden endrer alle nødvendig informasjon om en stasjon på den valgte tiden
@@ -222,7 +247,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         viewManager = LinearLayoutManager(mContext)
 
         // TODO: Finne ut hvorfor context er null her naar man trykker paa legg til fra mapstationholder
-        viewAdapter = CityListAdapter(dataset, mContext)
+        viewAdapter = CityListAdapter(dataset, mContext, context)
 
 
         recyclerView = fView.findViewById<RecyclerView>(R.id.recyclerView).apply {
@@ -280,6 +305,9 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     // Method to add new favourite location to view.
     private fun addFavoriteElement(location: String) {
+        val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val date = Calendar.getInstance().get(Calendar.DATE)
+        val timeIndex = getTimeIndex(time, date)
         if (checkFavouriteCity(location)) { // TODO: Change content to work for the newer cityElement location. DONE?
             return
         }
@@ -289,7 +317,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         for (data in MainActivity.staticAirQualityStationsList) {
             val locationName = data.meta.location.name
             if (locationName.equals(formatedLoc)) {
-                dataset.add(CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY)))
+                dataset.add(CityElement(data, timeIndex))
             }
         }
 
@@ -336,7 +364,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     }
     private fun checkFavouriteCity(location: String) : Boolean {
         for (data in dataset) {
-            if (data.location.name.contentEquals(location)) {
+            if (location.contains(data.location.name)) {
                 return true
             }
         }
@@ -504,5 +532,20 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             }
 
         }
+    }
+
+    fun getTimeIndex(time : Int, date : Int) : Int{
+        var c = 0
+        MainActivity.staticAirQualityStationsList[0].data.time.forEach{
+            val datetime = it.from.split("T")
+            var d = datetime[0].takeLast(2).toInt()
+            var t = datetime[1].take(2).toInt()
+
+            if(date == d && time == t){
+                return c;
+            }
+            c++
+        }
+        return 0
     }
 }

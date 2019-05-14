@@ -27,15 +27,16 @@
         <TextView
                 android:id="@+id/progress_text"
                 android:text="Tid : 24"
+                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
         />
 
-        <SeekBar android:layout_width="150dp" android:layout_height="wrap_content"
-                 android:layout_marginTop="20dp"
+        <SeekBar android:layout_width="300dp" android:layout_height="wrap_content"
+                 android:layout_marginTop="30dp"
                  android:id="@+id/seekbar"
-                 android:max="48"
+                 android:max="47"
                  android:splitTrack="false"
                  android:min="1"
                  android:thumb="@drawable/layout"
@@ -43,19 +44,15 @@
         />
 
     </RelativeLayout>
+
     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                 android:layout_alignRight="@id/seekbar"
                  android:id="@+id/restore_button"
                  android:layout_gravity="top|end"
-                 android:layout_margin="30dp"
+                 android:layout_marginTop="10dp"
                  android:src="@drawable/ic_restore_black_24dp"
-                 android:backgroundTint="#ffffff"
-
-
-
-
+                 android:backgroundTint="#fafafa"
     />
-
-
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
