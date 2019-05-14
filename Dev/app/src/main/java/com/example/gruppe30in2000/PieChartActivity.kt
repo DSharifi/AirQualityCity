@@ -153,14 +153,6 @@ class PieChartActivity : AppCompatActivity(){
 
         val data = PieData(dataset)
 
-        val l = chart.legend
-
-        if(values.size > 4)
-            l.textSize = 10f
-        else
-            l.textSize = 16f
-
-
         chart.setDrawSliceText(false)
 
         chart.data = data
