@@ -10,8 +10,7 @@ class AQILevel{
         
         val low = 2.0
         val medium = 3.0
-    }
-        
+
         fun getAQILevel(aqiValue : Double) : Int {
             // Low = 1, Med =, High = 3
             if (aqiValue < low) {
@@ -47,3 +46,4 @@ class AQILevel{
     }
 
 }
+
