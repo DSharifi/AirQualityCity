@@ -75,8 +75,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         holder.linearView.setOnClickListener {
             // extend view and show basic info
             // https://stackoverflow.com/questions/41464629/expand-collapse-animation-in-cardview
-
-            val sSText = "Svevestøv nivå: " + String.format("%.2f", dataSet[pos].pm10val) + dataSet[pos].pm10Unit
+            val sS25Text = "Svevestøv PM2.5 nivå: " + String.format("%.2f", dataSet[pos].pm25val) + dataSet[pos].pm25unit
+            val sS10Text = "Svevestøv PM10 nivå: " + String.format("%.2f", dataSet[pos].pm10val) + dataSet[pos].pm10Unit
             val nitText = "Nitrogeninnhold: " + String.format("%.2f", dataSet[pos].nOVal) + dataSet[pos].nOunit
             val ozText = "Ozon nivå: " + String.format("%.2f", dataSet[pos].ozvalue) + dataSet[pos].ozonUnit
             val aqiText = "AQI nivå: " + String.format("%.2f", dataSet[pos].aqiValue) + "\n"
@@ -88,7 +88,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                     "%\nEksos: " + dataSet[pos].pmExc + "%\nTrafikk: " + dataSet[pos].pmNonEx + "%\nShipping: " + dataSet[pos].pmShip + "%"
 
 
-            holder.svevestov.text = sSText
+            holder.svevestovpm10.text = sS10Text
+            holder.svevestovpm25.text = sS25Text
             holder.nitrogen.text = nitText
             holder.ozone.text = ozText
             holder.aqilvl.text = aqiText
@@ -124,8 +125,9 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             }
 
 
-            if (holder.svevestov.visibility == View.GONE) {
-                holder.svevestov.visibility = View.VISIBLE
+            if (holder.svevestovpm25.visibility == View.GONE) {
+                holder.svevestovpm25.visibility = View.VISIBLE
+                holder.svevestovpm10.visibility = View.VISIBLE
                 holder.nitrogen.visibility = View.VISIBLE
                 holder.ozone.visibility = View.VISIBLE
                 holder.aqilvl.visibility = View.VISIBLE
@@ -136,7 +138,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
             }
             else  {
-                holder.svevestov.visibility = View.GONE
+                holder.svevestovpm25.visibility = View.GONE
+                holder.svevestovpm10.visibility = View.GONE
                 holder.nitrogen.visibility = View.GONE
                 holder.ozone.visibility = View.GONE
                 holder.aqilvl.visibility = View.GONE
@@ -266,10 +269,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val ib = textView.findViewById<ImageButton>(R.id.infoButton)
 
 
-        val svevestov = textView.findViewById<TextView>(R.id.pollution)
+        val svevestovpm25 = textView.findViewById<TextView>(R.id.pollution)
+        val svevestovpm10 = textView.findViewById<TextView>(R.id.pollution1)
         val nitrogen = textView.findViewById<TextView>(R.id.pollution2)
         val ozone = textView.findViewById<TextView>(R.id.pollution3)
-        val aqilvl = textView.findViewById<TextView>(R.id.pollution6)
+        val aqilvl = textView.findViewById<TextView>(R.id.pollution4)
         val linechartButton = textView.findViewById<Button>(R.id.linechart)
         val pm10Button = textView.findViewById<Button>(R.id.piechart_pm10)
         val pm25Button = textView.findViewById<Button>(R.id.piechart_pm25)
