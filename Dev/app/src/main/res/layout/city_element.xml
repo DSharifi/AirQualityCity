@@ -76,9 +76,17 @@
                       android:visibility="gone"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/pollution2"
+                      android:id="@+id/pollution1"
+                      android:gravity="center"
                       android:textSize="20sp"
                       android:layout_below="@id/pollution"
+                      android:layout_centerHorizontal="true"
+                      android:visibility="gone"
+            />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:id="@+id/pollution2"
+                      android:textSize="20sp"
+                      android:layout_below="@id/pollution1"
                       android:layout_centerHorizontal="true"
                       android:visibility="gone"
             />
@@ -90,7 +98,7 @@
                       android:visibility="gone"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/pollution6"
+                      android:id="@+id/pollution4"
                       android:textSize="20sp"
                       android:layout_below="@id/pollution3"
                       android:layout_centerHorizontal="true"
@@ -99,61 +107,70 @@
 
         </RelativeLayout>
 
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:layout_below="@id/infoview"
-                      android:id="@+id/buttonrow1"
-                      android:layout_centerHorizontal="true">
+                      android:orientation="horizontal"
+                      android:weightSum="2">
 
-            <Button
-                    android:layout_width="180dp"
-                    android:layout_height="100dp"
-                    android:text="Linjediagram"
-                    android:textColor="@color/white"
-                    android:drawableBottom="@drawable/chart_line"
-                    android:id="@+id/linechart"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/custom_button_darkest"
-                    android:visibility="gone"/>
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:id="@+id/buttonrow1"
+                          android:layout_centerHorizontal="true"
+                          android:orientation="vertical"
+                          android:layout_weight="1">
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="Linjediagram"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_line"
+                        android:id="@+id/linechart"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_darkest"
+                        android:visibility="gone"/>
 
-            <Button
-                    android:layout_width="180dp"
-                    android:layout_height="100dp"
-                    android:text="pm10 kilder"
-                    android:textColor="@color/white"
-                    android:drawableBottom="@drawable/chart_pie"
-                    android:id="@+id/piechart_pm10"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/custom_button_dark"
-                    android:visibility="gone"/>
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="pm10 kilder"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_pie"
+                        android:id="@+id/piechart_pm10"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_dark"
+                        android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:layout_below="@+id/buttonrow1"
+                          android:layout_centerHorizontal="true"
+                          android:orientation="vertical"
+                          android:layout_weight="1">
+
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="pm2.5 kilder"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_pie"
+                        android:id="@+id/piechart_pm25"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_lilla"
+                        android:visibility="gone"/>
+
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="no2 kilder"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_pie"
+                        android:id="@+id/piechart_no2"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_cyan"
+                        android:visibility="gone"/>
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:layout_below="@+id/buttonrow1"
-                      android:layout_centerHorizontal="true">
 
-            <Button
-                    android:layout_width="180dp"
-                    android:layout_height="100dp"
-                    android:text="pm2.5 kilder"
-                    android:textColor="@color/white"
-                    android:drawableBottom="@drawable/chart_pie"
-                    android:id="@+id/piechart_pm25"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/custom_button_lilla"
-                    android:visibility="gone"
-                    android:shadowColor="@color/quantum_googred"/>
-
-            <Button
-                    android:layout_width="180dp"
-                    android:layout_height="100dp"
-                    android:text="no2 kilder"
-                    android:textColor="@color/white"
-                    android:drawableBottom="@drawable/chart_pie"
-                    android:id="@+id/piechart_no2"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/custom_button_cyan"
-                    android:visibility="gone"/>
-        </LinearLayout>
 
 
     </RelativeLayout>

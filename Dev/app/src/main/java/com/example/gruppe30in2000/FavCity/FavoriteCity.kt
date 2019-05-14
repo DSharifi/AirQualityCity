@@ -178,15 +178,14 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         })
 
         restore_button.setOnClickListener {
-            //Toast.makeText(mContext, "Tilbakestilt informasjon til statsjonnene til nåtid", Toast.LENGTH_SHORT).show()
+            Toast.makeText(mContext, "Tilbakestilt data til nåtid", Toast.LENGTH_SHORT).show()
             // Tilbakestiller dataene til nåtid
-            Log.e("jbf", time.toString())
             forecasting(timeIndex)
-            //progresslabel.text = getDateTimeString(currentTime-1)
             seekbar.progress = timeIndex
         }
 
-        restore_button.callOnClick()
+        forecasting(timeIndex)
+        seekbar.progress = timeIndex
     }
 
     private fun getDateTimeString(currentTime : Int) : String{

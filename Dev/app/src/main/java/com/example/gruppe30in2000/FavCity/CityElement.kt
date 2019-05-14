@@ -37,5 +37,6 @@ class CityElement(station: AirQualityStation, currentHour: Int) {
     var pmInd = station.data.time[currentHour].variables.pm10_local_fraction_industry.value
     var pmExc = station.data.time[currentHour].variables.pm10_local_fraction_traffic_exhaust.value
     var pmNonEx = station.data.time[currentHour].variables.pm10_local_fraction_traffic_nonexhaust.value
-
+    var pm25val = station.data.time[currentHour].variables.pm25_concentration.value
+    var pm25unit = station.data.time[currentHour].variables.pm25_concentration.units
 }

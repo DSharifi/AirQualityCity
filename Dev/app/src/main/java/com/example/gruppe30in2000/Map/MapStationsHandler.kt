@@ -110,12 +110,11 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         val riskDisplay = dialogView.findViewById<ImageView>(R.id.risk_display)
         val tittel = dialogView.findViewById<TextView>(R.id.title_text)
         val nivaTxt = dialogView.findViewById<TextView>(R.id.description_text)
-        val svevestov = dialogView.findViewById<TextView>(R.id.pollution)
+        val svevestovpm10 = dialogView.findViewById<TextView>(R.id.pollution1)
+        val svevestovpm25 = dialogView.findViewById<TextView>(R.id.pollution)
         val nitrogen = dialogView.findViewById<TextView>(R.id.pollution2)
         val ozone = dialogView.findViewById<TextView>(R.id.pollution3)
-        //val nitlvls = dialogView.findViewById<TextView>(R.id.pollution4)
-        //val pm10lvls = dialogView.findViewById<TextView>(R.id.pollution5)
-        val aqiLevel = dialogView.findViewById<TextView>(R.id.pollution6)
+        val aqiLevel = dialogView.findViewById<TextView>(R.id.pollution4)
         val linechartButton = dialogView.findViewById<Button>(R.id.linechart)
         val pm10Button = dialogView.findViewById<Button>(R.id.piechart_pm10)
         val pm25Button = dialogView.findViewById<Button>(R.id.piechart_pm25)
@@ -132,39 +131,26 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
                 val aqiValue = station.data.time[currentHour].variables.AQI.value
                 val lvl = AQILevel.getAQILevelString(aqiValue)
-                var index = station.index
                 val ozonUnit = station.data.time[currentHour].variables.o3_concentration.units
                 val ozvalue = station.data.time[currentHour].variables.o3_concentration.value
                 val nOVal = station.data.time[currentHour].variables.no2_concentration.value
                 val nOunit = station.data.time[currentHour].variables.no2_concentration.units
                 val pm10val = station.data.time[currentHour].variables.pm10_concentration.value
                 val pm10Unit  = station.data.time[currentHour].variables.pm10_concentration.units
-                val nitShip = station.data.time[currentHour].variables.no2_local_fraction_shipping.value
-                val nitHeating = station.data.time[currentHour].variables.no2_local_fraction_heating.value
-                val nitInd = station.data.time[currentHour].variables.no2_local_fraction_industry.value
-                val nitExc = station.data.time[currentHour].variables.no2_local_fraction_traffic_exhaust.value
-                val pmHeat = station.data.time[currentHour].variables.pm10_local_fraction_heating.value
-                val pmShip = station.data.time[currentHour].variables.pm10_local_fraction_shipping.value
-                val pmInd = station.data.time[currentHour].variables.pm10_local_fraction_industry.value
-                val pmExc = station.data.time[currentHour].variables.pm10_local_fraction_traffic_exhaust.value
-                val pmNonEx = station.data.time[currentHour].variables.pm10_local_fraction_traffic_nonexhaust.value
+                val pm25val = station.data.time[currentHour].variables.pm25_concentration.value
+                val pm25Unit  = station.data.time[currentHour].variables.pm25_concentration.units
 
-                val sSText = "Svevestøv nivå: " + String.format("%.2f", pm10val) + pm10Unit
+                val sS10Text = "Svevestøv PM10 nivå: " + String.format("%.2f", pm10val) + pm10Unit
+                val sS25Text = "Svevestøv PM25 nivå: " + String.format("%.2f", pm25val) + pm25Unit
                 val nitText = "Nitrogeninnhold: " + String.format("%.2f", nOVal) + nOunit
                 val ozText = "Ozon nivå: " + String.format("%.2f", ozvalue) + ozonUnit
                 val aqiText = "AQI nivå: " + String.format("%.2f", aqiValue) + "\n"
 
-                val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + nitHeating.toString() + "%\nIndustri: " + nitInd +
-                        "%\nEksos: " + nitExc + "%\nShipping: " + nitShip + "%"
 
-                val pm10Lvls = "Svevestøvkilder:\nOppvarming: " + pmHeat.toString() + "%\nIndustri: " + pmInd +
-                        "%\nEksos: " + pmExc + "%\nTrafikk: " + pmNonEx + "%\nShipping: " + pmShip + "%"
-
-                svevestov.text = sSText
+                svevestovpm10.text = sS10Text
+                svevestovpm25.text = sS25Text
                 nitrogen.text = nitText
                 ozone.text = ozText
-                //nitlvls.text = nitrogenLvls
-                //pm10lvls.text = pm10Lvls
                 tittel.text = location
                 aqiLevel.text = aqiText
 
