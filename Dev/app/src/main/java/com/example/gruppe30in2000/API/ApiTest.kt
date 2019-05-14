@@ -59,3 +59,9 @@ fun main() {
 
 // TODO: Trenger kun REFTIME for historisk data. Reftime finnes ikke for siste måling.
 // TODO: Vil si: Livedata:  airqualityReponse uten parameter for reftime
+
+data class Airqt(
+    val `data`: Data,
+    val meta: Meta
+)
+

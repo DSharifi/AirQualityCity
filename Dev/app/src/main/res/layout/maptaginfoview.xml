@@ -61,7 +61,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/infoview"
                         android:layout_below="@id/risk_layout"
-                        android:layout_marginBottom="15dp"
+                        android:layout_centerHorizontal="true"
         >
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution"
@@ -84,19 +84,6 @@
                       android:layout_centerHorizontal="true"
                       android:visibility="visible"
             />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/pollution4"
-                      android:textSize="20sp"
-                      android:layout_below="@id/pollution6"
-                      android:visibility="visible"
-            />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/pollution5"
-                      android:textSize="20sp"
-                      android:layout_below="@id/pollution6"
-                      android:layout_alignParentEnd="true"
-                      android:visibility="visible"
-            />
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution6"
@@ -104,9 +91,58 @@
                       android:layout_below="@id/pollution3"
                       android:layout_centerHorizontal="true"
             />
-
-
         </RelativeLayout>
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:id="@+id/buttonrow1"
+                      android:layout_centerHorizontal="true"
+                      android:layout_below="@+id/infoview">
+
+            <Button
+                    android:layout_width="170dp"
+                    android:layout_height="100dp"
+                    android:text="Linjediagram"
+                    android:textColor="@color/white"
+                    android:drawableBottom="@drawable/chart_line"
+                    android:id="@+id/linechart"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/custom_button_darkest"/>
+
+            <Button
+                    android:layout_width="170dp"
+                    android:layout_height="100dp"
+                    android:text="pm10 kilder"
+                    android:textColor="@color/white"
+                    android:drawableBottom="@drawable/chart_pie"
+                    android:id="@+id/piechart_pm10"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/custom_button_dark"/>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:layout_below="@+id/buttonrow1"
+                      android:layout_centerHorizontal="true">
+
+            <Button
+                    android:layout_width="170dp"
+                    android:layout_height="100dp"
+                    android:text="pm2.5 kilder"
+                    android:textColor="@color/white"
+                    android:drawableBottom="@drawable/chart_pie"
+                    android:id="@+id/piechart_pm25"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/custom_button_lilla"/>
+
+            <Button
+                    android:layout_width="170dp"
+                    android:layout_height="100dp"
+                    android:text="no2 kilder"
+                    android:textColor="@color/white"
+                    android:drawableBottom="@drawable/chart_pie"
+                    android:id="@+id/piechart_no2"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/custom_button_cyan"/>
+        </LinearLayout>
 
     </RelativeLayout>
 

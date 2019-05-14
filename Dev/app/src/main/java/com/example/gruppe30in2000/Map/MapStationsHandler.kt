@@ -12,13 +12,12 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.gruppe30in2000.*
 import com.example.gruppe30in2000.API.AirQualityStation
-import com.example.gruppe30in2000.AQILevel
-import com.example.gruppe30in2000.R
 import com.example.gruppe30in2000.AQILevel.Companion.getAQILevel
 import com.example.gruppe30in2000.FavCity.FavoriteCity
-import com.example.gruppe30in2000.MainActivity
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.model.*
 import kotlin.random.Random
 import java.util.*
@@ -33,7 +32,11 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
     val redHeat = arrayListOf<LatLng>()
 
     val calendar = Calendar.getInstance()
-    val currentHour = calendar .get(Calendar.HOUR_OF_DAY)
+
+    val time = calendar.get(Calendar.HOUR_OF_DAY)
+    val date = calendar.get(Calendar.DATE)
+
+    val timeIndex = getTimeIndex(time, date)
 
     init {
         mMap = googleMap
@@ -53,7 +56,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
             lat = station.meta.location.latitude.toDouble()
             lng = station.meta.location.longitude.toDouble()
             name = station.meta.location.name
-            aqi = station.data.time[currentHour-1].variables.AQI.value
+            aqi = station.data.time[timeIndex].variables.AQI.value
 
 
             addStation(lat, lng, name, aqi)
@@ -89,6 +92,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
     }
 
+
     override fun onMarkerClick(marker: Marker?): Boolean {
         Log.e("MapstationHandler", "Marker at location ${marker?.title} clicked")
 
@@ -109,36 +113,41 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         val svevestov = dialogView.findViewById<TextView>(R.id.pollution)
         val nitrogen = dialogView.findViewById<TextView>(R.id.pollution2)
         val ozone = dialogView.findViewById<TextView>(R.id.pollution3)
-        val nitlvls = dialogView.findViewById<TextView>(R.id.pollution4)
-        val pm10lvls = dialogView.findViewById<TextView>(R.id.pollution5)
+        //val nitlvls = dialogView.findViewById<TextView>(R.id.pollution4)
+        //val pm10lvls = dialogView.findViewById<TextView>(R.id.pollution5)
         val aqiLevel = dialogView.findViewById<TextView>(R.id.pollution6)
+        val linechartButton = dialogView.findViewById<Button>(R.id.linechart)
+        val pm10Button = dialogView.findViewById<Button>(R.id.piechart_pm10)
+        val pm25Button = dialogView.findViewById<Button>(R.id.piechart_pm25)
+        val no2Button = dialogView.findViewById<Button>(R.id.piechart_no2)
 
         val location = tempLocation.toString()
 
+        val calendar = Calendar.getInstance()
+        val currentHour = getTimeIndex(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.DATE))
+        var index = 0
         for (station in MainActivity.staticAirQualityStationsList) {
             if (station.meta.location.name.equals(location)) {
                 Log.e("TESTE MAP ADD", "KOM INN :)")
 
-                val calendar = Calendar.getInstance()
-                val currentHour = calendar .get(Calendar.HOUR_OF_DAY)
-                val aqiValue = station.data.time[currentHour-1].variables.AQI.value
+                val aqiValue = station.data.time[currentHour].variables.AQI.value
                 val lvl = AQILevel.getAQILevelString(aqiValue)
-
-                val ozonUnit = station.data.time[currentHour-1].variables.o3_concentration.units
-                val ozvalue = station.data.time[currentHour-1].variables.o3_concentration.value
-                val nOVal = station.data.time[currentHour-1].variables.no2_concentration.value
-                val nOunit = station.data.time[currentHour-1].variables.no2_concentration.units
-                val pm10val = station.data.time[currentHour-1].variables.pm10_concentration.value
-                val pm10Unit  = station.data.time[currentHour-1].variables.pm10_concentration.units
-                val nitShip = station.data.time[currentHour-1].variables.no2_local_fraction_shipping.value
-                val nitHeating = station.data.time[currentHour-1].variables.no2_local_fraction_heating.value
-                val nitInd = station.data.time[currentHour-1].variables.no2_local_fraction_industry.value
-                val nitExc = station.data.time[currentHour-1].variables.no2_local_fraction_traffic_exhaust.value
-                val pmHeat = station.data.time[currentHour-1].variables.pm10_local_fraction_heating.value
-                val pmShip = station.data.time[currentHour-1].variables.pm10_local_fraction_shipping.value
-                val pmInd = station.data.time[currentHour-1].variables.pm10_local_fraction_industry.value
-                val pmExc = station.data.time[currentHour-1].variables.pm10_local_fraction_traffic_exhaust.value
-                val pmNonEx = station.data.time[currentHour-1].variables.pm10_local_fraction_traffic_nonexhaust.value
+                var index = station.index
+                val ozonUnit = station.data.time[currentHour].variables.o3_concentration.units
+                val ozvalue = station.data.time[currentHour].variables.o3_concentration.value
+                val nOVal = station.data.time[currentHour].variables.no2_concentration.value
+                val nOunit = station.data.time[currentHour].variables.no2_concentration.units
+                val pm10val = station.data.time[currentHour].variables.pm10_concentration.value
+                val pm10Unit  = station.data.time[currentHour].variables.pm10_concentration.units
+                val nitShip = station.data.time[currentHour].variables.no2_local_fraction_shipping.value
+                val nitHeating = station.data.time[currentHour].variables.no2_local_fraction_heating.value
+                val nitInd = station.data.time[currentHour].variables.no2_local_fraction_industry.value
+                val nitExc = station.data.time[currentHour].variables.no2_local_fraction_traffic_exhaust.value
+                val pmHeat = station.data.time[currentHour].variables.pm10_local_fraction_heating.value
+                val pmShip = station.data.time[currentHour].variables.pm10_local_fraction_shipping.value
+                val pmInd = station.data.time[currentHour].variables.pm10_local_fraction_industry.value
+                val pmExc = station.data.time[currentHour].variables.pm10_local_fraction_traffic_exhaust.value
+                val pmNonEx = station.data.time[currentHour].variables.pm10_local_fraction_traffic_nonexhaust.value
 
                 val sSText = "Svevestøv nivå: " + String.format("%.2f", pm10val) + pm10Unit
                 val nitText = "Nitrogeninnhold: " + String.format("%.2f", nOVal) + nOunit
@@ -154,8 +163,8 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                 svevestov.text = sSText
                 nitrogen.text = nitText
                 ozone.text = ozText
-                nitlvls.text = nitrogenLvls
-                pm10lvls.text = pm10Lvls
+                //nitlvls.text = nitrogenLvls
+                //pm10lvls.text = pm10Lvls
                 tittel.text = location
                 aqiLevel.text = aqiText
 
@@ -191,6 +200,33 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
             }
         }
 
+        linechartButton.setOnClickListener{
+            val i = Intent(this.parentContext, GraphActivity::class.java)
+            i.putExtra("index",index)
+            ContextCompat.startActivity(this.parentContext, i, null)
+        }
+        pm10Button.setOnClickListener{
+            val i = Intent(this.parentContext, PieChartActivity::class.java)
+            i.putExtra("index",index)
+            i.putExtra("chartNr", 0)
+            i.putExtra("timeIndex", currentHour)
+            ContextCompat.startActivity(this.parentContext, i, null)
+        }
+        pm25Button.setOnClickListener{
+            val i = Intent(this.parentContext, PieChartActivity::class.java)
+            i.putExtra("index",index)
+            i.putExtra("chartNr", 1)
+            i.putExtra("timeIndex", currentHour)
+            ContextCompat.startActivity(this.parentContext, i, null)
+        }
+        no2Button.setOnClickListener{
+            val i = Intent(this.parentContext, PieChartActivity::class.java)
+            i.putExtra("index",index)
+            i.putExtra("chartNr", 2)
+            i.putExtra("timeIndex", currentHour)
+            ContextCompat.startActivity(this.parentContext, i, null)
+        }
+
 
         addbutton.setOnClickListener {
 
@@ -206,5 +242,20 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
     fun createHeatMap(){
         val heatmap = Heatmap(mMap, greenHeat, yellowHeat, redHeat)
+    }
+
+    fun getTimeIndex(time : Int, date : Int) : Int{
+        var c = 0
+        MainActivity.staticAirQualityStationsList[0].data.time.forEach{
+            val datetime = it.from.split("T")
+            var d = datetime[0].takeLast(2).toInt()
+            var t = datetime[1].take(2).toInt()
+
+            if(date == d && time == t){
+                return c;
+            }
+            c++
+        }
+        return 0
     }
 }

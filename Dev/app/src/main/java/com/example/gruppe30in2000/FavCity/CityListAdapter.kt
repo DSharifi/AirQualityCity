@@ -11,15 +11,19 @@ import android.view.ViewGroup
 import android.view.View
 import android.widget.*
 import android.support.v4.content.LocalBroadcastManager
-import com.example.gruppe30in2000.PreferenceFragment
-import com.example.gruppe30in2000.R
 import android.preference.PreferenceManager;
+import android.widget.Button;
+import android.app.Activity
+import android.support.v4.content.ContextCompat.startActivity
+import android.text.Html
+import com.example.gruppe30in2000.*
 
 
-
-class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context) :
+class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context, activityContext: Context?) :
     RecyclerView.Adapter<CityListAdapter.ViewHolder>() {
     val context = context
+    //val activity = activityContext as Activity
+    //val activityContext = activityContext
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val textView = LayoutInflater.from(parent.context).inflate(R.layout.city_element, parent, false) as View
@@ -34,9 +38,6 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         holder.description.text = dataSet[pos].description
         // VALIDATE the risk type of newly added city
         validateRiskType(holder.description.text.toString(), holder)
-
-
-
 
         if (holder.description.text.toString().equals("Lav")) {
             holder.description.setBackgroundResource(R.drawable.rounded_good)
@@ -91,27 +92,59 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             holder.nitrogen.text = nitText
             holder.ozone.text = ozText
             holder.aqilvl.text = aqiText
-            holder.nitLvls.text = nitrogenLvls
-            holder.pm10Lvls.text = pm10Lvls
+            //holder.nitLvls.text = nitrogenLvls
+            //holder.pm10Lvls.text = pm10Lvls
+            //holder.linechartButton.text = Html.fromHtml("PM<sub>10</sub>")
+
+            holder.linechartButton.setOnClickListener{
+                val i = Intent(this.context, GraphActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                startActivity(this.context, i, null)
+            }
+            holder.pm10Button.setOnClickListener{
+                val i = Intent(this.context, PieChartActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                i.putExtra("chartNr", 0)
+                i.putExtra("timeIndex", dataSet[pos].timeindex)
+                startActivity(this.context, i, null)
+            }
+            holder.pm25Button.setOnClickListener{
+                val i = Intent(this.context, PieChartActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                i.putExtra("chartNr", 1)
+                i.putExtra("timeIndex", dataSet[pos].timeindex)
+                startActivity(this.context, i, null)
+            }
+            holder.no2Button.setOnClickListener{
+                val i = Intent(this.context, PieChartActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                i.putExtra("chartNr", 2)
+                i.putExtra("timeIndex", dataSet[pos].timeindex)
+                startActivity(this.context, i, null)
+            }
 
 
             if (holder.svevestov.visibility == View.GONE) {
                 holder.svevestov.visibility = View.VISIBLE
                 holder.nitrogen.visibility = View.VISIBLE
                 holder.ozone.visibility = View.VISIBLE
-                holder.nitLvls.visibility = View.VISIBLE
-                holder.pm10Lvls.visibility = View.VISIBLE
                 holder.aqilvl.visibility = View.VISIBLE
+                holder.linechartButton.visibility = View.VISIBLE
+                holder.pm10Button.visibility = View.VISIBLE
+                holder.pm25Button.visibility = View.VISIBLE
+                holder.no2Button.visibility = View.VISIBLE
+
             }
             else  {
                 holder.svevestov.visibility = View.GONE
                 holder.nitrogen.visibility = View.GONE
                 holder.ozone.visibility = View.GONE
-                holder.nitLvls.visibility = View.GONE
-                holder.pm10Lvls.visibility = View.GONE
                 holder.aqilvl.visibility = View.GONE
+                holder.linechartButton.visibility = View.GONE
+                holder.pm10Button.visibility = View.GONE
+                holder.pm25Button.visibility = View.GONE
+                holder.no2Button.visibility = View.GONE
             }
-
         }
 
         holder.ib.setOnClickListener {
@@ -236,11 +269,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val svevestov = textView.findViewById<TextView>(R.id.pollution)
         val nitrogen = textView.findViewById<TextView>(R.id.pollution2)
         val ozone = textView.findViewById<TextView>(R.id.pollution3)
-        val nitLvls = textView.findViewById<TextView>(R.id.pollution4)
-        val pm10Lvls = textView.findViewById<TextView>(R.id.pollution5)
         val aqilvl = textView.findViewById<TextView>(R.id.pollution6)
-
-
+        val linechartButton = textView.findViewById<Button>(R.id.linechart)
+        val pm10Button = textView.findViewById<Button>(R.id.piechart_pm10)
+        val pm25Button = textView.findViewById<Button>(R.id.piechart_pm25)
+        val no2Button = textView.findViewById<Button>(R.id.piechart_no2)
     }
 
     fun getInfo(text: String) : String {
