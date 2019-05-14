@@ -6,6 +6,7 @@ import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.gruppe30in2000.MainActivity
+import com.example.gruppe30in2000.PreferenceFragment
 import com.example.gruppe30in2000.R
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
@@ -49,21 +51,54 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         mMap = googleMap
 
+
         // Customize the map style
         try {
-            val success = mMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                    context, R.raw.map_style
+            val sp = PreferenceManager.getDefaultSharedPreferences(context)
+            val chosen = sp.getString(PreferenceFragment.mSKey, "1")
+            if (chosen.toInt() == 2) {
+                val success = mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        context, R.raw.map_style
+                    )
                 )
-            )
-            if (!success) {
-                //Log.e(FragmentActivity.TAG, "Style parsing failed.")
-                print("Styling parsing failed")
+                if (!success) {
+                    //Log.e(FragmentActivity.TAG, "Style parsing failed.")
+                    print("Styling parsing failed")
+                }
+            }
+            if (chosen.toInt() == 1) {
+                val success = mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        context, R.raw.map_alt_style
+                    )
+                )
+                if (!success) {
+                    //Log.e(FragmentActivity.TAG, "Style parsing failed.")
+                    print("Styling parsing failed")
+                }
             }
         } catch (e: Resources.NotFoundException) {
             // Log.e(FragmentActivity.TAG, "Can't find style. Error: ", e)
             print("Cant find style")
         }
+
+//        if (chosen.toInt() == 2){
+//            try {
+//                val success = mMap.setMapStyle(
+//                    MapStyleOptions.loadRawResourceStyle(
+//                        context, R.raw.map_alt_style
+//                    )
+//                )
+//                if (!success) {
+//                    //Log.e(FragmentActivity.TAG, "Style parsing failed.")
+//                    print("Styling parsing failed")
+//                }
+//            } catch (e: Resources.NotFoundException) {
+//                // Log.e(FragmentActivity.TAG, "Can't find style. Error: ", e)
+//                print("Cant find style")
+//            }
+//        }
 
         activateLocationIfEnabled()
 

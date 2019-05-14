@@ -44,6 +44,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+            android:title="Kartstil">
+
+        <ListPreference
+                android:title="Velg stil for kart"
+                android:summary=" "
+                android:key="MapStyle"
+                android:defaultValue="1"
+                android:entries="@array/modus"
+                android:entryValues="@array/modusvalue"/>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         android:title="Kontakt oss">
         <Preference
             android:title="Tilbakemeldinger"
@@ -53,18 +66,10 @@
                 android:action="android.intent.action.VIEW"
                 android:data="mailto:johanneskw@gmail.com">
             </intent>
-
         </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title=" ">
-
         <Preference
-            android:title=" "
-            android:summary=" "
-            android:key="Empty"/>
-
+                android:title=" "
+                android:summary="\n"/>
     </PreferenceCategory>
 
 
