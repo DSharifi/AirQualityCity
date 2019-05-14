@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="modus">
+        <item>Lys</item>
+        <item>Mørk</item>
+    </string-array>
+
+    <string-array name="modusvalue">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+</resources>
