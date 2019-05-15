@@ -15,7 +15,7 @@ import android.widget.Toast
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
-import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.FavCity.FavoriteCityFragment
 import com.example.gruppe30in2000.Map.MapFragment
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
@@ -81,8 +81,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
         // TODO TEMPORARY TEST FAVOURITE CITY LIST
         // Reset favourite city list everytime the app start.
-        FavoriteCity.dataset = ArrayList<CityElement>()
-        replaceFragment(FavoriteCity())
+        FavoriteCityFragment.dataset = ArrayList<CityElement>()
+        replaceFragment(FavoriteCityFragment())
 
         save()
     }
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                replaceFragment(FavoriteCity())
+                replaceFragment(FavoriteCityFragment())
                 return@OnNavigationItemSelectedListener true
             }
 
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     private fun checkHoursPassed(lastCheck : DateTime, hours : Int): Boolean {
         val currentTime = DateTime()
         val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
-        return hours < difference;
+        return hours < difference
 
 //        return true
     }

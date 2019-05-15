@@ -48,7 +48,7 @@ class AllStationView : AppCompatActivity() {
 
         initRecycleView(dataset)
 
-        // TODO implement add cardview and send back the selected cardview to FavoriteCity and display it in Favorites city View.
+        // TODO implement add cardview and send back the selected cardview to FavoriteCityFragment and display it in Favorites city View.
         val searchInput = findViewById<EditText>(R.id.search_input)
 
         //make a common textWatcher to use for several editText/TextView listener

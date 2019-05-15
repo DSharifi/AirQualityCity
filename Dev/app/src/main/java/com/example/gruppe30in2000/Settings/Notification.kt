@@ -5,7 +5,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import android.util.Log
-import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.FavCity.FavoriteCityFragment
 import com.example.gruppe30in2000.StationUtil.AQILevel
 import com.example.gruppe30in2000.R
 
@@ -20,7 +20,7 @@ class Notification (context : Context, notifyMan : NotificationManager) {
 
         var id = 1232132
 
-        for (station in FavoriteCity.dataset) {
+        for (station in FavoriteCityFragment.dataset) {
 
             if (prefs.getString(PreferenceFragment.alertValue, "10").toInt() <= AQILevel.getAlertLevel(station.aqiValue)){
 

@@ -49,7 +49,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
+class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
