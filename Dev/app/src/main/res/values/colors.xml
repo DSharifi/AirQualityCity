@@ -6,8 +6,8 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="grey">#D3D3D3</color>
-    <color name="good">#7DF17A</color>
-    <color name="moderate">#FFEB3B</color>
+    <color name="good">#1ED609</color>
+    <color name="moderate">#FFC107</color>
     <color name="bad">#F14343</color>
     <color name="verybad">#5517C2</color>
 </resources>

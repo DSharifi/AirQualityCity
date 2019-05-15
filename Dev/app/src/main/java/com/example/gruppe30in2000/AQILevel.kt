@@ -4,9 +4,13 @@ class AQILevel{
 
     companion object {
         
+        //Dette er riktig verdier:
+        //val low = 2.0
+        //val medium = 3.0
+        
         val low = 2.0
         val medium = 3.0
-        
+
         fun getAQILevel(aqiValue : Double) : Int {
             // Low = 1, Med =, High = 3
             if (aqiValue < low) {
@@ -20,9 +24,9 @@ class AQILevel{
 
         fun getAQILevelString(aqiValue : Double) : String {
             // Low = 1, Med =, High = 3
-            if (aqiValue <= low) {
+            if (aqiValue < low) {
                 return "Lav"
-            } else if (aqiValue > low && aqiValue < medium) {
+            } else if (aqiValue >= low && aqiValue < medium) {
                     return "Moderat"
                 } else {
                 return "Hoy"
@@ -31,9 +35,9 @@ class AQILevel{
 
 
         fun getAlertLevel(aqiValue : Double) : Int {
-            if (aqiValue <= low) {
+            if (aqiValue < low) {
                 return 0
-            } else if (aqiValue > low && aqiValue < medium) {
+            } else if (aqiValue >= low && aqiValue < medium) {
                 return 1
             } else {
                 return 2
@@ -42,3 +46,4 @@ class AQILevel{
     }
 
 }
+

@@ -37,8 +37,12 @@ class AllStationView : AppCompatActivity() {
         // RECIEVE DATA FROM ADAPTER with custom message: from-cityadapter
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, IntentFilter("from-cityadapter"))
 
+        val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val date = Calendar.getInstance().get(Calendar.DATE)
+        val timeIndex = getTimeIndex(time, date)
+
         for (data in airquailityStation) {
-                dataset.add(CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY)))
+                dataset.add(CityElement(data, timeIndex))
             }
 
         initRecycleView(dataset)
@@ -70,7 +74,7 @@ class AllStationView : AppCompatActivity() {
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
         viewManager = LinearLayoutManager(this)
 
-        viewAdapter = CityListAdapter(dataset,this)
+        viewAdapter = CityListAdapter(dataset,this, this)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewAllStation).apply {
 
@@ -117,5 +121,18 @@ class AllStationView : AppCompatActivity() {
         finish()
     }
 
+    fun getTimeIndex(time : Int, date : Int) : Int{
+        var c = 0
+        MainActivity.staticAirQualityStationsList[0].data.time.forEach{
+            val datetime = it.from.split("T")
+            var d = datetime[0].takeLast(2).toInt()
+            var t = datetime[1].take(2).toInt()
 
+            if(date == d && time == t){
+                return c;
+            }
+            c++
+        }
+        return 0
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.gruppe30in2000
 
+import android.net.MailTo
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.preference.ListPreference
@@ -8,6 +9,9 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.content.Intent
+
+
 
 
 
@@ -21,6 +25,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         val pregKEY = "preg_key"
 
         val alertValue = "alertValue"
+        val mSKey = "MapStyle"
 
 
         //Updates and shows the chosen setting-value
@@ -65,11 +70,25 @@ class PreferenceFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedstates: Bundle?, rootkey: String?) {
         setPreferencesFromResource(R.xml.settings_screen, rootkey)
         bindPreferenceSummaryToValue(findPreference("alertValue"))
+        bindPreferenceSummaryToValue(findPreference("MapStyle"))
+        val mailTo = findPreference("MailTo")
+        mailTo.setOnPreferenceClickListener {
+            val mailto = Intent(Intent.ACTION_SEND)
+            mailto.setType("message/rfc822")
+            mailto.putExtra(Intent.EXTRA_EMAIL, arrayOf("sdbjunes@student.matnat.uio.no"))
+            mailto.putExtra(Intent.EXTRA_SUBJECT, "Tilbakemelding til AirQalityCity")
+            mailto.putExtra(Intent.EXTRA_TEXT, "Skriv din tilbakemelding her.. ")
+            startActivity(Intent.createChooser(mailto, "velg mail applikasjon"))
+            true
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         return super.onCreateView(inflater, container, savedInstanceState)
     }
+
+
+
+
 
 }

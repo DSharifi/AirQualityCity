@@ -11,13 +11,19 @@
 
     <application
             android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_aqc_icon_round"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@mipmap/ic_aqc_icon_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name=".FavCity.AllStationView"
         android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".GraphActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".PieChartActivity"
+                  android:screenOrientation="portrait">
         </activity>
         <!--<activity android:name=".FavCity.CityListAdapter">-->
         <!--</activity>-->

@@ -52,8 +52,11 @@
                       android:text="@string/risk_type"
                       android:textColor="@color/white"
                       android:textSize="18sp"
+                      android:textStyle="bold"
                       android:layout_toRightOf="@+id/type"
+
             />
+
 
 
         </RelativeLayout>
@@ -63,7 +66,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/infoview"
                         android:layout_below="@id/risk_layout"
-                        android:layout_marginBottom="15dp"
+                        android:layout_centerHorizontal="true"
         >
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution"
@@ -73,9 +76,17 @@
                       android:visibility="gone"
             />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/pollution2"
+                      android:id="@+id/pollution1"
+                      android:gravity="center"
                       android:textSize="20sp"
                       android:layout_below="@id/pollution"
+                      android:layout_centerHorizontal="true"
+                      android:visibility="gone"
+            />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:id="@+id/pollution2"
+                      android:textSize="20sp"
+                      android:layout_below="@id/pollution1"
                       android:layout_centerHorizontal="true"
                       android:visibility="gone"
             />
@@ -89,52 +100,105 @@
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/pollution4"
                       android:textSize="20sp"
-                      android:layout_below="@id/pollution6"
-                      android:visibility="gone"
-            />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/pollution5"
-                      android:textSize="20sp"
-                      android:layout_below="@id/pollution6"
-                      android:layout_alignParentEnd="true"
-                      android:visibility="gone"
-            />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/pollution6"
-                      android:textSize="20sp"
                       android:layout_below="@id/pollution3"
                       android:layout_centerHorizontal="true"
                       android:visibility="gone"
             />
 
-
-
         </RelativeLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:layout_below="@id/infoview"
+                      android:orientation="horizontal"
+                      android:weightSum="2">
+
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:id="@+id/buttonrow1"
+                          android:layout_centerHorizontal="true"
+                          android:orientation="vertical"
+                          android:layout_weight="1">
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="Linjediagram"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_line"
+                        android:id="@+id/linechart"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_darkest"
+                        android:visibility="gone"/>
+
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="pm10 kilder"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_pie"
+                        android:id="@+id/piechart_pm10"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_dark"
+                        android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:layout_below="@+id/buttonrow1"
+                          android:layout_centerHorizontal="true"
+                          android:orientation="vertical"
+                          android:layout_weight="1">
+
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="pm2.5 kilder"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_pie"
+                        android:id="@+id/piechart_pm25"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_lilla"
+                        android:visibility="gone"/>
+
+                <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:text="no2 kilder"
+                        android:textColor="@color/white"
+                        android:drawableBottom="@drawable/chart_pie"
+                        android:id="@+id/piechart_no2"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/custom_button_cyan"
+                        android:visibility="gone"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+
 
     </RelativeLayout>
 
     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                android:id="@+id/risk_display"
-               android:background="@drawable/ic_lens_green_35dp"
                android:layout_gravity="end"
                android:layout_marginEnd="50dp"
                android:layout_marginTop="25dp"
+               android:visibility="gone"
     />
     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                  android:id="@+id/add_button"
                  android:layout_marginEnd="10dp"
-                 android:src="@drawable/ic_add_button"
+                 android:layout_marginTop="25dp"
+                 android:layout_gravity="end"
+                 android:src="@drawable/ic_add_round_button_svgrepo_com"
                  android:visibility="invisible"
-                 android:layout_gravity="center|end"
                  android:background="#ffffff"
 
 
     />
     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                  android:id="@+id/infoButton"
-                 android:layout_gravity="center|end"
+                 android:layout_gravity="end"
                  android:layout_marginEnd="10dp"
-                 android:src="@drawable/ic_warning_black_24dp"
+                 android:layout_marginTop="25dp"
+                 android:src="@drawable/ic_warning_alert_svgrepo_com"
                  android:visibility="visible"
                  android:background="#ffffff"
     />
