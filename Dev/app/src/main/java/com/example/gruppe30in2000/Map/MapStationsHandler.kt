@@ -1,7 +1,6 @@
 package com.example.gruppe30in2000.Map
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
@@ -14,12 +13,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.gruppe30in2000.*
 import com.example.gruppe30in2000.API.AirQualityStation
-import com.example.gruppe30in2000.AQILevel.Companion.getAQILevel
-import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.StationUtil.AQILevel.Companion.getAQILevel
+import com.example.gruppe30in2000.StationUtil.AQILevel
+import com.example.gruppe30in2000.StationUtil.GraphActivity
+import com.example.gruppe30in2000.StationUtil.PieChartActivity
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.model.*
-import kotlin.random.Random
 import java.util.*
 
 class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnMarkerClickListener {
@@ -126,9 +125,10 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         val currentHour = getTimeIndex(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.DATE))
         var index = 0
         for (station in MainActivity.staticAirQualityStationsList) {
+
             if (station.meta.location.name.equals(location)) {
                 Log.e("TESTE MAP ADD", "KOM INN :)")
-
+                index = station.index
                 val aqiValue = station.data.time[currentHour].variables.AQI.value
                 val lvl = AQILevel.getAQILevelString(aqiValue)
                 val ozonUnit = station.data.time[currentHour].variables.o3_concentration.units

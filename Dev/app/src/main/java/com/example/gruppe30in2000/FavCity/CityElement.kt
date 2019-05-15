@@ -1,11 +1,7 @@
 package com.example.gruppe30in2000.FavCity
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.text.Editable
 import com.example.gruppe30in2000.API.AirQualityStation
-import com.example.gruppe30in2000.API.No2LocalFractionHeating
-import com.example.gruppe30in2000.AQILevel
+import com.example.gruppe30in2000.StationUtil.AQILevel
 import java.util.*
 
 

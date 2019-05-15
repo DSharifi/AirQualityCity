@@ -2,24 +2,21 @@ package com.example.gruppe30in2000.Map
 
 
 import android.Manifest
-import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.gruppe30in2000.MainActivity
-import com.example.gruppe30in2000.PreferenceFragment
+import com.example.gruppe30in2000.Settings.PreferenceFragment
 import com.example.gruppe30in2000.R
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import java.io.Console
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {

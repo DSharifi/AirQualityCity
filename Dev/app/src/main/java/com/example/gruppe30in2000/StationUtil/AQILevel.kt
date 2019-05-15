@@ -1,4 +1,4 @@
-package com.example.gruppe30in2000
+package com.example.gruppe30in2000.StationUtil
 
 class AQILevel{
 
