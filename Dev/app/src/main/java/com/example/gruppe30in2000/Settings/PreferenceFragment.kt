@@ -1,6 +1,5 @@
-package com.example.gruppe30in2000
+package com.example.gruppe30in2000.Settings
 
-import android.net.MailTo
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.preference.ListPreference
@@ -10,9 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.content.Intent
-
-
-
+import com.example.gruppe30in2000.R
 
 
 class PreferenceFragment : PreferenceFragmentCompat() {
@@ -25,6 +22,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         val pregKEY = "preg_key"
 
         val alertValue = "alertValue"
+        val mSKey = "MapStyle"
 
 
         //Updates and shows the chosen setting-value
@@ -54,7 +52,8 @@ class PreferenceFragment : PreferenceFragmentCompat() {
 
         private fun bindPreferenceSummaryToValue(preference: Preference) {
             // Set the listener to watch for value changes.
-            preference.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
+            preference.onPreferenceChangeListener =
+                sBindPreferenceSummaryToValueListener
 
             // Trigger the listener immediately with the preference's
             // current value.
@@ -69,6 +68,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedstates: Bundle?, rootkey: String?) {
         setPreferencesFromResource(R.xml.settings_screen, rootkey)
         bindPreferenceSummaryToValue(findPreference("alertValue"))
+        bindPreferenceSummaryToValue(findPreference("MapStyle"))
         val mailTo = findPreference("MailTo")
         mailTo.setOnPreferenceClickListener {
             val mailto = Intent(Intent.ACTION_SEND)

@@ -2,7 +2,6 @@ package com.example.gruppe30in2000.FavCity
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -11,15 +10,20 @@ import android.view.ViewGroup
 import android.view.View
 import android.widget.*
 import android.support.v4.content.LocalBroadcastManager
-import com.example.gruppe30in2000.PreferenceFragment
-import com.example.gruppe30in2000.R
 import android.preference.PreferenceManager;
+import android.widget.Button;
+import android.support.v4.content.ContextCompat.startActivity
+import com.example.gruppe30in2000.*
+import com.example.gruppe30in2000.Settings.PreferenceFragment
+import com.example.gruppe30in2000.StationUtil.GraphActivity
+import com.example.gruppe30in2000.StationUtil.PieChartActivity
 
 
-
-class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context) :
+class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context, activityContext: Context?) :
     RecyclerView.Adapter<CityListAdapter.ViewHolder>() {
     val context = context
+    //val activity = activityContext as Activity
+    //val activityContext = activityContext
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val textView = LayoutInflater.from(parent.context).inflate(R.layout.city_element, parent, false) as View
@@ -33,10 +37,7 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         holder.title.text = dataSet[pos].title
         holder.description.text = dataSet[pos].description
         // VALIDATE the risk type of newly added city
-        validateRiskType(holder.description.text.toString(), holder)
-
-
-
+//        validateRiskType(holder.description.text.toString(), holder)
 
         if (holder.description.text.toString().equals("Lav")) {
             holder.description.setBackgroundResource(R.drawable.rounded_good)
@@ -74,44 +75,79 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         holder.linearView.setOnClickListener {
             // extend view and show basic info
             // https://stackoverflow.com/questions/41464629/expand-collapse-animation-in-cardview
-
-            val sSText = "Svevestøv nivå: " + String.format("%.2f", dataSet[pos].pm10val) + dataSet[pos].pm10Unit
+            val sS25Text = "Svevestøv PM2.5 nivå: " + String.format("%.2f", dataSet[pos].pm25val) + dataSet[pos].pm25unit
+            val sS10Text = "Svevestøv PM10 nivå: " + String.format("%.2f", dataSet[pos].pm10val) + dataSet[pos].pm10Unit
             val nitText = "Nitrogeninnhold: " + String.format("%.2f", dataSet[pos].nOVal) + dataSet[pos].nOunit
             val ozText = "Ozon nivå: " + String.format("%.2f", dataSet[pos].ozvalue) + dataSet[pos].ozonUnit
             val aqiText = "AQI nivå: " + String.format("%.2f", dataSet[pos].aqiValue) + "\n"
 
             val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + dataSet[pos].nitHeating.toString() + "%\nIndustri: " + dataSet[pos].nitInd +
-                    "%\nTrafikk/Eksos: " + dataSet[pos].nitExc + "%\nShipping: " + dataSet[pos].nitShip + "%"
+                    "%\nEksos: " + dataSet[pos].nitExc + "%\nShipping: " + dataSet[pos].nitShip + "%"
 
             val pm10Lvls = "Svevestøvkilder:\nOppvarming: " + dataSet[pos].pmHeat.toString() + "%\nIndustri: " + dataSet[pos].pmInd +
                     "%\nEksos: " + dataSet[pos].pmExc + "%\nTrafikk: " + dataSet[pos].pmNonEx + "%\nShipping: " + dataSet[pos].pmShip + "%"
 
 
-            holder.svevestov.text = sSText
+            holder.svevestovpm10.text = sS10Text
+            holder.svevestovpm25.text = sS25Text
             holder.nitrogen.text = nitText
             holder.ozone.text = ozText
             holder.aqilvl.text = aqiText
-            holder.nitLvls.text = nitrogenLvls
-            holder.pm10Lvls.text = pm10Lvls
+            //holder.nitLvls.text = nitrogenLvls
+            //holder.pm10Lvls.text = pm10Lvls
+            //holder.linechartButton.text = Html.fromHtml("PM<sub>10</sub>")
+
+            holder.linechartButton.setOnClickListener{
+                val i = Intent(this.context, GraphActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                startActivity(this.context, i, null)
+            }
+            holder.pm10Button.setOnClickListener{
+                val i = Intent(this.context, PieChartActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                i.putExtra("chartNr", 0)
+                i.putExtra("timeIndex", dataSet[pos].timeindex)
+                startActivity(this.context, i, null)
+            }
+            holder.pm25Button.setOnClickListener{
+                val i = Intent(this.context, PieChartActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                i.putExtra("chartNr", 1)
+                i.putExtra("timeIndex", dataSet[pos].timeindex)
+                startActivity(this.context, i, null)
+            }
+            holder.no2Button.setOnClickListener{
+                val i = Intent(this.context, PieChartActivity::class.java)
+                i.putExtra("index",dataSet[pos].index)
+                i.putExtra("chartNr", 2)
+                i.putExtra("timeIndex", dataSet[pos].timeindex)
+                startActivity(this.context, i, null)
+            }
 
 
-            if (holder.svevestov.visibility == View.GONE) {
-                holder.svevestov.visibility = View.VISIBLE
+            if (holder.svevestovpm25.visibility == View.GONE) {
+                holder.svevestovpm25.visibility = View.VISIBLE
+                holder.svevestovpm10.visibility = View.VISIBLE
                 holder.nitrogen.visibility = View.VISIBLE
                 holder.ozone.visibility = View.VISIBLE
-                holder.nitLvls.visibility = View.VISIBLE
-                holder.pm10Lvls.visibility = View.VISIBLE
                 holder.aqilvl.visibility = View.VISIBLE
+                holder.linechartButton.visibility = View.VISIBLE
+                holder.pm10Button.visibility = View.VISIBLE
+                holder.pm25Button.visibility = View.VISIBLE
+                holder.no2Button.visibility = View.VISIBLE
+
             }
             else  {
-                holder.svevestov.visibility = View.GONE
+                holder.svevestovpm25.visibility = View.GONE
+                holder.svevestovpm10.visibility = View.GONE
                 holder.nitrogen.visibility = View.GONE
                 holder.ozone.visibility = View.GONE
-                holder.nitLvls.visibility = View.GONE
-                holder.pm10Lvls.visibility = View.GONE
                 holder.aqilvl.visibility = View.GONE
+                holder.linechartButton.visibility = View.GONE
+                holder.pm10Button.visibility = View.GONE
+                holder.pm25Button.visibility = View.GONE
+                holder.no2Button.visibility = View.GONE
             }
-
         }
 
         holder.ib.setOnClickListener {
@@ -158,7 +194,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 if (prefs.getBoolean(PreferenceFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaM)
                 if (prefs.getBoolean(PreferenceFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteM)
                 if (prefs.getBoolean(PreferenceFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreM)
-                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true || prefs.getBoolean(PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
+                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true || prefs.getBoolean(
+                        PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
                 healthInfo.text = infotext
             }
             if (getInfo(lvl).equals("bad")) {
@@ -192,37 +229,37 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         notifyDataSetChanged()
     }
 
-    // Method to validate and change the riskdisplay image by description text.
-    fun validateRiskType(text: String, holder: ViewHolder) {
-        // Change risk displayimage color.
-        when {
-            text.contains("hoy", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_sad_svgrepo_com
-                    )
-                )
-
-            text.contains("moderat", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_straight_svgrepo_com
-                    )
-                )
-
-            text.contains("lav", ignoreCase = true) ->
-                holder.riskDisplay.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_smile_svgrepo_com
-                    )
-                )
-
-            else -> Log.e("log: ", "FEIL RISK INPUT!!")
-        }
-    }
+//    // Method to validate and change the riskdisplay image by description text.
+//    fun validateRiskType(text: String, holder: ViewHolder) {
+//        // Change risk displayimage color.
+//        when {
+//            text.contains("hoy", ignoreCase = true) ->
+//                holder.riskDisplay.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        context,
+//                        R.drawable.ic_sad_svgrepo_com
+//                    )
+//                )
+//
+//            text.contains("moderat", ignoreCase = true) ->
+//                holder.riskDisplay.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        context,
+//                        R.drawable.ic_straight_svgrepo_com
+//                    )
+//                )
+//
+//            text.contains("lav", ignoreCase = true) ->
+//                holder.riskDisplay.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        context,
+//                        R.drawable.ic_smile_svgrepo_com
+//                    )
+//                )
+//
+//            else -> Log.e("log: ", "FEIL RISK INPUT!!")
+//        }
+//    }
 
     class ViewHolder(textView: View) : RecyclerView.ViewHolder(textView) {
         val title = textView.findViewById<TextView>(R.id.title_text)
@@ -233,24 +270,25 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         val ib = textView.findViewById<ImageButton>(R.id.infoButton)
 
 
-        val svevestov = textView.findViewById<TextView>(R.id.pollution)
+        val svevestovpm25 = textView.findViewById<TextView>(R.id.pollution)
+        val svevestovpm10 = textView.findViewById<TextView>(R.id.pollution1)
         val nitrogen = textView.findViewById<TextView>(R.id.pollution2)
         val ozone = textView.findViewById<TextView>(R.id.pollution3)
-        val nitLvls = textView.findViewById<TextView>(R.id.pollution4)
-        val pm10Lvls = textView.findViewById<TextView>(R.id.pollution5)
-        val aqilvl = textView.findViewById<TextView>(R.id.pollution6)
-
-
+        val aqilvl = textView.findViewById<TextView>(R.id.pollution4)
+        val linechartButton = textView.findViewById<Button>(R.id.linechart)
+        val pm10Button = textView.findViewById<Button>(R.id.piechart_pm10)
+        val pm25Button = textView.findViewById<Button>(R.id.piechart_pm25)
+        val no2Button = textView.findViewById<Button>(R.id.piechart_no2)
     }
 
     fun getInfo(text: String) : String {
 
         when {
-            text.contains("hoy", ignoreCase = true) ->
+            text.contains("dårlig", ignoreCase = true) ->
                 return "bad"
             text.contains("moderat", ignoreCase = true) ->
                 return "moderat"
-            text.contains("lav", ignoreCase = true) ->
+            text.contains("god", ignoreCase = true) ->
                 return "good"
 
             else -> Log.e("log: ", "FEIL INPUT!!")

@@ -10,9 +10,9 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
-import com.example.gruppe30in2000.AQILevel
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import java.util.*
@@ -31,19 +31,24 @@ class AllStationView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        hideSoftKeyboard()
         setContentView(com.example.gruppe30in2000.R.layout.activity_all_station_view)
 
 
         // RECIEVE DATA FROM ADAPTER with custom message: from-cityadapter
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, IntentFilter("from-cityadapter"))
 
+        val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val date = Calendar.getInstance().get(Calendar.DATE)
+        val timeIndex = getTimeIndex(time, date)
+
         for (data in airquailityStation) {
-                dataset.add(CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY)))
+                dataset.add(CityElement(data, timeIndex))
             }
 
         initRecycleView(dataset)
 
-        // TODO implement add cardview and send back the selected cardview to FavoriteCity and display it in Favorites city View.
+        // TODO implement add cardview and send back the selected cardview to FavoriteCityFragment and display it in Favorites city View.
         val searchInput = findViewById<EditText>(R.id.search_input)
 
         //make a common textWatcher to use for several editText/TextView listener
@@ -70,7 +75,7 @@ class AllStationView : AppCompatActivity() {
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
         viewManager = LinearLayoutManager(this)
 
-        viewAdapter = CityListAdapter(dataset,this)
+        viewAdapter = CityListAdapter(dataset,this, this)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewAllStation).apply {
 
@@ -117,5 +122,23 @@ class AllStationView : AppCompatActivity() {
         finish()
     }
 
+    fun getTimeIndex(time : Int, date : Int) : Int{
+        var c = 0
+        MainActivity.staticAirQualityStationsList[0].data.time.forEach{
+            val datetime = it.from.split("T")
+            var d = datetime[0].takeLast(2).toInt()
+            var t = datetime[1].take(2).toInt()
 
+            if(date == d && time == t){
+                return c;
+            }
+            c++
+        }
+        return 0
+    }
+
+
+    fun hideSoftKeyboard() {
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    }
 }
