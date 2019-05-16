@@ -15,7 +15,7 @@ import android.widget.Toast
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AsyncApiGetter
 import com.example.gruppe30in2000.API.OnTaskCompleted
-import com.example.gruppe30in2000.FavCity.FavoriteCity
+import com.example.gruppe30in2000.FavCity.FavoriteCityFragment
 import com.example.gruppe30in2000.Map.MapFragment
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
@@ -26,11 +26,9 @@ import com.google.gson.GsonBuilder
 import com.fatboyindustrial.gsonjodatime.Converters
 import org.joda.time.Hours
 
-import android.preference.PreferenceManager
-
-import android.support.v4.app.NotificationCompat
-
-import android.util.Log
+import com.example.gruppe30in2000.Settings.LocationPermission
+import com.example.gruppe30in2000.Settings.Notification
+import com.example.gruppe30in2000.Settings.PreferenceFragment
 
 import java.util.*
 
@@ -83,8 +81,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
         // TODO TEMPORARY TEST FAVOURITE CITY LIST
         // Reset favourite city list everytime the app start.
-        FavoriteCity.dataset = ArrayList<CityElement>()
-        replaceFragment(FavoriteCity())
+        FavoriteCityFragment.dataset = ArrayList<CityElement>()
+        replaceFragment(FavoriteCityFragment())
 
         save()
     }
@@ -93,7 +91,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                replaceFragment(FavoriteCity())
+                replaceFragment(FavoriteCityFragment())
                 return@OnNavigationItemSelectedListener true
             }
 
@@ -108,7 +106,10 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
                 val mf = PreferenceFragment()
                 replaceFragment(mf)
                 //message.setText(R.string.title_notifications)
-                notifyer()
+                notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                val n = Notification(this, notificationManager)
+                n.notifyer()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     private fun checkHoursPassed(lastCheck : DateTime, hours : Int): Boolean {
         val currentTime = DateTime()
         val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
-        return hours < difference;
+        return hours < difference
 
 //        return true
     }
@@ -171,11 +172,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     }
 
 
-
-    /**
-     *
-     */
-
     private fun save() {
         // save data in shared prefs
         val sharedPreferences = getSharedPreferences(preference, Context.MODE_PRIVATE)
@@ -191,38 +187,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         editor?.apply()
 
         println(staticAirQualityStationsList)
-    }
-
-
-    //Burde flyttes ut til en annen fil
-
-    fun notifyer() {
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        var id = 1232132
-
-        for (station in FavoriteCity.dataset) {
-
-            if (prefs.getString(PreferenceFragment.alertValue, "10").toInt() <= AQILevel.getAlertLevel(station.aqiValue)){
-
-                Log.e(prefs.getString(PreferenceFragment.alertValue, "10"), AQILevel.getAlertLevel(station.aqiValue).toString())
-
-                val builder = NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_warning_blue_24dp)
-                    .setContentTitle("AQS: " + station.title)
-                    .setContentText("Forurensingsnivå: " + station.description)
-                    .setStyle(
-                        NotificationCompat.BigTextStyle()
-                            .bigText("Forurensingsnivå: " + station.description)
-                    )
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true)
-
-                id++
-                notificationManager.notify(id, builder.build())
-            }
-        }
     }
 
 }

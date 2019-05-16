@@ -3,7 +3,6 @@ package com.example.gruppe30in2000.FavCity
 import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
-import android.app.Activity.*
 import android.content.*
 import android.content.ContentValues.TAG
 import android.content.RestrictionsManager.RESULT_ERROR
@@ -20,16 +19,12 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
-import android.text.TextWatcher
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.*
 import android.widget.*
 import com.example.gruppe30in2000.API.AirQualityStation
-import com.example.gruppe30in2000.API.Data
-import com.example.gruppe30in2000.API.Meta
-import com.example.gruppe30in2000.AQILevel
-import com.example.gruppe30in2000.AQILevel.Companion.getAQILevelString
+import com.example.gruppe30in2000.StationUtil.AQILevel.Companion.getAQILevelString
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import com.github.salomonbrys.kotson.fromJson
@@ -39,7 +34,6 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.RectangularBounds
@@ -48,19 +42,14 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.fragment_favorite_city.*
-import org.joda.time.Hours
 
 import java.io.IOException
-import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
+class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListener {
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -140,15 +129,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
         progresslabel.text = getDateTimeString(timeIndex)
 
-        /*if(currentTime == 0){
-                seekbar.progress = 23
-        } else if(currentTime == 1){
-            seekbar.progress = 24
-        } else if(currentTime == 2){
-            seekbar.progress = 25
-        } else{
-            seekbar.progress = currentTime
-        }*/
+
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 // Display the current progress of SeekBar
@@ -379,92 +360,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
         return null
     }
 
-    private fun geolocate(text : Editable ) : Boolean {
-        val searchString = text.toString()
-        Log.d(TAG, "geolocate: geolocating")
-        val geocoder  = Geocoder(this.context)
-        var list = ArrayList<Address>().toList()
-
-        try {
-            list = geocoder.getFromLocationName(searchString,1)
-        }catch (e : IOException) {
-            Log.e("geolate:", "IOException" + e.message)
-        }
-
-
-        if (list.size > 0) {
-            val address = list.get(0)
-            Log.e("Result address:", address.toString())
-
-//            Toast.makeText(this.context, address.toString(), Toast.LENGTH_LONG).show()
-        }
-
-        return false
-    }
-
-    // Fetch a spesifct place by id
-    fun fetchPlaces() {
-
-        // Define a Place ID.
-        var placeId = "INSERT_PLACE_ID_HERE"
-
-        // Specify the fields to return.
-        val placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
-
-        // Construct a request object, passing the place ID and fields array.
-        val request = FetchPlaceRequest.builder(placeId, placeFields).build()
-
-        // Add a listener to handle the response.
-
-        placesClient.fetchPlace(request).addOnSuccessListener {
-                response ->
-            val place = response.place
-            Log.i(TAG, "Place found: " + place.name)
-        }.addOnFailureListener {
-                exception ->
-            Log.e(TAG, "Place not found: " + exception.message)
-        }
-    }
-
-    fun placeAutocomplete() {
-        val token = AutocompleteSessionToken.newInstance()
-
-        // Create a RectangularBounds object.
-        val bounds = RectangularBounds.newInstance(
-            LatLng(-33.880490, 151.184363),
-            LatLng(-33.858754, 151.229596));
-        // Use the builder to create a FindAutocompletePredictionsRequest.
-        val request = FindAutocompletePredictionsRequest.builder()
-            // Call either setLocationBias() OR setLocationRestriction().
-            .setLocationBias(bounds)
-            //.setLocationRestriction(bounds)
-            .setCountry("au")
-            .setTypeFilter(TypeFilter.ADDRESS)
-            .setSessionToken(token)
-            .setQuery("query")
-            .build()
-
-        placesClient.findAutocompletePredictions(request).addOnSuccessListener {
-                response ->
-            for (prediction in response.autocompletePredictions) {
-                Log.i(TAG, prediction.placeId)
-                Log.i(TAG, prediction.getPrimaryText(null).toString())
-            }
-        }.addOnFailureListener {
-                exception ->
-            val apiException = ApiException(Status(1))
-            Log.e(TAG, "Place not found: " + apiException.statusCode)
-        }
-    }
-
-
-    fun moveItem(oldPos: Int, newPos: Int) {
-        val fooditem = dataset.get(oldPos)
-        dataset.removeAt(oldPos)
-        dataset.add(newPos, fooditem)
-        viewAdapter.notifyItemMoved(oldPos, newPos)
-    }
-
 
     fun deleteItemAt(pos: Int) {
         val item = dataset[pos]
@@ -479,13 +374,6 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
     }
 
-    fun hideSoftKeyboard() {
-        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-//        if (activity?.currentFocus != null) {
-//            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            inputMethodManager.hideSoftInputFromWindow(edit.windowToken, 0)
-//        }
-    }
 
     fun getNearestStation(){
         val fused = LocationServices.getFusedLocationProviderClient(activity!!.applicationContext)
@@ -541,7 +429,7 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
             var t = datetime[1].take(2).toInt()
 
             if(date == d && time == t){
-                return c;
+                return c
             }
             c++
         }

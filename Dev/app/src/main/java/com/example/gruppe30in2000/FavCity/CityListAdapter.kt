@@ -2,7 +2,6 @@ package com.example.gruppe30in2000.FavCity
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -13,10 +12,11 @@ import android.widget.*
 import android.support.v4.content.LocalBroadcastManager
 import android.preference.PreferenceManager;
 import android.widget.Button;
-import android.app.Activity
 import android.support.v4.content.ContextCompat.startActivity
-import android.text.Html
 import com.example.gruppe30in2000.*
+import com.example.gruppe30in2000.Settings.PreferenceFragment
+import com.example.gruppe30in2000.StationUtil.GraphActivity
+import com.example.gruppe30in2000.StationUtil.PieChartActivity
 
 
 class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context, activityContext: Context?) :
@@ -194,7 +194,8 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 if (prefs.getBoolean(PreferenceFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaM)
                 if (prefs.getBoolean(PreferenceFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteM)
                 if (prefs.getBoolean(PreferenceFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreM)
-                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true || prefs.getBoolean(PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
+                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true || prefs.getBoolean(
+                        PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
                 healthInfo.text = infotext
             }
             if (getInfo(lvl).equals("bad")) {

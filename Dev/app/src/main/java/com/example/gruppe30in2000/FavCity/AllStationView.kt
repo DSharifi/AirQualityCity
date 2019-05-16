@@ -10,9 +10,9 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
-import com.example.gruppe30in2000.AQILevel
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import java.util.*
@@ -31,6 +31,7 @@ class AllStationView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        hideSoftKeyboard()
         setContentView(com.example.gruppe30in2000.R.layout.activity_all_station_view)
 
 
@@ -47,7 +48,7 @@ class AllStationView : AppCompatActivity() {
 
         initRecycleView(dataset)
 
-        // TODO implement add cardview and send back the selected cardview to FavoriteCity and display it in Favorites city View.
+        // TODO implement add cardview and send back the selected cardview to FavoriteCityFragment and display it in Favorites city View.
         val searchInput = findViewById<EditText>(R.id.search_input)
 
         //make a common textWatcher to use for several editText/TextView listener
@@ -134,5 +135,10 @@ class AllStationView : AppCompatActivity() {
             c++
         }
         return 0
+    }
+
+
+    fun hideSoftKeyboard() {
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 }

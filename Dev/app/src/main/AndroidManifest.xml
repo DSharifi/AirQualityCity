@@ -19,17 +19,17 @@
         <activity android:name=".FavCity.AllStationView"
         android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".GraphActivity"
+        <activity android:name=".StationUtil.GraphActivity"
                   android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".PieChartActivity"
+        <activity android:name=".StationUtil.PieChartActivity"
                   android:screenOrientation="portrait">
         </activity>
         <!--<activity android:name=".FavCity.CityListAdapter">-->
         <!--</activity>-->
         <!--<activity android:name=".FavCity.CityElement">-->
         <!--</activity>-->
-        <!--<activity android:name=".FavCity.FavoriteCity"-->
+        <!--<activity android:name=".FavCity.FavoriteCityFragment"-->
                   <!--android:screenOrientation="portrait">-->
         <!--</activity>-->
         <!--
