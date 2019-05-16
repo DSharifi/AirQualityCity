@@ -3,6 +3,9 @@ package com.example.gruppe30in2000.API
 import android.util.Log
 import com.google.gson.Gson
 import com.github.salomonbrys.kotson.*
+import java.lang.Exception
+import java.util.concurrent.CyclicBarrier
+import java.util.concurrent.atomic.AtomicInteger
 
 class AirQualityStationCollection{
         var airQualityStationList = ArrayList<AirQualityStation>()
@@ -20,18 +23,52 @@ class AirQualityStationCollection{
         }
 
         private fun getAirStations() : ArrayList<AirQualityStation> {
-                val stationList = ArrayList<AirQualityStation>()
                 val stations = getStations()
-
                 val gson = Gson()
-                var c = 0;
+
+                val stationListArr = Array<AirQualityStation?>(stations.size, {null})
+
+                var i = 0
+
+                Log.e("Lengde", stations.size.toString())
+
+                val a = CyclicBarrier(stations.size + 1)
+
                 for (station in stations) {
-                        val url =  "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}"
-                        val airQualityResponse = khttp.get(url, headers = mapOf("User-Agent" to userAgent))
-                        stationList.add(gson.fromJson(airQualityResponse.text))
-                        stationList.get(c).index = c
-                        c++
+                    val url =  "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}"
+                    val j = i
+
+                    khttp.async.get(url, headers = mapOf("User-Agent" to userAgent), onResponse = {
+                        stationListArr[j] = gson.fromJson(this.text)
+                        Log.e("Index:", j.toString())
+
+                        try {
+                            a.await()
+                        } catch (e: Exception) {}
+
+                    }, onError = {
+                        Log.e("ERROR INDEX", j.toString())
+                    })
+
+                    i++
                 }
+
+                try {
+                    a.await()
+                } catch (e: Exception) {}
+
+                val stationList = ArrayList<AirQualityStation>(stations.size)
+
+                i = 0
+
+                for (station in stationListArr) {
+                        if (station != null) {
+                            stationList.add(station)
+                            station.index = i++
+                        }
+                }
+
+
                 return stationList
         }
 
