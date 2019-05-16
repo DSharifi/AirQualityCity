@@ -6,12 +6,16 @@ import com.github.salomonbrys.kotson.*
 
 class AirQualityStationCollection{
         var airQualityStationList = ArrayList<AirQualityStation>()
+        private val userAgent = "Gruppe30"
+
         init{
                 airQualityStationList = getAirStations()
         }
 
-        private fun getStations() : ArrayList<Station> {
-                val response = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations")
+        fun getStations() : ArrayList<Station> {
+                val url = "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations"
+                val response = khttp.get(url, headers = mapOf("User-Agent" to userAgent))
+
                 return Gson().fromJson(response.text)
         }
 
@@ -22,7 +26,8 @@ class AirQualityStationCollection{
                 val gson = Gson()
                 var c = 0;
                 for (station in stations) {
-                        val airQualityResponse = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}")
+                        val url =  "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}"
+                        val airQualityResponse = khttp.get(url, headers = mapOf("User-Agent" to userAgent))
                         stationList.add(gson.fromJson(airQualityResponse.text))
                         stationList.get(c).index = c
                         c++

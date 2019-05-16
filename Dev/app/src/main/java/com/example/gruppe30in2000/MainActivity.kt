@@ -24,8 +24,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import com.google.gson.GsonBuilder
 import com.fatboyindustrial.gsonjodatime.Converters
-import org.joda.time.Hours
 
+import android.preference.PreferenceManager
+
+import android.support.v4.app.NotificationCompat
+
+import android.util.Log
+import org.joda.time.Seconds
 import com.example.gruppe30in2000.Settings.LocationPermission
 import com.example.gruppe30in2000.Settings.Notification
 import com.example.gruppe30in2000.Settings.PreferenceFragment
@@ -44,8 +49,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     private val lastCheck = "last measurements"
 
 
-    // duration in hours between updates
-    private val updateTime = 2
+    // duration in seconds between updates
+    private val updateTime = 3600
 
     lateinit var notificationManager : NotificationManager
 
@@ -70,7 +75,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     }
 
 
-    override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>){
+    override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>, saveData: Boolean){
         if(list.isEmpty()){
             Toast.makeText(this, "Kunne ikke hente data", Toast.LENGTH_LONG).show()
         }
@@ -84,7 +89,8 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         FavoriteCityFragment.dataset = ArrayList<CityElement>()
         replaceFragment(FavoriteCityFragment())
 
-        save()
+        if (saveData)
+            save()
     }
 
 
@@ -130,10 +136,12 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
      * Checks if time difference (hours) is greater than a specified
      * number, for a given date object.
      */
-    private fun checkHoursPassed(lastCheck : DateTime, hours : Int): Boolean {
+    private fun checkTimePassed(lastCheck : DateTime, seconds : Int): Boolean {
         val currentTime = DateTime()
-        val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
-        return hours < difference
+//        val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
+        val difference : Int = Seconds.secondsBetween(lastCheck, currentTime).seconds
+
+        return seconds < difference;
 
 //        return true
     }
@@ -146,29 +154,38 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
      * Metoden skal kalles naar main vinduet loades.
      */
     fun loadStations() {
+
         val sharedPreferences = getSharedPreferences(preference, Context.MODE_PRIVATE)
-
-
-        var stationsJson : String? = sharedPreferences.getString(stations, null)
         var lastCheckJson : String? = sharedPreferences.getString(lastCheck, null)
 
         val gson = Gson()
         // custom gson parser for joda-time objects
         val dateGson = Converters.registerDateTime(GsonBuilder()).create()
 
+        if (lastCheckJson == null || checkTimePassed(dateGson.fromJson(lastCheckJson, DateTime::class.java), updateTime)) {
+            apiRequest()
+        } else {
 
-        if (stationsJson == null || lastCheckJson == null || checkHoursPassed(dateGson.fromJson(lastCheckJson, DateTime::class.java), updateTime)) {
-            // new get request is neccesary
-            //gets data from api - runs in async thread
-            val asyncApiGetter = AsyncApiGetter(this)
-            asyncApiGetter.execute()
+            var stationsJson : String? = sharedPreferences.getString(stations, null)
+
+            if (stationsJson == null)
+                apiRequest()
+
+            else {
+                // load already saved
+                val stationList = gson.fromJson<ArrayList<AirQualityStation>>(stationsJson)
+                onTaskCompletedApiGetter(stationList, false)
+            }
         }
 
-        else {
-            // load already saved
-            val stationList = gson.fromJson<ArrayList<AirQualityStation>>(stationsJson)
-            onTaskCompletedApiGetter(stationList)
-        }
+    }
+
+    fun apiRequest() {
+        // new get request is neccesary
+        //gets data from api - runs in async thread
+
+        val asyncApiGetter = AsyncApiGetter(this)
+        asyncApiGetter.execute()
     }
 
 
