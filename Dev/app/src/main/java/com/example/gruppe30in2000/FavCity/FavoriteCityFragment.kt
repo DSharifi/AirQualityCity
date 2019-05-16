@@ -448,7 +448,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             val locationName = data.meta.location.name
             if (locationName.equals(formatedLoc)) {
                 val element = CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
-                element.title = "Din lokasjon"
                 dataset.add(0, element)
             }
         }
