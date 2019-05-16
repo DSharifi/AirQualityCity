@@ -12,15 +12,10 @@ class AirQualityStationCollection{
                 airQualityStationList = getAirStations()
         }
 
-<<<<<<< HEAD
         fun getStations() : ArrayList<Station> {
                 val url = "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations"
                 val response = khttp.get(url, headers = mapOf("User-Agent" to userAgent))
 
-=======
-        private fun getStations() : ArrayList<Station> {
-                val response = khttp.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/stations")
->>>>>>> Testing
                 return Gson().fromJson(response.text)
         }
 
@@ -34,16 +29,9 @@ class AirQualityStationCollection{
                         val url =  "https://in2000-apiproxy.ifi.uio.no/weatherapi/airqualityforecast/0.1/?station=${station.eoi}"
                         val airQualityResponse = khttp.get(url, headers = mapOf("User-Agent" to userAgent))
                         stationList.add(gson.fromJson(airQualityResponse.text))
-<<<<<<< HEAD
-
-                }
-
-                Log.e("test", "test")
-=======
                         stationList.get(c).index = c
                         c++
                 }
->>>>>>> Testing
                 return stationList
         }
 

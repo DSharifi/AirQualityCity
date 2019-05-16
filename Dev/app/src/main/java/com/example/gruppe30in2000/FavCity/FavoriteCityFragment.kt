@@ -58,8 +58,8 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var fView: View
-    private lateinit var placesClient : PlacesClient
-    private lateinit var mContext : Context
+    private lateinit var placesClient: PlacesClient
+    private lateinit var mContext: Context
 
     private val SecondActivityCode = 101
     // navn paa shared preferences
@@ -99,7 +99,8 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, IntentFilter("from-mapstationhandler"))
+        LocalBroadcastManager.getInstance(mContext)
+            .registerReceiver(mMessageReceiver, IntentFilter("from-mapstationhandler"))
         val seekbar = view.findViewById<SeekBar>(R.id.seekbar)
         val progresslabel = view.findViewById<TextView>(R.id.progress_text)
         val restore_button = view.findViewById<ImageButton>(R.id.restore_button)
@@ -135,8 +136,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                 // Display the current progress of SeekBar
                 if (i != 0) {
                     progresslabel.text = getDateTimeString(i)
-                }
-                else {
+                } else {
                     progresslabel.text = getDateTimeString(0)
                 }
 
@@ -149,11 +149,14 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                 // TODO: Open a dialog that ask the user to confirm change?
                 if (seekBar.progress == 0) {
                     forecasting(1)
-                }
-                else {
+                } else {
                     forecasting(seekBar.progress)
                 }
-                Toast.makeText(mContext, "Endret informasjon til stasjonene til tidspunktet: ${progresslabel.text}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    mContext,
+                    "Endret informasjon til stasjonene til tidspunktet: ${progresslabel.text}",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
         })
@@ -169,9 +172,9 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         seekbar.progress = timeIndex
     }
 
-    private fun getDateTimeString(currentTime : Int) : String{
+    private fun getDateTimeString(currentTime: Int): String {
         Log.e("prog", currentTime.toString())
-        if (MainActivity.staticAirQualityStationsList.isNotEmpty()){
+        if (MainActivity.staticAirQualityStationsList.isNotEmpty()) {
             val datetime = MainActivity.staticAirQualityStationsList[0].data.time[currentTime].from.split("T")
             val date = datetime[0]
             val hour = datetime[1].take(5)
@@ -181,8 +184,10 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         }
         return "No data"
 
+    }
+
     // TODO: Denne metoden endrer alle nødvendig informasjon om en stasjon på den valgte tiden
-    private fun forecasting(time : Int) {
+    private fun forecasting(time: Int) {
         // TODO: Loop through dataset and change info for each station to the specified time?
         val newDateset = ArrayList<CityElement>()
         for (station in dataset) {
@@ -241,7 +246,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         // make a swipe controller object to enable swipe card.
         var swipeController = object : SwipeController() {
-            override fun deleteItem(pos : Int) {
+            override fun deleteItem(pos: Int) {
                 deleteItemAt(pos)
             }
 
@@ -255,31 +260,33 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
     }
 
-     /* Override the activity's onActivityResult(), check the request code, and
+    /* Override the activity's onActivityResult(), check the request code, and
      * do something with the returned place data (in this example it's place name, ID and Address).
      */
     // Metode som henter result message from AllstationView
-    override fun onActivityResult(requestCode : Int , resultCode: Int, data : Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == SecondActivityCode) {
             when (resultCode) {
-            RESULT_OK -> {
-                val returnedLocation = data.getStringExtra("Stationlocation")
-                val returnedDescription= data.getStringExtra("DescriptionStation")
-                if (checkFavouriteCity(returnedLocation)) {
-                    Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
-                    return
+                RESULT_OK -> {
+                    val returnedLocation = data.getStringExtra("Stationlocation")
+                    val returnedDescription = data.getStringExtra("DescriptionStation")
+                    if (checkFavouriteCity(returnedLocation)) {
+                        Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+
+
+                    addFavoriteElement(returnedLocation)
                 }
-
-
-                addFavoriteElement(returnedLocation)
-            } RESULT_ERROR -> {
+                RESULT_ERROR -> {
                     // TODO: Handle the error.
                     val status = Autocomplete.getStatusFromIntent(data)
                     Log.e(TAG, status.statusMessage)
-            } RESULT_CANCELED -> {
-                Log.e("CANCELED","CANCELED")
-                // The user canceled the operation.
-            }
+                }
+                RESULT_CANCELED -> {
+                    Log.e("CANCELED", "CANCELED")
+                    // The user canceled the operation.
+                }
             }
         }
     }
@@ -323,7 +330,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         val editor = sharedPreferences?.edit()
 
         val gson = Gson()
-        val json : String = gson.toJson(dataset)
+        val json: String = gson.toJson(dataset)
         editor?.putString(key, json)
         editor?.apply()
     }
@@ -335,7 +342,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         val sharedPreferences = mContext.getSharedPreferences(name, Context.MODE_PRIVATE)
         val gson = Gson()
 
-        val json : String? = sharedPreferences?.getString(key, null)
+        val json: String? = sharedPreferences?.getString(key, null)
 
         if (json == null) {
             return
@@ -343,10 +350,11 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             // Get the current time in the 24 hours format (ranging from 0 - 23)
             val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             dataset = gson.fromJson(json)
-            forecasting(currentTime-1)
+            forecasting(currentTime - 1)
         }
     }
-    private fun checkFavouriteCity(location: String) : Boolean {
+
+    private fun checkFavouriteCity(location: String): Boolean {
         for (data in dataset) {
             if (location.contains(data.location.name)) {
                 return true
@@ -355,7 +363,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         return false
     }
 
-    private fun getStation(location : String) : AirQualityStation?{
+    private fun getStation(location: String): AirQualityStation? {
         for (station in MainActivity.staticAirQualityStationsList) {
             if (station.meta.location.name.equals(location)) {
                 return station
@@ -369,50 +377,53 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         val item = dataset[pos]
         dataset.removeAt(pos)
         viewAdapter.notifyItemRemoved(pos)
-        viewAdapter.notifyItemRangeChanged(pos,dataset.size)
+        viewAdapter.notifyItemRangeChanged(pos, dataset.size)
 
         // oppdatere
         saveFavoriteElement()
 
-        Toast.makeText(this.context,"Removed ${item.title}",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this.context, "Removed ${item.title}", Toast.LENGTH_SHORT).show()
 
     }
 
 
-    fun getNearestStation(){
+    fun getNearestStation() {
         val fused = LocationServices.getFusedLocationProviderClient(activity!!.applicationContext)
 
         val tmpPos = Location(LocationManager.GPS_PROVIDER)
         val myPos = Location(LocationManager.GPS_PROVIDER)
 
-        var tmpStation : AirQualityStation = MainActivity.staticAirQualityStationsList[0]
-        var dist : Float = 1000000.00f
-        var tmpDist : Float
+        var tmpStation: AirQualityStation = MainActivity.staticAirQualityStationsList[0]
+        var dist: Float = 1000000.00f
+        var tmpDist: Float
 
 
-        if (ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(
+                activity!!.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             fused.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null){
+                if (location != null) {
                     myPos.latitude = location.latitude
                     myPos.longitude = location.longitude
 //                    Log.e("not null ---- " , location.longitude.toString())
 //                    Log.e("not null ---- " , location.latitude.toString())
 
-                }
-                else{
+                } else {
                     //TODO: Hva skal skje her?
 //                    Log.e("Location = " , " Null---")
                 }
 
 
 
-                for (station in MainActivity.staticAirQualityStationsList){
+                for (station in MainActivity.staticAirQualityStationsList) {
                     //Det er feil i api'et, så må bytte på lat og long
                     tmpPos.latitude = station.meta.location.longitude.toDouble()
                     tmpPos.longitude = station.meta.location.latitude.toDouble()
 
                     tmpDist = tmpPos.distanceTo(myPos)
-                    if (dist > tmpDist){
+                    if (dist > tmpDist) {
                         tmpStation = station
                         dist = tmpDist
 //                        Log.e("Distance in float:" , dist.toString())
@@ -453,14 +464,14 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
     }
 
-    fun getTimeIndex(time : Int, date : Int) : Int{
+    fun getTimeIndex(time: Int, date: Int): Int {
         var c = 0
-        MainActivity.staticAirQualityStationsList[0].data.time.forEach{
+        MainActivity.staticAirQualityStationsList[0].data.time.forEach {
             val datetime = it.from.split("T")
             var d = datetime[0].takeLast(2).toInt()
             var t = datetime[1].take(2).toInt()
 
-            if(date == d && time == t){
+            if (date == d && time == t) {
                 return c
             }
             c++
