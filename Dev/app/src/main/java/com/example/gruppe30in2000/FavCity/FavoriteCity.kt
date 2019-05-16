@@ -486,8 +486,8 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
 
                 }
                 else{
+                    //TODO: Hva skal skje her?
 //                    Log.e("Location = " , " Null---")
-
                 }
 
 
@@ -505,9 +505,37 @@ class FavoriteCity : Fragment(), GoogleApiClient.OnConnectionFailedListener {
                     }
                 }
                 val value = tmpStation.data.time[0].variables.AQI.value
-                addFavoriteElement(tmpStation.meta.location.name)
+                addNearestStation(tmpStation.meta.location.name)
             }
 
         }
+    }
+
+    // Method to add new favourite location to view.
+    private fun addNearestStation(location: String) {
+        if (checkFavouriteCity(location)) { // TODO: Change content to work for the newer cityElement location. DONE?
+            return
+        }
+        val bits = location.split(",").toTypedArray()
+        val formatedLoc = bits[0]
+
+        for (data in MainActivity.staticAirQualityStationsList) {
+            val locationName = data.meta.location.name
+            if (locationName.equals(formatedLoc)) {
+                val element = CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
+                element.title = "Din lokasjon"
+                dataset.add(0, element)
+            }
+        }
+
+        initRecycleView(dataset)
+
+        viewAdapter.notifyDataSetChanged()
+
+        // lagrer det nye arrayet!
+        saveFavoriteElement()
+
+        Toast.makeText(mContext, "Lagt til ${location} i favoritter!", Toast.LENGTH_LONG).show()
+
     }
 }

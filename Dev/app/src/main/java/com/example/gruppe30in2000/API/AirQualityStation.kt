@@ -3,7 +3,6 @@ package com.example.gruppe30in2000.API
 import android.util.Log
 import com.google.gson.Gson
 import com.github.salomonbrys.kotson.*
-import okhttp3.OkHttpClient
 
 class AirQualityStationCollection{
         var airQualityStationList = ArrayList<AirQualityStation>()
