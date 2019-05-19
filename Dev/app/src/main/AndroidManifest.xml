@@ -25,6 +25,9 @@
         <activity android:name=".StationUtil.PieChartActivity"
                   android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".Settings.HelpActivity"
+                  android:screenOrientation="portrait">
+        </activity>
         <!--<activity android:name=".FavCity.CityListAdapter">-->
         <!--</activity>-->
         <!--<activity android:name=".FavCity.CityElement">-->

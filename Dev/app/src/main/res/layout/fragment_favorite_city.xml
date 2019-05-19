@@ -24,11 +24,7 @@
             android:layout_margin="20dp"
             android:orientation="vertical"
     >
-        <Button android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="last update: "
-                android:id="@+id/refresh_button"
-        />
+
         <TextView
                 android:id="@+id/progress_text"
                 android:text="Tid : 24"
@@ -55,6 +51,15 @@
                  android:id="@+id/restore_button"
                  android:layout_gravity="top|end"
                  android:src="@drawable/ic_restore_black_24dp"
+                 android:backgroundTint="#fafafa"
+
+    />
+    <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                 android:layout_alignLeft="@id/seekbar"
+                 android:id="@+id/refresh_button"
+                 android:maxHeight="24dp"
+                 android:maxWidth="24dp"
+                 android:src="@drawable/ic_cloud_download_black_24dp"
                  android:backgroundTint="#fafafa"
 
     />

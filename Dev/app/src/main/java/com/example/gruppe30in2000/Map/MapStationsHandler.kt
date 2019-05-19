@@ -141,7 +141,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                 val pm25Unit  = station.data.time[currentHour].variables.pm25_concentration.units
 
                 val sS10Text = "Svevestøv PM10 nivå: " + String.format("%.2f", pm10val) + pm10Unit
-                val sS25Text = "Svevestøv PM25 nivå: " + String.format("%.2f", pm25val) + pm25Unit
+                val sS25Text = "Svevestøv PM2.5 nivå: " + String.format("%.2f", pm25val) + pm25Unit
                 val nitText = "Nitrogeninnhold: " + String.format("%.2f", nOVal) + nOunit
                 val ozText = "Ozon nivå: " + String.format("%.2f", ozvalue) + ozonUnit
                 val aqiText = "AQI nivå: " + String.format("%.2f", aqiValue) + "\n"

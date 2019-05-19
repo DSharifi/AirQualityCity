@@ -26,7 +26,7 @@ class GraphActivity : AppCompatActivity(){
 
         val intent = intent
 
-        val chart = findViewById<LineChart>(R.id.line_chart)
+        val chart = findViewById<LineChart>(R.id.line_chart) as LineChart
 
         val xAxis = chart.xAxis
 

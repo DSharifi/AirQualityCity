@@ -12,7 +12,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -25,11 +24,9 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import com.example.gruppe30in2000.API.AirQualityStation
-import com.example.gruppe30in2000.API.AirQualityStationCollection
 import com.example.gruppe30in2000.StationUtil.AQILevel.Companion.getAQILevelString
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
-import com.fatboyindustrial.gsonjodatime.Converters
 import com.github.salomonbrys.kotson.fromJson
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
@@ -46,17 +43,10 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.joda.time.DateTime
 
 import java.io.IOException
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 
 class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListener {
@@ -93,6 +83,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
 
+        // TODO: Finne en maate aa kun legge til naermeste stasjon engang naar appen kjorer?
         // Add the nearest station to favourite
         if (!addNearestStation) {
             addNearestStation = true
@@ -104,24 +95,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         return fView
     }
-
-
-    private fun save() {
-        // save data in shared prefs
-        val sharedPreferences = mContext.getSharedPreferences(MainActivity.preference, Context.MODE_PRIVATE)
-        val gson = Gson()
-        val dateGson = Converters.registerDateTime(GsonBuilder()).create()
-        val editor = sharedPreferences?.edit()
-
-        val stationsJson = gson.toJson(MainActivity.staticAirQualityStationsList)
-        val lastCheckJson = dateGson.toJson(DateTime())
-
-        editor?.putString(MainActivity.stations, stationsJson)
-        editor?.putString(MainActivity.lastCheck, lastCheckJson)
-        editor?.apply()
-
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -144,21 +117,14 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             startActivityForResult(intent, SecondActivityCode)
         }
 
-
-
-        val refreshButton = fView.findViewById<Button>(R.id.refresh_button)
-        refreshButton.setOnClickListener {
-            GlobalScope.launch {
-                this@FavoriteCityFragment.update()
-            }
-        }
-
-
         // Get the current time in the 24 hours format (ranging from 0 - 23)
         val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val date = Calendar.getInstance().get(Calendar.DATE)
 
         val timeIndex = getTimeIndex(time, date)
+
+        Log.e("hourrrrrrr", time.toString())
+        Log.e("dateeeeeee", date.toString())
 
 
 
@@ -204,50 +170,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         forecasting(timeIndex)
         seekbar.progress = timeIndex
-    }
-
-
-    private fun update() {
-        var stationsGetter = AirQualityStationCollection()
-        var stations = stationsGetter.airQualityStationList
-
-        if(stations.isEmpty()){
-            Toast.makeText(mContext, "Kunne ikke oppdatere data", Toast.LENGTH_LONG).show()
-            return
-
-        } else {
-
-            MainActivity.staticAirQualityStationsList = stations
-
-            // don't use hashSet, use a list. We need the ordering of the favourites!
-            val eoiOfFavStations = ArrayList<String>()
-
-            for (station in dataset) {
-                eoiOfFavStations.add(station.eoi)
-            }
-
-            val newDataSet = ArrayList<CityElement>()
-
-            for (station in stations) {
-                val eoi = station.meta.location
-
-                if (eoiOfFavStations.contains(eoi)) {
-                    newDataSet.add(CityElement(station, ))
-                }
-            }
-
-            try{
-                viewAdapter.notifyDataSetChanged()
-            } catch (e:Exception){
-                Log.e("updateError", e.toString())
-            }
-
-            GlobalScope.launch {
-                save()
-            }
-
-        }
-
     }
 
     private fun getDateTimeString(currentTime: Int): String {
@@ -542,6 +464,9 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     }
 
     fun getTimeIndex(time: Int, date: Int): Int {
+        if(MainActivity.staticAirQualityStationsList.isEmpty()){
+            return 0;
+        }
         var c = 0
         MainActivity.staticAirQualityStationsList[0].data.time.forEach {
             val datetime = it.from.split("T")
