@@ -6,6 +6,7 @@ import java.util.*
 
 
 class CityElement(station: AirQualityStation, currentHour: Int) {
+    val eoi = station.meta.location.areacode
 
     val index = station.index
     val location= station.meta.location

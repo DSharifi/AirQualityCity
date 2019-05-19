@@ -34,6 +34,8 @@ import org.joda.time.Seconds
 import com.example.gruppe30in2000.Settings.LocationPermission
 import com.example.gruppe30in2000.Settings.Notification
 import com.example.gruppe30in2000.Settings.PreferenceFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 import java.util.*
 
@@ -41,16 +43,10 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
-    // name of shared preferences
-    private val preference = "station preferences"
-    // key for arrayList of measurements
-    private val stations = "station measurements"
-    // key for datetime of last measurement
-    private val lastCheck = "last measurements"
+
 
 
     // duration in seconds between updates
-    private val updateTime = 3600
 
     lateinit var notificationManager : NotificationManager
 
@@ -59,6 +55,14 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     companion object {
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
+        val updateTime = 1
+        // name of shared preferences
+        val preference = "station preferences"
+        // key for arrayList of measurements
+        val stations = "station measurements"
+        // key for datetime of last measurement
+        val lastCheck = "last measurements"
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,21 +82,22 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
     override fun onTaskCompletedApiGetter(list: ArrayList<AirQualityStation>, saveData: Boolean){
         if(list.isEmpty()){
             Toast.makeText(this, "Kunne ikke hente data", Toast.LENGTH_LONG).show()
+        } else {
+            staticAirQualityStationsList = list
         }
-        staticAirQualityStationsList = list
+
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
 
-        // TODO TEMPORARY TEST FAVOURITE CITY LIST
-        // Reset favourite city list everytime the app start.
-        FavoriteCityFragment.dataset = ArrayList<CityElement>()
         replaceFragment(FavoriteCityFragment())
 
-        if (saveData)
-            save()
-
+        GlobalScope.launch {
+            if (saveData)
+                save()
+        }
     }
+
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -128,7 +133,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentContainer, fragment)
         fragmentTransaction.commit()
-
     }
 
 

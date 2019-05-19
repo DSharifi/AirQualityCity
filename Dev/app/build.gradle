@@ -31,6 +31,8 @@ android {
 }
 repositories {
     maven { url 'https://jitpack.io' }
+    jcenter()
+
 }
 
 dependencies {
@@ -47,13 +49,16 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation 'khttp:khttp:+'
 
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
     implementation 'com.google.android.libraries.places:places:1.0.0' // Google places
+
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1"
 
 
     implementation 'com.google.code.findbugs:jsr305:3.0.1'
