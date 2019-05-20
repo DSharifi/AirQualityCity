@@ -37,11 +37,8 @@ import com.google.gson.GsonBuilder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
-
 import java.util.*
 import kotlin.collections.ArrayList
-
-
 
 
 class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListener {
@@ -132,7 +129,8 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
 
 
-        val refreshButton = fView.findViewById<Button>(R.id.refresh_button)
+        val refreshButton = fView.findViewById<ImageButton>(R.id.refresh_button)
+
         refreshButton.setOnClickListener {
             GlobalScope.launch{
                 if (this@FavoriteCityFragment.update()) {
@@ -560,11 +558,9 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     fun getTimeIndex(time: Int, date: Int): Int {
         if (MainActivity.staticAirQualityStationsList.isEmpty()) {
             return 0
-            Log.e("list", "isEmpty")
         }
 
         var c = 0
-        Log.e("list", "isNotEmpty but crash?")
         MainActivity.staticAirQualityStationsList[0].data.time.forEach {
             val datetime = it.from.split("T")
             var d = datetime[0].takeLast(2).toInt()
@@ -575,7 +571,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             }
             c++
         }
-        Log.e("list", "isNotEmpty but 0")
         return 0
     }
 }

@@ -55,6 +55,16 @@
                 android:entryValues="@array/modusvalue"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+            android:title="Hjelp">
+        <Preference
+                android:title="Hvordan bruke appen"
+                android:summary="Hvordan bruke appen."
+                android:key="Help">
+        </Preference>
+
+    </PreferenceCategory>
+
 
     <PreferenceCategory
         android:title="Kontakt oss">

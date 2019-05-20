@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent" android:layout_height="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:layout_height="match_parent"
+                  android:layout_width="match_parent"
+                  xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical">
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:id="@+id/title" android:layout_gravity="center_horizontal" android:textSize="36sp"
+                  android:textAlignment="center" android:textColor="#000000" android:text="Hjelp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Funksjonaliteter" android:textColor="#000000"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Trykk på stasjonen for å få detaljert informasjon om stasjonen." android:textAlignment="center"/>
+
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:src="@drawable/openingstation"
+                   android:adjustViewBounds="true"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Sveip til venstre på stasjonen for å fjerne den." android:textAlignment="center"/>
+
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:src="@drawable/deletestation"
+                   android:adjustViewBounds="true"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Klikk på utropstegnet for å få informasjon og helseråd om målingen basert på valget du velger i innstillinger." android:textAlignment="center"/>
+
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:src="@drawable/showinfo"
+                   android:adjustViewBounds="true"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Verdier" android:textColor="#000000"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Svevestøv" android:textAlignment="center"/>
+
+        <TextView android:textSize="18sp"
+                  android:autoLink="web"
+                  android:clickable="true"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="16dp"
+                  android:text="https://www.fhi.no/nettpub/luftkvalitet/svevestov/svevestov/"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Nitrogen" android:textAlignment="center"/>
+
+        <TextView android:textSize="18sp"
+                  android:autoLink="web"
+                  android:clickable="true"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="16dp"
+                  android:text="https://www.fhi.no/nettpub/luftkvalitet/nitrogendioksid/nitrogendioksid"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp"
+                  android:text="Ozon" android:textAlignment="center"/>
+
+        <TextView android:textSize="18sp"
+                  android:autoLink="web"
+                  android:clickable="true"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="16dp"
+                  android:text="https://www.fhi.no/nettpub/luftkvalitet/ozon/ozon/"/>
+
+    </LinearLayout>
+</ScrollView>
