@@ -7,19 +7,15 @@ import android.content.*
 import android.content.ContentValues.TAG
 import android.content.RestrictionsManager.RESULT_ERROR
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.Editable
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.*
@@ -32,31 +28,20 @@ import com.example.gruppe30in2000.R
 import com.fatboyindustrial.gsonjodatime.Converters
 import com.github.salomonbrys.kotson.fromJson
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.RectangularBounds
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 
-import java.io.IOException
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
+
+
 
 
 class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListener {
@@ -123,6 +108,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     }
 
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val floatingButton = fView.findViewById<FloatingActionButton>(R.id.floating_button)
@@ -148,10 +134,17 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         val refreshButton = fView.findViewById<Button>(R.id.refresh_button)
         refreshButton.setOnClickListener {
-            GlobalScope.launch {
-                this@FavoriteCityFragment.update()
+            GlobalScope.launch{
+                if (this@FavoriteCityFragment.update()) {
+                    activity?.runOnUiThread {
+                        run {
+                            initRecycleView(dataset)
+                        }
+                    }
+                }
             }
         }
+
 
 
         // Get the current time in the 24 hours format (ranging from 0 - 23)
@@ -207,15 +200,33 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     }
 
 
-    private fun update() {
-        var stationsGetter = AirQualityStationCollection()
-        var stations = stationsGetter.airQualityStationList
+    private fun update() : Boolean {
+        val stations : ArrayList<AirQualityStation>
+
+        try {
+            val stationsGetter = AirQualityStationCollection()
+            stations = stationsGetter.airQualityStationList
+        } catch (e : Exception) {
+            activity?.runOnUiThread {
+                run {
+                    Toast.makeText(mContext, "Kunne ikke oppdatere data, sjekk netverkstilkoblingen din.", Toast.LENGTH_LONG).show()
+                    this@FavoriteCityFragment.viewAdapter.notifyDataSetChanged()
+                }
+            }
+            return false
+        }
 
         if(stations.isEmpty()){
-            Toast.makeText(mContext, "Kunne ikke oppdatere data", Toast.LENGTH_LONG).show()
-            return
+            activity?.runOnUiThread {
+                run {
+                    Toast.makeText(mContext, "Kunne ikke oppdatere data. APIet er nede", Toast.LENGTH_LONG).show()
+                    this@FavoriteCityFragment.viewAdapter.notifyDataSetChanged()
+                }
+            }
+            return false
 
         } else {
+            // successful get request
 
             MainActivity.staticAirQualityStationsList = stations
 
@@ -229,22 +240,27 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             val newDataSet = ArrayList<CityElement>()
 
             for (station in stations) {
-                val eoi = station.meta.location
+                val eoi = station.meta.location.areacode
 
                 if (eoiOfFavStations.contains(eoi)) {
-                    newDataSet.add(CityElement(station, ))
+                    newDataSet.add(CityElement(station, Calendar.getInstance().get(Calendar.HOUR_OF_DAY)))
                 }
             }
 
-            try{
-                viewAdapter.notifyDataSetChanged()
-            } catch (e:Exception){
-                Log.e("updateError", e.toString())
+
+            // clear dataset, and add again
+            dataset.clear()
+
+            for (cityElement in newDataSet) {
+                dataset.add(cityElement)
             }
+
 
             GlobalScope.launch {
                 save()
             }
+
+            return true
 
         }
 
@@ -295,7 +311,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                     val description = getAQILevelString(aqi) // get the aqi level in string
                     Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
                     addFavoriteElement(location)
-
                 }
             }
 
@@ -384,6 +399,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             val locationName = data.meta.location.name
             if (locationName.equals(formatedLoc)) {
                 dataset.add(CityElement(data, timeIndex))
+                break
             }
         }
 
@@ -542,7 +558,13 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     }
 
     fun getTimeIndex(time: Int, date: Int): Int {
+        if (MainActivity.staticAirQualityStationsList.isEmpty()) {
+            return 0
+            Log.e("list", "isEmpty")
+        }
+
         var c = 0
+        Log.e("list", "isNotEmpty but crash?")
         MainActivity.staticAirQualityStationsList[0].data.time.forEach {
             val datetime = it.from.split("T")
             var d = datetime[0].takeLast(2).toInt()
@@ -553,6 +575,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             }
             c++
         }
+        Log.e("list", "isNotEmpty but 0")
         return 0
     }
 }

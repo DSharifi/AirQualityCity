@@ -38,6 +38,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 import java.util.*
+import android.net.ConnectivityManager
+
+
 
 
 
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     companion object {
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
-        val updateTime = 1
+        val updateTime = 3
         // name of shared preferences
         val preference = "station preferences"
         // key for arrayList of measurements
@@ -89,13 +92,14 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-
-        replaceFragment(FavoriteCityFragment())
-
         GlobalScope.launch {
             if (saveData)
                 save()
         }
+
+        replaceFragment(FavoriteCityFragment())
+
+
     }
 
 
@@ -167,7 +171,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         // custom gson parser for joda-time objects
         val dateGson = Converters.registerDateTime(GsonBuilder()).create()
 
-        if (lastCheckJson == null || checkTimePassed(dateGson.fromJson(lastCheckJson, DateTime::class.java), updateTime)) {
+        if (networkConnected() && (lastCheckJson == null || checkTimePassed(dateGson.fromJson(lastCheckJson, DateTime::class.java), updateTime))) {
             apiRequest()
         } else {
 
@@ -207,8 +211,12 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
         editor?.putString(stations, stationsJson)
         editor?.putString(lastCheck, lastCheckJson)
         editor?.apply()
+    }
 
-        println(staticAirQualityStationsList)
+
+    private fun networkConnected(): Boolean {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return cm.activeNetworkInfo != null
     }
 
 }

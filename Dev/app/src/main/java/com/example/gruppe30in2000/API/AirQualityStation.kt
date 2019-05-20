@@ -48,6 +48,7 @@ class AirQualityStationCollection{
 
                     }, onError = {
                         Log.e("ERROR INDEX", j.toString())
+                        a.await()
                     })
 
                     i++

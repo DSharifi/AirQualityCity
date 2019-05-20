@@ -45,6 +45,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
     //Adds all stations to map
     fun addAllStations(stationlist: ArrayList<AirQualityStation>){
+
         var lat : Double
         var lng : Double
         var name : String
@@ -66,7 +67,6 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
 
     //Add a pin to the map with the position and name
-    // TODO: Endre til å skille på riktig luftverdier
     fun addStation(lat : Double, lng : Double, name : String, aqiValue : Double){
 
         //Det skal egentlig være lat først, blir feil om man ikke bytter på
