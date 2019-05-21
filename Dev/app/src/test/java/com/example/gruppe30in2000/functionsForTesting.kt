@@ -13,8 +13,8 @@ fun getNearestStation(myPos : Location, stationList: ArrayList<AirQualityStation
 
     var lowestDist = tmpPos.distanceTo(myPos)
 
-    println(myPos)
-    println(tmpPos)
+//    println(myPos)
+//    println(tmpPos)
 
 //    for (station in stationList) {
 //
