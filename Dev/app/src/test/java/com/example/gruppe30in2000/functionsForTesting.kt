@@ -13,27 +13,27 @@ fun getNearestStation(myPos : Location, stationList: ArrayList<AirQualityStation
 
     var lowestDist = tmpPos.distanceTo(myPos)
 
-//    println(myPos)
-//    println(tmpPos)
+    println(myPos)
+    println(tmpPos)
 
-//    for (station in stationList) {
-//
-//        tmpPos.latitude =  station.meta.location.latitude.toDouble()
-//        tmpPos.longitude = nearestStation.meta.location.longitude.toDouble()
-//
-//        var distance = myPos.distanceTo(tmpPos)
-//
-//        if (distance < lowestDist) {
-//            lowestDist = distance
-//            nearestStation = station
-//        }
-//
-//        println(distance)
-//        println(nearestStation)
-//        println(station)
-//        println("\n\n\n")
-//
-//    }
+    for (station in stationList) {
+
+        tmpPos.latitude =  station.meta.location.latitude.toDouble()
+        tmpPos.longitude = nearestStation.meta.location.longitude.toDouble()
+
+        var distance = myPos.distanceTo(tmpPos)
+
+        if (distance < lowestDist) {
+            lowestDist = distance
+            nearestStation = station
+        }
+
+        println(distance)
+        println(nearestStation)
+        println(station)
+        println("\n\n\n")
+
+    }
 
 
     return nearestStation
