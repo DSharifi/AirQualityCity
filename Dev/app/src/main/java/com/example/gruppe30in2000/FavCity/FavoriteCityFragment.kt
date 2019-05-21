@@ -563,7 +563,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         for (data in MainActivity.staticAirQualityStationsList) {
             val locationName = data.meta.location.name
             if (locationName.equals(formatedLoc)) {
-                val element = CityElement(data, Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
+                val element = CityElement(data, getTimeIndex(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.DATE)))
                 dataset.add(0, element)
             }
         }
