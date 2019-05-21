@@ -137,6 +137,14 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                     activity?.runOnUiThread {
                         run {
                             initRecycleView(dataset)
+                            // Tilbakestiller dataene til nåtid
+                            val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                            val date = Calendar.getInstance().get(Calendar.DATE)
+
+                            val timeIndex = getTimeIndex(time, date)
+                            forecasting(timeIndex)
+                            seekbar.progress = timeIndex
+
                             Toast.makeText(mContext, "Målingene er oppdatert!", Toast.LENGTH_SHORT).show()
                         }
                     }

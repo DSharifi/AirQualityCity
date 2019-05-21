@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
     companion object {
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
-        val updateTime = 3
+        val updateTime = 3600
         // name of shared preferences
         val preference = "station preferences"
         // key for arrayList of measurements
