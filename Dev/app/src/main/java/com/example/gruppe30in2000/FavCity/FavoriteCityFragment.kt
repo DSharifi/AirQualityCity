@@ -132,11 +132,14 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         val refreshButton = fView.findViewById<ImageButton>(R.id.refresh_button)
 
         refreshButton.setOnClickListener {
+
+            Log.e("After set", dataset.toString())
             GlobalScope.launch{
                 if (this@FavoriteCityFragment.update()) {
                     activity?.runOnUiThread {
                         run {
-                            initRecycleView(dataset)
+                            Log.e("After set", dataset.toString())
+                            viewAdapter.notifyDataSetChanged()
                             // Tilbakestiller dataene til nåtid
                             val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
                             val date = Calendar.getInstance().get(Calendar.DATE)
@@ -235,25 +238,35 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         } else {
             // successful get request
 
+
+            fun isInset(eoi: String): Boolean {
+                for (element in dataset) {
+                    if (eoi == element.eoi)
+                        return true
+                }
+
+                return false
+            }
+
+            Log.e("before filter", stations.toString())
+
             MainActivity.staticAirQualityStationsList = stations
 
-            // don't use hashSet, use a list. We need the ordering of the favourites!
-            val eoiOfFavStations = ArrayList<String>()
+            val aqStationFavourites = stations.filter {s -> isInset(s.meta.location.areacode)}
 
-            for (station in dataset) {
-                eoiOfFavStations.add(station.eoi)
-            }
+            Log.e("filter", aqStationFavourites.toString())
 
             val newDataSet = ArrayList<CityElement>()
 
-            for (station in stations) {
-                val eoi = station.meta.location.areacode
-
-                if (eoiOfFavStations.contains(eoi)) {
-                    newDataSet.add(CityElement(station, Calendar.getInstance().get(Calendar.HOUR_OF_DAY)))
+            loop@ for (element in dataset) {
+                for (station in aqStationFavourites) {
+                    if (element.eoi == station.meta.location.areacode){
+                        val cityElement = CityElement(station, Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
+                        newDataSet.add(cityElement)
+                        continue@loop
+                    }
                 }
             }
-
 
             // clear dataset, and add again
             dataset.clear()
@@ -272,6 +285,8 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         }
 
     }
+
+
 
     private fun getDateTimeString(currentTime: Int): String {
         Log.e("prog", currentTime.toString())

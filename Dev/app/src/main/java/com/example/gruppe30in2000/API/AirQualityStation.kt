@@ -22,6 +22,7 @@ class AirQualityStationCollection{
                 return Gson().fromJson(response.text)
         }
 
+
         private fun getAirStations() : ArrayList<AirQualityStation> {
                 val stations = getStations()
                 val gson = Gson()
@@ -77,7 +78,10 @@ class AirQualityStationCollection{
 
 class AirQualityStation(val data: Data, val meta: Meta) {
         var index = 0;
-    // TODO: Legger til metoder her. (Get, og set, etc.)
+
+         override fun toString(): String {
+            return meta.location.name
+         }
 }
 
 data class Data(

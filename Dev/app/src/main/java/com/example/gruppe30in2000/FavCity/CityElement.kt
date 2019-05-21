@@ -6,6 +6,11 @@ import java.util.*
 
 
 class CityElement(station: AirQualityStation, currentHour: Int) {
+
+    override fun toString(): String {
+        return eoi
+    }
+
     val eoi = station.meta.location.areacode
 
     val index = station.index
