@@ -137,6 +137,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                     activity?.runOnUiThread {
                         run {
                             initRecycleView(dataset)
+                            Toast.makeText(mContext, "Målingene er oppdatert!", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
