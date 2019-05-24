@@ -5,7 +5,14 @@ import com.example.gruppe30in2000.StationUtil.AQILevel
 import java.util.*
 
 
+// Klasse som representerer hver cardview i Recycleviewet.
 class CityElement(station: AirQualityStation, currentHour: Int) {
+
+    override fun toString(): String {
+        return eoi
+    }
+
+    val eoi = station.meta.location.areacode
 
     val index = station.index
     val location= station.meta.location

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import com.example.gruppe30in2000.R
 
 
@@ -77,6 +78,12 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             mailto.putExtra(Intent.EXTRA_SUBJECT, "Tilbakemelding til AirQalityCity")
             mailto.putExtra(Intent.EXTRA_TEXT, "Skriv din tilbakemelding her.. ")
             startActivity(Intent.createChooser(mailto, "velg mail applikasjon"))
+            true
+        }
+        val help = findPreference("Help")
+        help.setOnPreferenceClickListener {
+            val i = Intent(context, HelpActivity::class.java)
+            ContextCompat.startActivity(requireContext(), i, null)
             true
         }
     }

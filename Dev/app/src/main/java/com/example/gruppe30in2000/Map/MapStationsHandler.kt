@@ -45,6 +45,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
     //Adds all stations to map
     fun addAllStations(stationlist: ArrayList<AirQualityStation>){
+
         var lat : Double
         var lng : Double
         var name : String
@@ -66,7 +67,6 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
 
     //Add a pin to the map with the position and name
-    // TODO: Endre til å skille på riktig luftverdier
     fun addStation(lat : Double, lng : Double, name : String, aqiValue : Double){
 
         //Det skal egentlig være lat først, blir feil om man ikke bytter på
@@ -104,7 +104,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
 
-
+        // Henter alle nødvendige knappene, textView og imageButton som skal vises i dialogen.
         val addbutton = dialogView.findViewById<ImageButton>(R.id.add_button)
         val riskDisplay = dialogView.findViewById<ImageView>(R.id.risk_display)
         val tittel = dialogView.findViewById<TextView>(R.id.title_text)
@@ -141,7 +141,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
                 val pm25Unit  = station.data.time[currentHour].variables.pm25_concentration.units
 
                 val sS10Text = "Svevestøv PM10 nivå: " + String.format("%.2f", pm10val) + pm10Unit
-                val sS25Text = "Svevestøv PM25 nivå: " + String.format("%.2f", pm25val) + pm25Unit
+                val sS25Text = "Svevestøv PM2.5 nivå: " + String.format("%.2f", pm25val) + pm25Unit
                 val nitText = "Nitrogeninnhold: " + String.format("%.2f", nOVal) + nOunit
                 val ozText = "Ozon nivå: " + String.format("%.2f", ozvalue) + ozonUnit
                 val aqiText = "AQI nivå: " + String.format("%.2f", aqiValue) + "\n"
@@ -213,9 +213,9 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
             ContextCompat.startActivity(this.parentContext, i, null)
         }
 
-
+        // Når brukeren trykker på legg til knappen. Lager en intent, legger til lokasjone og sende tilbake til parentContext
+        // Med den action navn: from-mapstationhandler
         addbutton.setOnClickListener {
-
             val intent = Intent("from-mapstationhandler")
             intent.putExtra("location", location)
             LocalBroadcastManager.getInstance(parentContext).sendBroadcast(intent)
@@ -227,7 +227,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
 
     fun createHeatMap(){
-        val heatmap = Heatmap(mMap, greenHeat, yellowHeat, redHeat)
+        Heatmap(mMap, greenHeat, yellowHeat, redHeat)
     }
 
     fun getTimeIndex(time : Int, date : Int) : Int{
@@ -238,7 +238,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
             var t = datetime[1].take(2).toInt()
 
             if(date == d && time == t){
-                return c;
+                return c
             }
             c++
         }

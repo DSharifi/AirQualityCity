@@ -22,8 +22,6 @@ import com.example.gruppe30in2000.StationUtil.PieChartActivity
 class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Context, activityContext: Context?) :
     RecyclerView.Adapter<CityListAdapter.ViewHolder>() {
     val context = context
-    //val activity = activityContext as Activity
-    //val activityContext = activityContext
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val textView = LayoutInflater.from(parent.context).inflate(R.layout.city_element, parent, false) as View
@@ -33,12 +31,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
     override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
 
-        // set the element (cardview) text and description text base on the current position of the dataSet list.
+        // Sette cardviewet sin lokasjon og deskription text basert på den nåværende posisjonen i listen
         holder.title.text = dataSet[pos].title
         holder.description.text = dataSet[pos].description
-        // VALIDATE the risk type of newly added city
-//        validateRiskType(holder.description.text.toString(), holder)
 
+        // Validerer tekstene og setter bakgrunnsfarge basert på teksten.
         if (holder.description.text.toString().equals("Lav")) {
             holder.description.setBackgroundResource(R.drawable.rounded_good)
             holder.description.text = " God "
@@ -50,18 +47,17 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
         if (holder.description.text.toString().equals("Hoy")) {
             holder.description.setBackgroundResource(R.drawable.rounded_bad)
             holder.description.text = " Dårlig "
-
         }
 
-
-
-        if (context is AllStationView) { // If the context that call on this adapter is All stationView, make the addbutton visible.
+        // Dersom context som kaller på denne adapteren er contexten til AllstationView, så gjør vi addButton og ib synlig.
+        if (context is AllStationView) {
             holder.addButton.visibility = View.VISIBLE
             holder.ib.visibility = View.INVISIBLE
         }
 
 
-        // On addButton clicked. Get the current card information and send back to AllstationView. with the custom: custom-message
+        // Når brukeren trykker på legg til knappen. Henter vi den nåværende cardview sin informasjon og sender tilbake til AllstationView
+        // Med den action navn: from-cityadapter
         holder.addButton.setOnClickListener {
             val location = holder.title.text.toString()
             val description = holder.description.text.toString()
@@ -81,21 +77,12 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
             val ozText = "Ozon nivå: " + String.format("%.2f", dataSet[pos].ozvalue) + dataSet[pos].ozonUnit
             val aqiText = "AQI nivå: " + String.format("%.2f", dataSet[pos].aqiValue) + "\n"
 
-            val nitrogenLvls = "Nitrogenkilder:\nOppvarming: " + dataSet[pos].nitHeating.toString() + "%\nIndustri: " + dataSet[pos].nitInd +
-                    "%\nEksos: " + dataSet[pos].nitExc + "%\nShipping: " + dataSet[pos].nitShip + "%"
-
-            val pm10Lvls = "Svevestøvkilder:\nOppvarming: " + dataSet[pos].pmHeat.toString() + "%\nIndustri: " + dataSet[pos].pmInd +
-                    "%\nEksos: " + dataSet[pos].pmExc + "%\nTrafikk: " + dataSet[pos].pmNonEx + "%\nShipping: " + dataSet[pos].pmShip + "%"
-
-
             holder.svevestovpm10.text = sS10Text
             holder.svevestovpm25.text = sS25Text
             holder.nitrogen.text = nitText
             holder.ozone.text = ozText
             holder.aqilvl.text = aqiText
-            //holder.nitLvls.text = nitrogenLvls
-            //holder.pm10Lvls.text = pm10Lvls
-            //holder.linechartButton.text = Html.fromHtml("PM<sub>10</sub>")
+
 
             holder.linechartButton.setOnClickListener{
                 val i = Intent(this.context, GraphActivity::class.java)
@@ -152,19 +139,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
 
         holder.ib.setOnClickListener {
 
-            val dialogBuilder = AlertDialog.Builder(context) // make a dialog builder
-            val dialogView = LayoutInflater.from(context).inflate(R.layout.infobox, null) // get the dialog xml view
-            dialogBuilder.setView(dialogView) // set the view into the builder
+            val dialogBuilder = AlertDialog.Builder(context) // Bygger en dialog
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.infobox, null) // Inflater dialogen utifra dialog xml filen
+            dialogBuilder.setView(dialogView)
 
             val alertDialog = dialogBuilder.create()
-
-//            val settings = LayoutInflater.from(context).inflate(R.layout.fragment_settings, null)
-//
-//            val astma = settings.findViewById<CheckBox>(R.id.astma)
-//            val hjerte = settings.findViewById<CheckBox>(R.id.hjerte)
-//            val eldre = settings.findViewById<CheckBox>(R.id.eldre)
-//            val gravide = settings.findViewById<CheckBox>(R.id.gravide)
-//            val generell = settings.findViewById<CheckBox>(R.id.ingen)
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -191,11 +170,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 extBtn.setBackgroundColor(context.getColor(R.color.moderate))
                 infotext = context.getString(R.string.modLvl)
                 infotext += context.getString(R.string.hEModerate)
-                if (prefs.getBoolean(PreferenceFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaM)
-                if (prefs.getBoolean(PreferenceFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteM)
-                if (prefs.getBoolean(PreferenceFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreM)
-                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true || prefs.getBoolean(
-                        PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.allGood)
+                if (prefs.getBoolean(PreferenceFragment.astmaKEY, false)) infotext += context.getString(R.string.astmaM)
+                if (prefs.getBoolean(PreferenceFragment.heartKEY, false)) infotext += context.getString(R.string.hjerteM)
+                if (prefs.getBoolean(PreferenceFragment.oldKEY, false)) infotext += context.getString(R.string.eldreM)
+                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) || prefs.getBoolean(
+                        PreferenceFragment.genKEY, false)) infotext += context.getString(R.string.allGood)
                 healthInfo.text = infotext
             }
             if (getInfo(lvl).equals("bad")) {
@@ -203,11 +182,11 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
                 extBtn.setBackgroundColor(context.getColor(R.color.bad))
                 infotext = context.getString(R.string.badLVl)
                 infotext += context.getString(R.string.hEBad)
-                if (prefs.getBoolean(PreferenceFragment.astmaKEY, false) == true) infotext += context.getString(R.string.astmaB)
-                if (prefs.getBoolean(PreferenceFragment.oldKEY, false) == true) infotext += context.getString(R.string.eldreB)
-                if (prefs.getBoolean(PreferenceFragment.heartKEY, false) == true) infotext += context.getString(R.string.hjerteB)
-                if (prefs.getBoolean(PreferenceFragment.pregKEY, false) == true) infotext += context.getString(R.string.gravideB)
-                if (prefs.getBoolean(PreferenceFragment.genKEY, false) == true) infotext += context.getString(R.string.generalB)
+                if (prefs.getBoolean(PreferenceFragment.astmaKEY, false)) infotext += context.getString(R.string.astmaB)
+                if (prefs.getBoolean(PreferenceFragment.oldKEY, false)) infotext += context.getString(R.string.eldreB)
+                if (prefs.getBoolean(PreferenceFragment.heartKEY, false)) infotext += context.getString(R.string.hjerteB)
+                if (prefs.getBoolean(PreferenceFragment.pregKEY, false)) infotext += context.getString(R.string.gravideB)
+                if (prefs.getBoolean(PreferenceFragment.genKEY, false)) infotext += context.getString(R.string.generalB)
                 healthInfo.text = infotext
             }
 
@@ -223,43 +202,6 @@ class CityListAdapter (private var dataSet: ArrayList<CityElement>, context: Con
     override fun getItemCount(): Int {
         return dataSet.size
     }
-
-    fun filteredList(list: ArrayList<CityElement>) {
-        dataSet = list
-        notifyDataSetChanged()
-    }
-
-//    // Method to validate and change the riskdisplay image by description text.
-//    fun validateRiskType(text: String, holder: ViewHolder) {
-//        // Change risk displayimage color.
-//        when {
-//            text.contains("hoy", ignoreCase = true) ->
-//                holder.riskDisplay.setImageDrawable(
-//                    ContextCompat.getDrawable(
-//                        context,
-//                        R.drawable.ic_sad_svgrepo_com
-//                    )
-//                )
-//
-//            text.contains("moderat", ignoreCase = true) ->
-//                holder.riskDisplay.setImageDrawable(
-//                    ContextCompat.getDrawable(
-//                        context,
-//                        R.drawable.ic_straight_svgrepo_com
-//                    )
-//                )
-//
-//            text.contains("lav", ignoreCase = true) ->
-//                holder.riskDisplay.setImageDrawable(
-//                    ContextCompat.getDrawable(
-//                        context,
-//                        R.drawable.ic_smile_svgrepo_com
-//                    )
-//                )
-//
-//            else -> Log.e("log: ", "FEIL RISK INPUT!!")
-//        }
-//    }
 
     class ViewHolder(textView: View) : RecyclerView.ViewHolder(textView) {
         val title = textView.findViewById<TextView>(R.id.title_text)

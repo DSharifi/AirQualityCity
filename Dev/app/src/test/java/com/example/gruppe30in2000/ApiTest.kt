@@ -1,5 +1,6 @@
-package com.example.gruppe30in2000.API
+package com.example.gruppe30in2000
 
+import com.example.gruppe30in2000.API.AirQualityStation
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 
@@ -45,7 +46,6 @@ fun getAirStations() : ArrayList<AirQualityStation> {
     return stationList
 }
 
-// Returnerer AQI verdien til en stasjon på et spesifikt tidspunkt
 fun getAqi(station:Int, time:Int) : Double{
     return getAirStations()[station].data.time[time].variables.AQI.value
 }
@@ -60,9 +60,3 @@ fun main() {
 
 // TODO: Trenger kun REFTIME for historisk data. Reftime finnes ikke for siste måling.
 // TODO: Vil si: Livedata:  airqualityReponse uten parameter for reftime
-
-data class Airqt(
-    val `data`: Data,
-    val meta: Meta
-)
-
