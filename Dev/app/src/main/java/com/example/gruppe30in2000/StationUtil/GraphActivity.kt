@@ -46,8 +46,6 @@ class GraphActivity : AppCompatActivity(){
 
         val station = MainActivity.staticAirQualityStationsList[index]
 
-        //chart = station.meta.location.name + ", " + station.meta.superlocation.name
-
         val desc = Description()
         desc.text = station.meta.location.name + ", " + station.meta.superlocation.name
         chart.description = desc
@@ -55,7 +53,6 @@ class GraphActivity : AppCompatActivity(){
 
 
         val xLabels = ArrayList<String>()
-        //val aqiValues = ArrayList<Entry>()
         val svevestovpm10Values = ArrayList<Entry>()
         val svevestovpm25Values = ArrayList<Entry>()
         val nitrogenValues = ArrayList<Entry>()
@@ -68,7 +65,6 @@ class GraphActivity : AppCompatActivity(){
             val date = dateSplit[1] + "-" + dateSplit[0]
             val finalDateTime = datetime[1] + " " + date
             xLabels.add(finalDateTime)
-            //aqiValues.add(Entry(c.toFloat() ,it.variables.AQI.value.toFloat()))
             svevestovpm10Values.add(Entry(c.toFloat() ,it.variables.pm10_concentration.value.toFloat()))
             svevestovpm25Values.add(Entry(c.toFloat() ,it.variables.pm25_concentration.value.toFloat()))
             nitrogenValues.add(Entry(c.toFloat() ,it.variables.no2_concentration.value.toFloat()))
@@ -95,32 +91,27 @@ class GraphActivity : AppCompatActivity(){
         }
 
 
-        //val setAQI = LineDataSet(aqiValues, "AQI")
         val setSvevestovpm10 = LineDataSet(svevestovpm10Values, "Svevestøv PM10")
         val setSvevestovpm25 = LineDataSet(svevestovpm25Values, "Svevestøv PM2.5")
         val setNitrogen = LineDataSet(nitrogenValues, "Nitrogen")
         val setOzon = LineDataSet(ozonValues, "Ozon")
 
-        //setAQI.setDrawValues(false)
         setSvevestovpm10.setDrawValues(false)
         setSvevestovpm25.setDrawValues(false)
         setNitrogen.setDrawValues(false)
         setOzon.setDrawValues(false)
 
-        //setAQI.color = Color.MAGENTA
         setSvevestovpm10.color = Color.BLUE
         setSvevestovpm25.color = Color.MAGENTA
         setNitrogen.color = Color.GREEN
         setOzon.color = Color.RED
 
-        //setAQI.setCircleColor(Color.MAGENTA)
         setSvevestovpm10.setCircleColor(Color.BLUE)
         setSvevestovpm25.setCircleColor(Color.MAGENTA)
         setNitrogen.setCircleColor(Color.GREEN)
         setOzon.setCircleColor(Color.RED)
 
         val dataSets = ArrayList<ILineDataSet>()
-        //dataSets.add(setAQI)
         dataSets.add(setSvevestovpm10)
         dataSets.add(setSvevestovpm25)
         dataSets.add(setNitrogen)

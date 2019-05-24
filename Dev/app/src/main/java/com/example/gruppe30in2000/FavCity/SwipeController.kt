@@ -2,10 +2,8 @@ package com.example.gruppe30in2000.FavCity
 
 import android.annotation.SuppressLint
 import android.graphics.Canvas
-import android.provider.MediaStore.Audio.Playlists.Members.moveItem
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.support.v7.widget.helper.ItemTouchHelper.Callback
 
 import android.support.v7.widget.helper.ItemTouchHelper.*
@@ -16,22 +14,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import com.example.gruppe30in2000.R
-import kotlinx.android.synthetic.main.city_element.view.*
 
-
-enum class ButtonsState {
-    GONE,
-    LEFT_VISIBLE,
-    RIGHT_VISIBLE
-}
 
 open class SwipeController : Callback() {
     private var swipeBack = false
-    private val buttonShowedState = ButtonsState.GONE
     private val buttonWidth = 300f
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        return ItemTouchHelper.Callback.makeMovementFlags(0, LEFT)
+        return makeMovementFlags(0, LEFT)
     }
 
     override fun onMove(
@@ -82,7 +72,7 @@ open class SwipeController : Callback() {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
                 if (swipeBack) {
-                    // If swipe left, display dialog to delete
+                    // Dersom brukeren swiper til venste, viser vi dialogen slik at brukeren kan slette stasjonen.
                     if (dX <= buttonWidth) {
                         if (isCurrentlyActive) {
                             val dialogBuilder = AlertDialog.Builder(recyclerView.context) // make a dialog builder

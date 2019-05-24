@@ -60,7 +60,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
                 )
                 if (!success) {
-                    //Log.e(FragmentActivity.TAG, "Style parsing failed.")
                     print("Styling parsing failed")
                 }
             }
@@ -71,32 +70,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
                 )
                 if (!success) {
-                    //Log.e(FragmentActivity.TAG, "Style parsing failed.")
                     print("Styling parsing failed")
                 }
             }
         } catch (e: Resources.NotFoundException) {
-            // Log.e(FragmentActivity.TAG, "Can't find style. Error: ", e)
             print("Cant find style")
         }
-
-//        if (chosen.toInt() == 2){
-//            try {
-//                val success = mMap.setMapStyle(
-//                    MapStyleOptions.loadRawResourceStyle(
-//                        context, R.raw.map_alt_style
-//                    )
-//                )
-//                if (!success) {
-//                    //Log.e(FragmentActivity.TAG, "Style parsing failed.")
-//                    print("Styling parsing failed")
-//                }
-//            } catch (e: Resources.NotFoundException) {
-//                // Log.e(FragmentActivity.TAG, "Can't find style. Error: ", e)
-//                print("Cant find style")
-//            }
-//        }
-
         activateLocationIfEnabled()
 
         //Moves the camera to Oslo
@@ -113,7 +92,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
     //Activates location button on map if its enabled, else show toast
-    //TODO: Endre else til å linke til settings slik at det kan settes på manuelt
     fun activateLocationIfEnabled() {
         if (ContextCompat.checkSelfPermission(activity!!.applicationContext,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -123,15 +101,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         else {
             Toast.makeText(activity!!.applicationContext, R.string.enable_location, Toast.LENGTH_LONG).show()
-
-            /*
-            https://stackoverflow.com/questions/31127116/open-app-permission-settings/33268774
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-            Uri.parse("package:" + getPackageName()));
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-             */
         }
     }
 

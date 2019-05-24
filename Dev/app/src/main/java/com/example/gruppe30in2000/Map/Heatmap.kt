@@ -8,9 +8,7 @@ import com.google.maps.android.heatmaps.Gradient
 import com.google.maps.android.heatmaps.HeatmapTileProvider
 
 
-//Adds heatmap
-// Skal man ta inn 3 forskjellige lister med kordinater som representerer rød, gul og grønn?
-// Kan bli tungvindt hvis hele kartet må oppdateres hvis kun en stasjon skifter farge?
+// Legger til heatmap
 
 class Heatmap(googleMap: GoogleMap, listGreen: List<LatLng>, listYellow: List<LatLng>, listRed: List<LatLng>){
     init {

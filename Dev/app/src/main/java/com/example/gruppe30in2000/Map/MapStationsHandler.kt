@@ -104,7 +104,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
 
-
+        // Henter alle nødvendige knappene, textView og imageButton som skal vises i dialogen.
         val addbutton = dialogView.findViewById<ImageButton>(R.id.add_button)
         val riskDisplay = dialogView.findViewById<ImageView>(R.id.risk_display)
         val tittel = dialogView.findViewById<TextView>(R.id.title_text)
@@ -213,9 +213,9 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
             ContextCompat.startActivity(this.parentContext, i, null)
         }
 
-
+        // Når brukeren trykker på legg til knappen. Lager en intent, legger til lokasjone og sende tilbake til parentContext
+        // Med den action navn: from-mapstationhandler
         addbutton.setOnClickListener {
-
             val intent = Intent("from-mapstationhandler")
             intent.putExtra("location", location)
             LocalBroadcastManager.getInstance(parentContext).sendBroadcast(intent)
@@ -227,7 +227,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
 
 
     fun createHeatMap(){
-        val heatmap = Heatmap(mMap, greenHeat, yellowHeat, redHeat)
+        Heatmap(mMap, greenHeat, yellowHeat, redHeat)
     }
 
     fun getTimeIndex(time : Int, date : Int) : Int{
@@ -238,7 +238,7 @@ class MapStationsHandler(googleMap: GoogleMap, context: Context) : GoogleMap.OnM
             var t = datetime[1].take(2).toInt()
 
             if(date == d && time == t){
-                return c;
+                return c
             }
             c++
         }

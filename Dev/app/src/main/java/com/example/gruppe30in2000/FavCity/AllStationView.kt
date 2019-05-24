@@ -20,8 +20,6 @@ import java.util.*
 
 class AllStationView : AppCompatActivity() {
 
-    // TODO Fix risk_display overlapping with location in GUI
-    // TODO Fix swipecontroller display problem.
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -32,10 +30,9 @@ class AllStationView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSoftKeyboard()
-        setContentView(com.example.gruppe30in2000.R.layout.activity_all_station_view)
+        setContentView(R.layout.activity_all_station_view)
 
-
-        // RECIEVE DATA FROM ADAPTER with custom message: from-cityadapter
+        // Henter data fra adapteren med en custom melding: "from-cityadapter"
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, IntentFilter("from-cityadapter"))
 
         val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
@@ -48,11 +45,9 @@ class AllStationView : AppCompatActivity() {
 
         initRecycleView(dataset)
 
-        // TODO implement add cardview and send back the selected cardview to FavoriteCityFragment and display it in Favorites city View.
         val searchInput = findViewById<EditText>(R.id.search_input)
 
-        //make a common textWatcher to use for several editText/TextView listener
-
+        // Lager her en felles/generic textWatcher slik at flere editText/TextView kan legge til som listener.
         val textWatcher = object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 filter(s.toString())
@@ -67,11 +62,10 @@ class AllStationView : AppCompatActivity() {
 
 
         searchInput.addTextChangedListener(textWatcher)
-        val title = findViewById<TextView>(R.id.Stasjoner_title)
     }
 
 
-
+    // Initialiserer Recycle view, viser alle tilgjengelig stasjonene.
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
         viewManager = LinearLayoutManager(this)
 
@@ -83,8 +77,11 @@ class AllStationView : AppCompatActivity() {
             adapter = viewAdapter
         }
     }
-    private fun filter(text : String) {
 
+    // en privat metode som blir kalt på hver gang searchInput endrer seg (afterTextChanged())
+    // denne metoden filterer bort alle stasjoner som ikke inneholder text inni navnet.
+    // Legger kun de stasjone som inneholder tekststrengen i navnet og oppdaterer recycleviewet.
+    private fun filter(text : String) {
         val filteredElements = ArrayList<CityElement>()
         for (item : CityElement in dataset) {
             if (item.title.toLowerCase().contains(text.toLowerCase())) {
@@ -96,8 +93,8 @@ class AllStationView : AppCompatActivity() {
     }
 
 
-    // Handler for received Intents. This will be called whenever an Intent
-    // with an action named "custom-event-name" is broadcasted
+    // En handler som håndterer de innhentede Intents. Denne metoden onReceieve blir kalt hver gang en Intent
+    // med en action navn "custom-event-name" blir broadcasted.
     private val mMessageReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             // Get extra data included in the Intent
@@ -108,8 +105,8 @@ class AllStationView : AppCompatActivity() {
         }
     }
 
-    // Method to pass data from current activity to another activity
-    // Add the data to send back with putExtra method and set the result.
+    // Denne metode sender data fra den nåværende activity til en annen activity.
+    // Legger de to verdiene og sender tilbake ved bruk av putExstra og kalle på "setResult" for å sende intent.
     private fun passBackDataToActivity(location : String, description: String) {
         intent.putExtra("Stationlocation", location)
         intent.putExtra("DescriptionStation", description)
@@ -130,7 +127,7 @@ class AllStationView : AppCompatActivity() {
             var t = datetime[1].take(2).toInt()
 
             if(date == d && time == t){
-                return c;
+                return c
             }
             c++
         }

@@ -22,7 +22,6 @@ class PieChartActivity : AppCompatActivity(){
         val intent = intent
 
         val chart = findViewById<LineChart>(R.id.piechart) as PieChart
-        //val title = findViewById<TextView>(R.id.title)
 
         val index = intent.getIntExtra("index", 0)
         val chartNr = intent.getIntExtra("chartNr", 0)

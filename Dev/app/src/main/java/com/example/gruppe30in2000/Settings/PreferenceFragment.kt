@@ -1,6 +1,5 @@
 package com.example.gruppe30in2000.Settings
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.preference.ListPreference
@@ -11,10 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.content.Intent
 import android.support.v4.content.ContextCompat
-import com.example.gruppe30in2000.FavCity.AllStationView
-import com.example.gruppe30in2000.MainActivity.Companion.preference
 import com.example.gruppe30in2000.R
-import com.example.gruppe30in2000.Settings.HelpActivity
 
 
 class PreferenceFragment : PreferenceFragmentCompat() {

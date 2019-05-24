@@ -76,8 +76,10 @@ class AirQualityStationCollection{
 
 }
 
+
+// Her har vi laget alle nødvendige klasser basert på det vi får fra API-et
 class AirQualityStation(val data: Data, val meta: Meta) {
-        var index = 0;
+        var index = 0
 
          override fun toString(): String {
             return meta.location.name

@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 
 
-
 import android.widget.Toast
 
 import com.example.gruppe30in2000.API.AirQualityStation
@@ -19,17 +18,10 @@ import com.example.gruppe30in2000.FavCity.FavoriteCityFragment
 import com.example.gruppe30in2000.Map.MapFragment
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
-import com.example.gruppe30in2000.FavCity.CityElement
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import com.google.gson.GsonBuilder
 import com.fatboyindustrial.gsonjodatime.Converters
-
-import android.preference.PreferenceManager
-
-import android.support.v4.app.NotificationCompat
-
-import android.util.Log
 import org.joda.time.Seconds
 import com.example.gruppe30in2000.Settings.LocationPermission
 import com.example.gruppe30in2000.Settings.Notification
@@ -46,15 +38,9 @@ import android.net.ConnectivityManager
 
 class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
-
-
-
     // duration in seconds between updates
 
     lateinit var notificationManager : NotificationManager
-
-
-
 
     companion object {
         var staticAirQualityStationsList = ArrayList<AirQualityStation>()
@@ -72,8 +58,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.initial_welcome_view)
-
-
         loadStations()
 
         // Creates LocationPermission object and asks user to allow location
@@ -121,7 +105,6 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
             R.id.navigation_notifications -> {
                 val mf = PreferenceFragment()
                 replaceFragment(mf)
-                //message.setText(R.string.title_notifications)
                 notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
                 val n = Notification(this, notificationManager)
@@ -147,12 +130,10 @@ class MainActivity : AppCompatActivity(), OnTaskCompleted {
      */
     private fun checkTimePassed(lastCheck : DateTime, seconds : Int): Boolean {
         val currentTime = DateTime()
-//        val difference : Int = Hours.hoursBetween(lastCheck, currentTime).hours
         val difference : Int = Seconds.secondsBetween(lastCheck, currentTime).seconds
 
-        return seconds < difference;
+        return seconds < difference
 
-//        return true
     }
 
 

@@ -22,7 +22,6 @@ import android.view.*
 import android.widget.*
 import com.example.gruppe30in2000.API.AirQualityStation
 import com.example.gruppe30in2000.API.AirQualityStationCollection
-import com.example.gruppe30in2000.StationUtil.AQILevel.Companion.getAQILevelString
 import com.example.gruppe30in2000.MainActivity
 import com.example.gruppe30in2000.R
 import com.fatboyindustrial.gsonjodatime.Converters
@@ -30,7 +29,6 @@ import com.github.salomonbrys.kotson.fromJson
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -50,7 +48,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var fView: View
-    private lateinit var placesClient: PlacesClient
     private lateinit var mContext: Context
 
     private val SecondActivityCode = 101
@@ -75,7 +72,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         fView = inflater.inflate(R.layout.fragment_favorite_city, container, false)
 
-        // Add the nearest station to favourite
+        // Dersom den nærmeste stasjonen ikke er lagt til, setter vi verdien til true og legge til den næremeste.
         if (!addNearestStation) {
             addNearestStation = true
             // If list of all station is not empty then we get and add the nearest station available
@@ -120,7 +117,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         initRecycleView(dataset)
 
-
+        // Starter AllstationView on click.
         floatingButton.setOnClickListener {
             val intent = Intent(this.context, AllStationView::class.java)
             intent.putExtra("EXTRA_SESSION_ID", "SOMEVALUE FROM FAVOrite")
@@ -237,8 +234,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
         } else {
             // successful get request
-
-
             fun isInset(eoi: String): Boolean {
                 for (element in dataset) {
                     if (eoi == element.eoi)
@@ -248,13 +243,9 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                 return false
             }
 
-            Log.e("before filter", stations.toString())
-
             MainActivity.staticAirQualityStationsList = stations
 
             val aqStationFavourites = stations.filter {s -> isInset(s.meta.location.areacode)}
-
-            Log.e("filter", aqStationFavourites.toString())
 
             val newDataSet = ArrayList<CityElement>()
 
@@ -286,26 +277,22 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
 
     }
 
-
-
+    // Returnerer stasjonen sin tid i string format.
     private fun getDateTimeString(currentTime: Int): String {
-        Log.e("prog", currentTime.toString())
         if (MainActivity.staticAirQualityStationsList.isNotEmpty()) {
             val datetime = MainActivity.staticAirQualityStationsList[0].data.time[currentTime].from.split("T")
             val date = datetime[0]
             val hour = datetime[1].take(5)
-            Log.e("date", date)
-            Log.e("hour", hour)
             return date + " - Kl:" + hour
         }
         return "No data"
 
     }
 
-    // TODO: Denne metoden endrer alle nødvendig informasjon om en stasjon på den valgte tiden
+    // Denne metoden endrer alle nødvendig informasjon om en stasjon til den sendte tiden
     private fun forecasting(time: Int) {
-        // TODO: Loop through dataset and change info for each station to the specified time?
         val newDateset = ArrayList<CityElement>()
+        // Looper gjennom alle favoritt stasjonene og legger til stasjonen inni en liste med valgt tidspunkt.
         for (station in dataset) {
             val tempStation = getStation(station.location.name)
             if (tempStation != null) {
@@ -317,32 +304,23 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
     }
 
 
-    // Handler for received Intents. This will be called whenever an Intent
-    // with an action named "custom-event-name" is broadcasted
+
+    // En handler som håndterer de innhentede Intents. Denne metoden onReceieve blir kalt hver gang en Intent
+    // med en action navn "custom-event-name" blir broadcasted.
     private val mMessageReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            // Get extra data included in the Intent
+            // Henter lokasjonen stringen som ligger i intent.
             val location = intent.getStringExtra("location")
-            if (checkFavouriteCity(location)) { // if the station already exists in favourite we return
+            if (checkFavouriteCity(location)) { // Hvis stasjonen allerede finnes i listen trenger ikke vi å gå videre.
                 return
             }
-            // TODO: Loop through the list of station and get the info that is needed.
-            for (station in MainActivity.staticAirQualityStationsList) {
-                if (station.meta.location.name == location) {
-                    val aqi = station.data.time[0].variables.AQI.value
-                    val description = getAQILevelString(aqi) // get the aqi level in string
-                    Log.e("Allstation View", "Received Message from cityadapter ${location} - ${description}")
-                    addFavoriteElement(location)
-                }
-            }
 
-            Log.e("Allstation View", "Received Message from cityadapter ${location}")
             addFavoriteElement(location)
         }
     }
 
 
-    // Method that initinalize the recycleView
+    // Initialiserer Recycle view, viser alle tilgjengelig stasjonene.
     private fun initRecycleView(dataset: ArrayList<CityElement>) {
 
         viewManager = LinearLayoutManager(mContext)
@@ -384,7 +362,6 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             when (resultCode) {
                 RESULT_OK -> {
                     val returnedLocation = data.getStringExtra("Stationlocation")
-                    val returnedDescription = data.getStringExtra("DescriptionStation")
                     if (checkFavouriteCity(returnedLocation)) {
                         Toast.makeText(mContext, "Stasjonen finnes allerede i favoritter!", Toast.LENGTH_SHORT).show()
                         return
@@ -406,7 +383,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         }
     }
 
-    // Method to add new favourite location to view.
+    // Metode som legger til en ny cardview inni recycleviewet
     private fun addFavoriteElement(location: String) {
         val time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val date = Calendar.getInstance().get(Calendar.DATE)
@@ -470,6 +447,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         }
     }
 
+    // privat metode som går gjennom alle favorittstasjonene og sjekke om location allerede finnes.
     private fun checkFavouriteCity(location: String): Boolean {
         for (data in dataset) {
             if (location.contains(data.location.name)) {
@@ -488,7 +466,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         return null
     }
 
-
+    // sletter en stasjon/cardview ved swipe
     fun deleteItemAt(pos: Int) {
         val item = dataset[pos]
         dataset.removeAt(pos)
@@ -498,11 +476,11 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
         // oppdatere
         saveFavoriteElement()
 
-        Toast.makeText(this.context, "Removed ${item.title}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this.context, "Fjernet ${item.title}", Toast.LENGTH_SHORT).show()
 
     }
 
-
+    // Metode for å finne og legge til den nærmeste stasjonen.
     fun getNearestStation() {
         val fused = LocationServices.getFusedLocationProviderClient(activity!!.applicationContext)
 
@@ -523,15 +501,8 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                 if (location != null) {
                     myPos.latitude = location.latitude
                     myPos.longitude = location.longitude
-//                    Log.e("not null ---- " , location.longitude.toString())
-//                    Log.e("not null ---- " , location.latitude.toString())
 
-                } else {
-                    //TODO: Hva skal skje her?
-//                    Log.e("Location = " , " Null---")
                 }
-
-
 
                 for (station in MainActivity.staticAirQualityStationsList) {
                     //Det er feil i api'et, så må bytte på lat og long
@@ -542,19 +513,17 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
                     if (dist > tmpDist) {
                         tmpStation = station
                         dist = tmpDist
-//                        Log.e("Distance in float:" , dist.toString())
                     }
                 }
-                val value = tmpStation.data.time[0].variables.AQI.value
                 addNearestStation(tmpStation.meta.location.name)
             }
 
         }
     }
 
-    // Method to add new favourite location to view.
+    // Legge til den nærmeste stasjonen inni recycleview.
     private fun addNearestStation(location: String) {
-        if (checkFavouriteCity(location)) { // TODO: Change content to work for the newer cityElement location. DONE?
+        if (checkFavouriteCity(location)) {
             return
         }
         val bits = location.split(",").toTypedArray()

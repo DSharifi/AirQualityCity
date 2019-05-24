@@ -45,6 +45,7 @@ fun getAirStations() : ArrayList<AirQualityStation> {
     return stationList
 }
 
+// Returnerer AQI verdien til en stasjon på et spesifikt tidspunkt
 fun getAqi(station:Int, time:Int) : Double{
     return getAirStations()[station].data.time[time].variables.AQI.value
 }

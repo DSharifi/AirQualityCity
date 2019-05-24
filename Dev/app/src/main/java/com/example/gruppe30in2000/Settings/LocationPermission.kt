@@ -5,7 +5,7 @@ import android.app.Activity
 import android.support.v4.app.ActivityCompat
 
 
-class LocationPermission(val activity: Activity){
+class LocationPermission(activity: Activity){
 
     private val mActivity = activity
 
