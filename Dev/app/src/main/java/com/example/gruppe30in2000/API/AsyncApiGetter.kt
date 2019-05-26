@@ -1,6 +1,7 @@
 package com.example.gruppe30in2000.API
 
 import android.os.AsyncTask
+import android.util.Log
 import java.lang.Exception
 
 
@@ -27,8 +28,13 @@ class AsyncApiGetter : AsyncTask<Unit, Unit, String> {
 
     override fun doInBackground(vararg params: Unit?): String? {
         try {
+            Log.e("IN BCK", "IN BCK")
             val a = AirQualityStationCollection()
             airQualityList = a.airQualityStationList
+            a.airQualityStationList.forEach {
+                Log.e("getter", it.meta.location.name)
+            }
+            Log.e("IN DONE", "IN DONE")
         } catch (e : Exception){ }
         return null
     }
