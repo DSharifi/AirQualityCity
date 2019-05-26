@@ -252,7 +252,7 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             loop@ for (element in dataset) {
                 for (station in aqStationFavourites) {
                     if (element.eoi == station.meta.location.areacode){
-                        val cityElement = CityElement(station, Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
+                        val cityElement = CityElement(station, getTimeIndex(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.DATE)))
                         newDataSet.add(cityElement)
                         continue@loop
                     }
@@ -441,9 +441,10 @@ class FavoriteCityFragment : Fragment(), GoogleApiClient.OnConnectionFailedListe
             return
         } else {
             // Get the current time in the 24 hours format (ranging from 0 - 23)
-            val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            val date = Calendar.getInstance().get(Calendar.DATE)
             dataset = gson.fromJson(json)
-            forecasting(currentTime - 1)
+            forecasting(getTimeIndex(hour, date))
         }
     }
 
